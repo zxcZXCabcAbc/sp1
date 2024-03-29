@@ -5,5 +5,7 @@
 return [
     // 指令定义
     'commands' => [
+        //测试shopify
+        'shopify:test'=>'app\command\Shopify\ShopifyTest',
     ],
 ];
