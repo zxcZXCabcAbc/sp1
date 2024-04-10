@@ -4,7 +4,11 @@ declare (strict_types = 1);
 namespace app\command\Shopify;
 
 use Shopify\Auth\FileSessionStorage;
+use Shopify\Auth\OAuth;
+use Shopify\Auth\Session;
 use Shopify\Clients\Storefront;
+use Shopify\Rest\Admin2023_04\Payment;
+use Shopify\Utils;
 use think\console\Command;
 use think\console\Input;
 use think\console\input\Argument;
@@ -32,7 +36,8 @@ class ShopifyTest extends Command
             $variantId = 'gid://shopify/ProductVariant/47310414577965';
             #2.创建结账
             //$checkoutId = $this->createCheckOut($variantId);
-            $checkoutId = 'gid://shopify/Checkout/a66e899f49c98ffb9f28dca4210fd0b8?key=941bd5b6eab2d1b81d7d65331e707a41';
+
+            $checkoutId = 'gid://shopify/Checkout/93ea24e7933fa9ca8fdb8d99d472bb37?key=51a611dadecfe70ea34562cf6c45e93f';
             #3.更新结账
             //$this->updateCheckout($checkoutId);
             #3.1:查询运费
@@ -45,23 +50,26 @@ class ShopifyTest extends Command
             $customer = [
                 'acceptsMarketing' => true,
                 'email' => 'jesiahshaffer@gmail.com',
+                //'email' => 'novle18@163.com',
                 'firstName' => "l",
                 'lastName' => 'fx',
                 'password' => 'ddhd@2024',
-                'phone' => '+8617386037442'
+                'phone' => '+8617386037448'
             ];
             //$customerId = $this->createCustomer($customer);
             $customerId = 'gid://shopify/Customer/7895980048685';
             # 获取customerAccesstoken
-            //$accessToken = $this->getCustomerAccessToken($customer);
+            $accessToken = $this->getCustomerAccessToken($customer);
+
             $customerAccessToken = '148b73cb85a66efb3ae3df3f212ccd8d';
             #4.2 将客户与账号关联起来
             //$this->associateCustomerWithCheckout($checkoutId,$customerAccessToken);
+
             #5.完成结账
             //$this->completeCheckout($checkoutId);
             #5.1: 创建支付
             $amount = '43.0';
-            //$this->createPayment($checkoutId,$amount);
+            $this->createPayment($checkoutId,$amount);
         }catch (\Exception $e){
             dump($e);
         }
@@ -83,7 +91,7 @@ class ShopifyTest extends Command
             scopes: $scopes,
             hostName: env('SHOPIFY_APP_HOST_NAME'),
             sessionStorage: new FileSessionStorage($path),
-            apiVersion: '2023-04',
+            apiVersion: env('SHOPIFY_API_VERSION'),
             isEmbeddedApp: true,
             isPrivateApp: false,
         );
@@ -133,17 +141,21 @@ QUERY;
     {
         $items = [
             [
-                'variantId'=>$variantId,
+                'variantId'=>'gid://shopify/ProductVariant/47310414577965',
                 'quantity'=>1,
-            ]
+            ],
+            [
+                'variantId'=>'gid://shopify/ProductVariant/47310414610733',
+                'quantity'=>2,
+            ],
         ];
         $query = <<<QUERY
-mutation(\$lineItems:CheckoutCreateInput!) {
+mutation(\$lineItems:CheckoutCreateInput!,\$first:Int) {
   checkoutCreate(input: \$lineItems) {
     checkout {
        id
        webUrl
-       lineItems(first: 1) {
+       lineItems(first: \$first) {
            nodes {
              title
              quantity
@@ -155,12 +167,12 @@ mutation(\$lineItems:CheckoutCreateInput!) {
 
 QUERY;
         $variables = [
-            'lineItems'=>['lineItems'=>$items]
+            'lineItems'=>['lineItems'=>$items],
+            'first'=>count($items)
         ];
         $res = $this->send($query,$variables);
-        dump($res);
-        $this->checkoutId = $res['data']['checkoutCreate']['checkout']['id'] ?? '';
-        dd($this->checkoutId);
+        dd($res);
+
     }
 
     //更新结算
@@ -397,26 +409,32 @@ QUERY;
     public function createPayment($checkoutId,$amount)
     {
         try {
-            $session_id = session_create_id();
-
+//            $redirect_url = 'https://social-electronic-march-same.trycloudflare.com/api/auth/callback';
+//            $url = OAuth::begin(env('SHOPIFY_APP_HOST_NAME'),$redirect_url,true);
+//
+//              $session_id = '0bc97ad8-662d-48aa-ac9d-13bfdcb3060e';
 //            Context::$API_VERSION = "2023-04";
-//            $session = new Session($session_id, env('SHOPIFY_APP_HOST_NAME'), true, "test");
+//            $session = new Session($session_id, env('SHOPIFY_APP_HOST_NAME'), true, "af1bd89a-71e6-4ac7-bf65-1be8e5d1908e");
 //            $session->setAccessToken(env('SHOPIFY_API_ADMIN_TOKEN'));
+
+            $session_token = <<<TOKEN
+Bearer eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJzaG9wX2lkIjoiY2FzaGJ1c29sLm15c2hvcGlmeS5jb20iLCJjYXJ0X3Rva2VuIjoiWjJOd0xYVnpMV05sYm5SeVlXd3hPakF4U0ZReU1sUXpSelZRUkRWSVJGZFpObEZXTUZBNFNEQkwiLCJzZXNzaW9uX2lkIjoiWjJOd0xYVnpMV05sYm5SeVlXd3hPakF4U0ZReU1sUXpSelZRUkRWSVJGZFpObEZXTUZBNFNEQkwiLCJjbGllbnRfaWQiOiJkODVhYzI5Ny0yZmUzLTQ4ODQtODEzOS02ZGIxOGM4MThhNWUiLCJjaGVja291dF9pZCI6ImNvY2x1Z3JicGpmeHZ3eTVvdXAyZTYwMmE3NSIsImZ1bm5lbF90eXBlIjoib3BjIiwiaWF0IjoxNzExOTY0MjcxLCJleHAiOjE3MTI1NjkwNzEsImlzcyI6IlJJTkFfdjEifQ.dldmHiKr17jzFsEozGfQWajkWHVx2wthZ5uWSd207JdrZUOx-vk0HTaOg2C8xSGJ82MV1_7_e-1MYvZT5PUZ6UAw_iIYTro_NKEBmoIY2C5DprTUN2niuZNYlBKFHq-ZjXHbFVUnXuF4VqYIhCekQtKHYWkiWcNwHWDJ9YklNvXabkvCtzs94ZKLPBpCdzyx6t5B39BrP81yrPJGmft9kpp7rBBWDTkpZnHWdZJRWV28TzlwTrpw0h2um8Y-36qrd-2Hed3jDm6IEvTzznrJTXGcGhuu7c6YS1cCzO82oySV9mnOokAPM9UYF661N8xC99c7P5lVHLSsYoYQO2-s5w
+TOKEN;
+
 
             $header = [
                 'Content-Type'=> 'application/json',
-                'X-Shopify-Access-Token'=>env('SHOPIFY_API_ADMIN_TOKEN')
+                'authorization'=>$session_token
             ];
             $cookie = [];
             $session = Utils::loadCurrentSession($header, $cookie, true);
-            dd($session);
             $payment = new Payment($session);
             $payment->checkout_id = $checkoutId;
             //$payment->checkout_id = '7972465ae1127aedc3f9d4f19f6b47ff';
             $payment->request_details = [
                 "ip_address" => "124.71.203.150",
-                "accept_language" => "en-US,en;q=0.8,fr;q=0.6",
-                "user_agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36"
+                "accept_language" => "zh-CN,zh;q=0.9",
+                "user_agent" => "Chrome/123.0.0.0 Safari/537.36"
             ];
             $payment->amount = $amount;
             $payment->session_id = $session->getId();

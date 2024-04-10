@@ -52,6 +52,11 @@ class ExceptionHandle extends Handle
     {
         // 添加自定义异常处理机制
 
+        if($e instanceof ValidateException){
+            return json(['code'=>412,'msg'=>$e->getMessage(),'data'=>[]]);
+        }else{
+            return json(['code'=>500,'msg'=>$e->getMessage(),'data'=>[]]);
+        }
         // 其他错误交给系统处理
         return parent::render($request, $e);
     }

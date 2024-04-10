@@ -8,7 +8,25 @@ class Index extends BaseController
 {
     public function index()
     {
-        return '<style>*{ padding: 0; margin: 0; }</style><iframe src="https://www.thinkphp.cn/welcome?version=' . \think\facade\App::version() . '" width="100%" height="100%" frameborder="0" scrolling="auto"></iframe>';
+        $data = [
+            ['id' => 1],
+            ['id' => 2],
+            ['id' => 'three'], // 这里添加了一个非数字的元素
+        ];
+
+        $result = $this->validate([
+            'data' => $data,
+        ], [
+            'data'  => 'require|array',
+            'data.*.id' => 'require|number',
+        ]);
+
+        if (true !== $result) {
+            return $result;
+        }
+
+        // 验证通过
+        return '验证通过';
     }
 
     public function hello($name = 'ThinkPHP8')

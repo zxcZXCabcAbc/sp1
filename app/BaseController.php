@@ -91,4 +91,14 @@ abstract class BaseController
         return $v->failException(true)->check($data);
     }
 
+    public function success($data = [])
+    {
+        return json(['code'=>200,'msg'=>'success','data'=>$data]);
+    }
+
+    public function error($msg,$code = 500,$data = [])
+    {
+        return json(['code'=>$code,'msg'=>$msg,$data => []]);
+    }
+
 }
