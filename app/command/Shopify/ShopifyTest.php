@@ -16,6 +16,7 @@ use think\console\input\Option;
 use think\console\Output;
 use Shopify\Context;
 use think\helper\Arr;
+use Shopify\Rest\Admin2023_04\Checkout;
 
 class ShopifyTest extends Command
 {
@@ -35,7 +36,7 @@ class ShopifyTest extends Command
             //$variantId = $this->getProductsList();
             $variantId = 'gid://shopify/ProductVariant/47310414577965';
             #2.创建结账
-            //$checkoutId = $this->createCheckOut($variantId);
+            $checkoutId = $this->createCheckOut($variantId);
 
             $checkoutId = 'gid://shopify/Checkout/93ea24e7933fa9ca8fdb8d99d472bb37?key=51a611dadecfe70ea34562cf6c45e93f';
             #3.更新结账
@@ -59,7 +60,7 @@ class ShopifyTest extends Command
             //$customerId = $this->createCustomer($customer);
             $customerId = 'gid://shopify/Customer/7895980048685';
             # 获取customerAccesstoken
-            $accessToken = $this->getCustomerAccessToken($customer);
+            //$accessToken = $this->getCustomerAccessToken($customer);
 
             $customerAccessToken = '148b73cb85a66efb3ae3df3f212ccd8d';
             #4.2 将客户与账号关联起来
@@ -83,7 +84,8 @@ class ShopifyTest extends Command
             'unauthenticated_read_product_listings',
             'unauthenticated_read_product_tags',
             'unauthenticated_read_checkouts',
-            'unauthenticated_write_checkouts'
+            'unauthenticated_write_checkouts',
+            'write_checkouts'
         ];
         Context::initialize(
             apiKey: env('SHOPIFY_API_KEY'),
@@ -162,6 +164,8 @@ mutation(\$lineItems:CheckoutCreateInput!,\$first:Int) {
          }
        }
     }
+    queueToken
+   
   }
 }
 
@@ -412,22 +416,36 @@ QUERY;
 //            $redirect_url = 'https://social-electronic-march-same.trycloudflare.com/api/auth/callback';
 //            $url = OAuth::begin(env('SHOPIFY_APP_HOST_NAME'),$redirect_url,true);
 //
-//              $session_id = '0bc97ad8-662d-48aa-ac9d-13bfdcb3060e';
-//            Context::$API_VERSION = "2023-04";
-//            $session = new Session($session_id, env('SHOPIFY_APP_HOST_NAME'), true, "af1bd89a-71e6-4ac7-bf65-1be8e5d1908e");
-//            $session->setAccessToken(env('SHOPIFY_API_ADMIN_TOKEN'));
+            $session_id = '0bc97ad8-662d-48aa-ac9d-13bfdcb3060e';
+            Context::$API_VERSION = "2024-01";
+            $session = new Session($session_id, env('SHOPIFY_APP_HOST_NAME'), true, "af1bd89a-71e6-4ac7-bf65-1be8e5d1908e");
+            $session->setAccessToken(env('SHOPIFY_API_ADMIN_TOKEN'));
 
-            $session_token = <<<TOKEN
-Bearer eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJzaG9wX2lkIjoiY2FzaGJ1c29sLm15c2hvcGlmeS5jb20iLCJjYXJ0X3Rva2VuIjoiWjJOd0xYVnpMV05sYm5SeVlXd3hPakF4U0ZReU1sUXpSelZRUkRWSVJGZFpObEZXTUZBNFNEQkwiLCJzZXNzaW9uX2lkIjoiWjJOd0xYVnpMV05sYm5SeVlXd3hPakF4U0ZReU1sUXpSelZRUkRWSVJGZFpObEZXTUZBNFNEQkwiLCJjbGllbnRfaWQiOiJkODVhYzI5Ny0yZmUzLTQ4ODQtODEzOS02ZGIxOGM4MThhNWUiLCJjaGVja291dF9pZCI6ImNvY2x1Z3JicGpmeHZ3eTVvdXAyZTYwMmE3NSIsImZ1bm5lbF90eXBlIjoib3BjIiwiaWF0IjoxNzExOTY0MjcxLCJleHAiOjE3MTI1NjkwNzEsImlzcyI6IlJJTkFfdjEifQ.dldmHiKr17jzFsEozGfQWajkWHVx2wthZ5uWSd207JdrZUOx-vk0HTaOg2C8xSGJ82MV1_7_e-1MYvZT5PUZ6UAw_iIYTro_NKEBmoIY2C5DprTUN2niuZNYlBKFHq-ZjXHbFVUnXuF4VqYIhCekQtKHYWkiWcNwHWDJ9YklNvXabkvCtzs94ZKLPBpCdzyx6t5B39BrP81yrPJGmft9kpp7rBBWDTkpZnHWdZJRWV28TzlwTrpw0h2um8Y-36qrd-2Hed3jDm6IEvTzznrJTXGcGhuu7c6YS1cCzO82oySV9mnOokAPM9UYF661N8xC99c7P5lVHLSsYoYQO2-s5w
-TOKEN;
-
-
-            $header = [
-                'Content-Type'=> 'application/json',
-                'authorization'=>$session_token
+//            $session_token = <<<TOKEN
+//Bearer eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJzaG9wX2lkIjoiY2FzaGJ1c29sLm15c2hvcGlmeS5jb20iLCJjYXJ0X3Rva2VuIjoiWjJOd0xYVnpMV05sYm5SeVlXd3hPakF4U0ZReU1sUXpSelZRUkRWSVJGZFpObEZXTUZBNFNEQkwiLCJzZXNzaW9uX2lkIjoiWjJOd0xYVnpMV05sYm5SeVlXd3hPakF4U0ZReU1sUXpSelZRUkRWSVJGZFpObEZXTUZBNFNEQkwiLCJjbGllbnRfaWQiOiJkODVhYzI5Ny0yZmUzLTQ4ODQtODEzOS02ZGIxOGM4MThhNWUiLCJjaGVja291dF9pZCI6ImNvY2x1Z3JicGpmeHZ3eTVvdXAyZTYwMmE3NSIsImZ1bm5lbF90eXBlIjoib3BjIiwiaWF0IjoxNzExOTY0MjcxLCJleHAiOjE3MTI1NjkwNzEsImlzcyI6IlJJTkFfdjEifQ.dldmHiKr17jzFsEozGfQWajkWHVx2wthZ5uWSd207JdrZUOx-vk0HTaOg2C8xSGJ82MV1_7_e-1MYvZT5PUZ6UAw_iIYTro_NKEBmoIY2C5DprTUN2niuZNYlBKFHq-ZjXHbFVUnXuF4VqYIhCekQtKHYWkiWcNwHWDJ9YklNvXabkvCtzs94ZKLPBpCdzyx6t5B39BrP81yrPJGmft9kpp7rBBWDTkpZnHWdZJRWV28TzlwTrpw0h2um8Y-36qrd-2Hed3jDm6IEvTzznrJTXGcGhuu7c6YS1cCzO82oySV9mnOokAPM9UYF661N8xC99c7P5lVHLSsYoYQO2-s5w
+//TOKEN;
+//
+//
+//            $header = [
+//                'Content-Type'=> 'application/json',
+//                'authorization'=>$session_token
+//            ];
+//            $cookie = [];
+//            $session = Utils::loadCurrentSession($header, $cookie, true);
+            $checkout = new Checkout($session);
+            $checkout->line_items = [
+                [
+                    "variant_id" => '47310414577965',
+                    "quantity" => 5
+                ]
             ];
-            $cookie = [];
-            $session = Utils::loadCurrentSession($header, $cookie, true);
+            $checkout->save(
+                true, // Update Object
+            );
+
+            dd($checkout);
+
+
             $payment = new Payment($session);
             $payment->checkout_id = $checkoutId;
             //$payment->checkout_id = '7972465ae1127aedc3f9d4f19f6b47ff';

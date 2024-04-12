@@ -5,6 +5,7 @@ namespace app\controller;
 
 use app\BaseController;
 use app\service\action\admin\Location;
+use app\service\action\admin\ShopifyPay;
 use app\service\action\store\Payment;
 use app\service\ShopifyApiService;
 use think\exception\ValidateException;
@@ -36,9 +37,11 @@ class Checkout extends BaseController
     public function createCheckout(Request $request)
     {
         $lineItems = $request->post('lineItems');
-        foreach ($lineItems as $item){
+        foreach ($lineItems as &$item){
             if(!isset($item['variantId']) || empty($item['variantId'])) throw new ValidateException('variantId require');
             if(!isset($item['quantity']) || empty($item['quantity'])) throw new ValidateException('quantity require');
+            //gid://shopify/ProductVariant/
+            $item['variantId'] = sprintf('gid://shopify/ProductVariant/%s',$item['variantId']);
         }
         $api = new Payment();
         $data = $api->createCheckOut($lineItems);
@@ -122,6 +125,21 @@ class Checkout extends BaseController
         #3.关联订单
         $data = $api->associateCustomerWithCheckout($request->post('checkoutId'),$access_token);
         return $this->success($data);
+    }
+    //完成支付
+    public function completePayment(Request $request)
+    {
+        $this->validate(
+            $request->all(),
+            [
+                'checkoutId'=>'require',
+                'amount'=>'require|number',
+            ]);
+        $payApi = new ShopifyPay(ShopifyApiService::ADMIN_API,$request);
+        $paymentId = $payApi->createPaymentId($request);
+
+
+
     }
 
 

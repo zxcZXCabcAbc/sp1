@@ -25,7 +25,9 @@
         "topthink/think-orm": "^3.0",
         "topthink/think-filesystem": "^2.0",
         "shopify/shopify-api": "^5.3",
-        "topthink/think-helper": "^3.1"
+        "topthink/think-helper": "^3.1",
+        "nesbot/carbon": "^2.72",
+        "topthink/think-annotation": "^2.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.0",
