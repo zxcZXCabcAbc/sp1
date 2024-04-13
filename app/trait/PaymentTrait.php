@@ -29,7 +29,7 @@ trait PaymentTrait
         );
     }
 
-    public function getPaySession()
+    public function getPaySession() : Session
     {
         $session = new Session(uniqid(time()), env('SHOPIFY_APP_HOST_NAME'), true, md5(time()));
         $session->setAccessToken(env('SHOPIFY_API_ADMIN_TOKEN'));

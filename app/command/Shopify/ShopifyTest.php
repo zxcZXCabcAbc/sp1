@@ -36,7 +36,7 @@ class ShopifyTest extends Command
             //$variantId = $this->getProductsList();
             $variantId = 'gid://shopify/ProductVariant/47310414577965';
             #2.创建结账
-            $checkoutId = $this->createCheckOut($variantId);
+            //$checkoutId = $this->createCheckOut($variantId);
 
             $checkoutId = 'gid://shopify/Checkout/93ea24e7933fa9ca8fdb8d99d472bb37?key=51a611dadecfe70ea34562cf6c45e93f';
             #3.更新结账
@@ -57,10 +57,10 @@ class ShopifyTest extends Command
                 'password' => 'ddhd@2024',
                 'phone' => '+8617386037448'
             ];
-            //$customerId = $this->createCustomer($customer);
+            $customerId = $this->createCustomer($customer);
             $customerId = 'gid://shopify/Customer/7895980048685';
             # 获取customerAccesstoken
-            //$accessToken = $this->getCustomerAccessToken($customer);
+            $accessToken = $this->getCustomerAccessToken($customer);
 
             $customerAccessToken = '148b73cb85a66efb3ae3df3f212ccd8d';
             #4.2 将客户与账号关联起来

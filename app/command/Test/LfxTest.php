@@ -3,16 +3,21 @@ declare (strict_types = 1);
 
 namespace app\command\Test;
 
+use app\event\PushOrder;
+use app\listener\PushOrderListener;
 use app\model\BaseModel;
 use app\model\Customer;
 use app\model\LineItems;
 use app\model\Orders;
+use app\service\action\rest\CustomerRest;
+use app\service\action\rest\OrderRest;
 use Carbon\Carbon;
 use think\console\Command;
 use think\console\Input;
 use think\console\input\Argument;
 use think\console\input\Option;
 use think\console\Output;
+use think\facade\Event;
 use think\Model;
 
 class LfxTest extends Command
@@ -27,6 +32,16 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
+
+            //$rest = new CustomerRest();
+            //dd($rest->create_customer());
+            $order = Orders::query()->find(2);
+            Event::trigger(PushOrder::class,new PushOrder($order));
+
+            dd(11);
+
+
+
             // 指令输出
             $path = public_path() . '\json\draft_order.json';
             $str = file_get_contents($path);

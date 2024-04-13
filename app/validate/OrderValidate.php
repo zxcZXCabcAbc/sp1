@@ -5,7 +5,7 @@ namespace app\validate;
 
 use think\Validate;
 
-class OrderValidate extends Validate
+class OrderValidate extends BaseValidate
 {
     /**
      * 定义验证规则
@@ -14,16 +14,24 @@ class OrderValidate extends Validate
      * @var array
      */
     protected $rule = [
-        'currency'=>['require','alpha'],
-        'phone'=>['require',],
-        'total_discounts'=>['require','number'],
-        'total_line_items_price'=>['require','number'],
-        'total_outstanding'=>['require','number'],
-        'total_price'=>['require','number'],
-        'total_shipping_price'=>['require','number'],
-        'total_tax'=>['require','number'],
-        'total_tip_received'=>['require','number'],
-        'shipping_address'=>[],
+        'line_items'=>[
+            'array',
+            'checkLines'=>
+                [
+                    'price'=>'require|float',
+                    'quantity'=>'require|number',
+                    'title'=>'string',
+                    'variant_id'=>'number'
+                ]
+        ],
+        'email'=>['email'],
+        'shipping_address'=>['array'],
+        'shipping_line'=>['array'],
+        'applied_discount'=>['array'],
+        'shipping_address.address1'=>['string'],
+        'shipping_address.city'=>['string'],
+        'shipping_address.company'=>['string'],
+
     ];
 
     /**

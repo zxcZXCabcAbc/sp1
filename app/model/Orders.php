@@ -3,6 +3,9 @@ declare (strict_types = 1);
 
 namespace app\model;
 
+/**
+ * @property string $admin_graphql_api_id
+ */
 class Orders extends BaseModel
 {
     protected $table = 'orders';
@@ -20,12 +23,13 @@ class Orders extends BaseModel
         'tags','token','total_discounts',
         'total_line_items_price','total_outstanding','total_price',
         'total_shipping_price','total_tax','total_tip_received',
-        'total_weight','updated_at','user_id','tax_lines','status'
+        'total_weight','updated_at','user_id','tax_lines','status','order_type'
     ];
 
     protected $json = ['client_details','note_attributes','payment_gateway_names','discount_codes','tax_lines'];
     protected $jsonAssoc = true;
-
+    const ORDER_DRAFT = 1;//草稿订单
+    const ORDER_NORMAL = 2;//正常订单
     public function addresses()
     {
         return $this->hasMany(Address::class,'order_id');

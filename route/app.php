@@ -28,6 +28,8 @@ Route::group('/api',function (){
         Route::post('/set-shipping','checkout/setShippingFee');//设置运费
         Route::post('/create-customer','checkout/createCustomer');//创建客户
         Route::post('/complete-payment','checkout/completePayment');//完成支付
-        Route::post('/create-order','order/createOrder');//创建订单
+        Route::post('/draft-create','order/createDraftOrder');//创建草稿订单
+        Route::put('/draft-modify/:id','Order/modifyDraftOrder')->model(\app\model\Orders::class);//修改订单
     });
 });
+//->middleware(\app\middleware\CheckShopifyRequest::class);//验证前端请求

@@ -6,7 +6,7 @@ namespace app\validate;
 use think\exception\ValidateException;
 use think\Validate;
 
-class DraftOrderValidate extends Validate
+class DraftOrderValidate extends BaseValidate
 {
     /**
      * 定义验证规则
@@ -31,22 +31,6 @@ class DraftOrderValidate extends Validate
         'line_items.checkLines'=>'line_items format is error',
     ];
 
-    protected function checkLines($value,$rule,$data)
-    {
-        $isPass = true;
-        foreach ($value as $vv){
-            try {
-                $validate = new Validate();
-                $validate->rule($rule);
-                $validate->failException()->check($vv);
-            }catch (ValidateException $e){
-                dump($e->getMessage());
-                $isPass = false;
-                break;
-            }
-        }
 
-        return $isPass;
-    }
 
 }
