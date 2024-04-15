@@ -6,7 +6,9 @@ namespace app\model;
 use think\Model;
 
 /**
- * @mixin \think\Model
+ * @property integer $quantity
+ * @property string $price
+ * @property string $title
  */
 class LineItems extends BaseModel
 {

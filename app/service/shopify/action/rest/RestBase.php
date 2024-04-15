@@ -2,6 +2,7 @@
 
 namespace app\service\shopify\action\rest;
 
+use app\model\Shops;
 use app\trait\PaymentTrait;
 
 abstract class RestBase
@@ -18,10 +19,11 @@ abstract class RestBase
 
     public function getInstance(){
         try {
+            $shop = $this->getShop();
             $className = static::class;
             $class = pathinfo($className, PATHINFO_BASENAME);
             $class = str_replace('Rest', '', $class);
-            $version = config('shopify.app_version');
+            $version = $shop ? $shop->version : config('shopify.app_version');
             $version = str_replace('-', '_', $version);
             $shopifyClass = sprintf('Shopify\Rest\Admin%s\%s', $version, $class);
             $rest = new \ReflectionClass($shopifyClass);

@@ -30,6 +30,9 @@ Route::group('/api',function (){
         Route::post('/complete-payment','checkout/completePayment');//完成支付
         Route::post('/draft-create','order/createDraftOrder');//创建草稿订单
         Route::put('/draft-modify/:id','Order/modifyDraftOrder')->model(\app\model\Orders::class);//修改订单
+        Route::get('/payment-enable-get','Order/getPaymentMethod');//获取支付方式
+        Route::post('/place-order/:id','Order/placeOrder')->model(\app\model\Orders::class);//下单
+        Route::get('/session-token/:id','Order/getSessionToken')->model(\app\model\ShopsPayment::class);//sessionToken
     });
-});
-//->middleware(\app\middleware\CheckShopifyRequest::class);//验证前端请求
+})
+->middleware(\app\middleware\CheckShopifyRequest::class);//验证前端请求

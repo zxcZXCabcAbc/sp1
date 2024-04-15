@@ -6,7 +6,11 @@ namespace app\model;
 use think\Model;
 
 /**
- * @mixin \think\Model
+ * @property string $email
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $phone
+ * @property string $note
  */
 class Customer extends BaseModel
 {

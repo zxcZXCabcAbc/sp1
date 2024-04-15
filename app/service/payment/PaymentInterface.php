@@ -6,5 +6,5 @@ use app\Request;
 
 interface PaymentInterface
 {
-    public function placeOrder(Request $request);
+    public function placeOrder();
 }

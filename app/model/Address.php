@@ -6,7 +6,23 @@ namespace app\model;
 use think\Model;
 
 /**
- * @mixin \think\Model
+ * @property string $first_name
+ * @property string $address1
+ * @property string $phone
+ * @property string $city
+ * @property string $zip
+ * @property string $province
+ * @property string $country
+ * @property string $last_name
+ * @property string $address2
+ * @property string $latitude
+ * @property string $longitude
+ * @property string $name
+ * @property string $country_code
+ * @property string $province_code
+ * @property integer $order_id
+ * @property integer $type
+ * @property integer $is_default
  */
 class Address extends BaseModel
 {

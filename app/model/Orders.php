@@ -3,8 +3,22 @@ declare (strict_types = 1);
 
 namespace app\model;
 
+use think\model\relation\HasMany;
+use think\model\relation\HasOne;
+
 /**
  * @property string $admin_graphql_api_id
+ * @property string $browser_ip
+ * @property string $total_price
+ * @property string $currency
+ * @property Address $shippingAddress
+ * @property Address $billingAddress
+ * @property string $contact_email
+ * @property string $phone
+ * @property integer $shop_id
+ * @property Shops $shop
+ * @property ShopsPayment $payment
+ * @property integer $payment_id
  */
 class Orders extends BaseModel
 {
@@ -23,7 +37,8 @@ class Orders extends BaseModel
         'tags','token','total_discounts',
         'total_line_items_price','total_outstanding','total_price',
         'total_shipping_price','total_tax','total_tip_received',
-        'total_weight','updated_at','user_id','tax_lines','status','order_type'
+        'total_weight','updated_at','user_id','tax_lines','status','order_type',
+        'shop_id','payment_id',
     ];
 
     protected $json = ['client_details','note_attributes','payment_gateway_names','discount_codes','tax_lines'];
@@ -40,7 +55,7 @@ class Orders extends BaseModel
         return $this->hasOne(Customer::class,'order_id');
     }
 
-    public function items()
+    public function items():HasMany
     {
         return $this->hasMany(LineItems::class,'order_id');
     }
@@ -48,6 +63,48 @@ class Orders extends BaseModel
     public function shippings()
     {
         return $this->hasMany(ShippingLines::class,'order_id');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shops::class,'shop_id');
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(ShopsPayment::class,'payment_id');
+    }
+
+    /**
+     * @return Address
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @property string $address1
+     */
+    public function getShippingAddressAttr() :Address
+    {
+        return $this->addresses()->where('type',Address::SHIPPING_ADDRESS)->find();
+    }
+
+    public function getBillAddress():Address
+    {
+        return $this->addresses()->where('type',Address::BILLING_ADDRESS)->find();
+    }
+
+    public function getShopAttr():Shops
+    {
+        return $this->shop()->find();
+    }
+
+    public function getCustomerAttr(): Customer
+    {
+        return $this->customer()->find();
+    }
+
+    public function getPaymentAttr(): ShopsPayment
+    {
+        return $this->payment()->find();
     }
 
 }

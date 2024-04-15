@@ -3,6 +3,7 @@
 namespace app\logic;
 
 use app\model\Orders;
+use app\service\payment\PaymentBase;
 use app\service\shopify\action\rest\DraftOrderRest;
 use app\trait\OrderTrait;
 use app\trait\PaymentTrait;
@@ -48,5 +49,26 @@ class OrderLogic
         $this->saveOrder($draft,$order);
         return compact('draft');
     }
+
+    public function placeOrder(Request $request,Orders $order)
+    {
+        #1.更新订单
+        $order->payment_id = $request->post('payment_id');
+        $order->save();
+        #2.更新账单地址
+        $this->saveBillingAddress($order,$request->param('billingAddress'));
+        #2.下单
+        $payment = new PaymentBase($order,$request);
+        return $payment->createThirdPayment();
+
+    }
+
+    protected function saveBillingAddress(Orders $order,array $billingAddressData)
+    {
+        $billingAddress = $order->billingAddress;
+        $billingAddress->update($billingAddressData);
+        return true;
+    }
+
 
 }

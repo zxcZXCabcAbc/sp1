@@ -4,8 +4,11 @@ declare (strict_types = 1);
 namespace app\controller;
 
 use app\BaseController;
+use app\libs\AsiabillSDK\action\SessionAsiabill;
 use app\logic\OrderLogic;
 use app\model\Orders;
+use app\model\Shops;
+use app\model\ShopsPayment;
 use app\validate\DraftOrderValidate;
 use app\validate\OrderValidate;
 use think\annotation\Inject;
@@ -36,6 +39,25 @@ class Order extends BaseController
             dump($e);
         }
    }
+
+    public function getPaymentMethod(Request $request)
+    {
+        return $this->success(Shops::getEnablePayment($request));
+    }
+
+    //下单
+    public function placeOrder(Request $request,Orders $order)
+    {
+        $data = $this->logic->placeOrder($request,$order);
+        return $this->success($data);
+    }
+
+    //获取sessionToken
+    public function getSessionToken(Request $request,ShopsPayment $payment)
+    {
+        $session = new SessionAsiabill($payment);
+        return $this->success($session->get_session_token());
+    }
 
 
 }

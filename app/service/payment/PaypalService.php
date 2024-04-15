@@ -4,10 +4,10 @@ namespace app\service\payment;
 
 use app\Request;
 
-class PaypalService implements PaymentInterface
+class PaypalService extends PaymentBase implements PaymentInterface
 {
 
-    public function placeOrder(Request $request)
+    public function placeOrder()
     {
         // TODO: Implement placeOrder() method.
     }

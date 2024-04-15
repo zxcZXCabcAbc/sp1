@@ -19,6 +19,8 @@ class CheckShopifyRequest
     {
         try {
             $shop = $request->header('X-Opc-Shop-Id');
+            if(empty($shop)) throw new \Exception('miss shop host');
+            return $next($request);
             $path_prefix = $request->request('path_prefix', '');
             $timestamp = $request->request('timestamp');
             $logged_in_customer_id = $request->request('logged_in_customer_id', '');

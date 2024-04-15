@@ -4,8 +4,13 @@ declare (strict_types = 1);
 namespace app\command\Test;
 
 use app\event\PushOrder;
+use app\libs\AsiabillSDK\builder\CheckoutBuilder;
 use app\model\Customer;
 use app\model\Orders;
+use app\model\Shops;
+use app\model\ShopsPayment;
+use app\trait\PaymentTrait;
+use Asiabill\Classes\AsiabillIntegration;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
@@ -13,6 +18,7 @@ use think\facade\Event;
 
 class LfxTest extends Command
 {
+    use PaymentTrait;
     protected function configure()
     {
         // 指令配置
@@ -26,6 +32,18 @@ class LfxTest extends Command
 
             //$rest = new CustomerRest();
             //dd($rest->create_customer());
+            $order = Orders::query()->find(1);
+            $builder = new CheckoutBuilder($order);
+            $data = $builder->setCustomerId('cus_tomer_test001')
+                    ->setCustomerPaymentMethodId('test')
+                    ->toArray();
+            dd($data);
+
+            //$sp = $this->getShop();
+            //$this->setUp();
+
+
+
             $order = Orders::query()->find(2);
             Event::trigger(PushOrder::class,new PushOrder($order));
 
