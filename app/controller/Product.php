@@ -4,7 +4,7 @@ declare (strict_types = 1);
 namespace app\controller;
 
 use app\BaseController;
-use app\service\action\store\Products;
+use app\service\shopify\action\store\Products;
 use think\Request;
 
 class Product extends BaseController

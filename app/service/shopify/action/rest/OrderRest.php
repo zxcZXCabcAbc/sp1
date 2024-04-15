@@ -1,8 +1,6 @@
 <?php
 
-namespace app\service\action\rest;
-
-use Shopify\Rest\Admin2023_04\Order;
+namespace app\service\shopify\action\rest;
 
 class OrderRest extends RestBase
 {

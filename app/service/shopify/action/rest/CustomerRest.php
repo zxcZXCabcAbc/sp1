@@ -1,6 +1,7 @@
 <?php
 
-namespace app\service\action\rest;
+namespace app\service\shopify\action\rest;
+
 class CustomerRest extends RestBase
 {
     /**

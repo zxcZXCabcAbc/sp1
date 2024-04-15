@@ -1,8 +1,8 @@
 <?php
 
-namespace app\service\action\admin;
+namespace app\service\shopify\action\admin;
 
-use app\service\ShopifyApiService;
+use app\service\shopify\ShopifyApiService;
 use Shopify\Rest\Admin2023_04\Payment;
 use think\Request;
 

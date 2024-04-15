@@ -4,21 +4,12 @@ declare (strict_types = 1);
 namespace app\command\Test;
 
 use app\event\PushOrder;
-use app\listener\PushOrderListener;
-use app\model\BaseModel;
 use app\model\Customer;
-use app\model\LineItems;
 use app\model\Orders;
-use app\service\action\rest\CustomerRest;
-use app\service\action\rest\OrderRest;
-use Carbon\Carbon;
 use think\console\Command;
 use think\console\Input;
-use think\console\input\Argument;
-use think\console\input\Option;
 use think\console\Output;
 use think\facade\Event;
-use think\Model;
 
 class LfxTest extends Command
 {

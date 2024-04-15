@@ -1,10 +1,8 @@
 <?php
 
-namespace app\service\action\admin;
+namespace app\service\shopify\action\admin;
 
-use app\service\ShopifyApiService;
-use Shopify\Rest\Admin2024_01\Country;
-use Shopify\Utils;
+use app\service\shopify\ShopifyApiService;
 
 class Location extends ShopifyApiService
 {

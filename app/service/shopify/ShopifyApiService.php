@@ -1,13 +1,11 @@
 <?php
 
-namespace app\service;
+namespace app\service\shopify;
 
 use app\trait\PaymentTrait;
-use Shopify\Auth\FileSessionStorage;
+use Shopify\Auth\Session;
 use Shopify\Clients\Rest;
 use Shopify\Clients\Storefront;
-use Shopify\Context;
-use Shopify\Auth\Session;
 use Shopify\Utils;
 use think\Request;
 

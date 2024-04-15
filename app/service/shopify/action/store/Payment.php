@@ -1,8 +1,8 @@
 <?php
 
-namespace app\service\action\store;
+namespace app\service\shopify\action\store;
 
-use app\service\ShopifyApiService;
+use app\service\shopify\ShopifyApiService;
 
 class Payment extends ShopifyApiService
 {

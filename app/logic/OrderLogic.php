@@ -2,12 +2,8 @@
 
 namespace app\logic;
 
-use app\model\Address;
-use app\model\Customer;
-use app\model\LineItems;
 use app\model\Orders;
-use app\model\ShippingLines;
-use app\service\action\rest\DraftOrderRest;
+use app\service\shopify\action\rest\DraftOrderRest;
 use app\trait\OrderTrait;
 use app\trait\PaymentTrait;
 use think\annotation\Inject;

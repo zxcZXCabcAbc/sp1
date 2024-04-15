@@ -1,6 +1,6 @@
 <?php
 
-namespace app\service\action\rest;
+namespace app\service\shopify\action\rest;
 use think\Request;
 
 class DraftOrderRest extends RestBase
