@@ -20,18 +20,17 @@ abstract class RestBase
     public function getInstance(){
         try {
             $shop = $this->getShop();
-            $className = static::class;
-            dump(compact('className'));
+            $className = static::Class;
             $class = pathinfo($className, PATHINFO_BASENAME);
             $class = str_replace('Rest', '', $class);
             $version = $shop ? $shop->version : config('shopify.app_version');
             $version = str_replace('-', '_', $version);
             $shopifyClass = sprintf('Shopify\Rest\Admin%s\%s', $version, $class);
-            dump(compact('shopifyClass'));
+            dd(compact('shopifyClass','class','version'));
             $rest = new \ReflectionClass($shopifyClass);
             $this->rest = $rest->newInstance($this->session);
         }catch (\ReflectionException $e){
-            dump($e);
+            dd($e);
         }
     }
 
