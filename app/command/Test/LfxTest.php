@@ -30,6 +30,8 @@ class LfxTest extends Command
     {
         try {
 
+            $path = 'a/b/c/test';
+            dd(pathinfo($path,PATHINFO_BASENAME));
             //$rest = new CustomerRest();
             //dd($rest->create_customer());
             $order = Orders::query()->find(1);

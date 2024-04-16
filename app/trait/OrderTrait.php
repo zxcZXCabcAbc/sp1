@@ -35,7 +35,8 @@ trait OrderTrait
                 $orders = Orders::query()->find($orderId);
             }else{
                 $orderData = $orderModel->setIsConvert(true)->fill($order)->getDatas();
-                $orders->update($orderData);
+                $orders->save($orderData);
+                $orderId = $orders->id;
             }
             $this->saveLineItems($orders, $lineItems);//保存商品
             $this->saveAddress($orders, $shippingAddress);//保存地址
