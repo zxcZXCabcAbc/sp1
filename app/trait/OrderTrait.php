@@ -69,7 +69,10 @@ trait OrderTrait
     protected function saveAddress(Orders $orders,$shippingAddress)
     {
         if(empty($shippingAddress)) return false;
-        $addressData = (new Address())->fill($shippingAddress)->getDatas();
+        $billingAddress = $shippingAddress;
+        $billingAddress['type'] = Address::BILLING_ADDRESS;
+        $addressList = [$shippingAddress,$billingAddress];
+        $addressData = (new Address())->fill($addressList)->getDatas();
         $orders->addresses()->delete();
         return $orders->addresses()->saveAll($addressData);
     }

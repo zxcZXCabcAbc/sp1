@@ -11,6 +11,7 @@ use app\model\Shops;
 use app\model\ShopsPayment;
 use app\validate\DraftOrderValidate;
 use app\validate\OrderValidate;
+use app\validate\PlaceOrderValidate;
 use think\annotation\Inject;
 use think\Request;
 
@@ -31,13 +32,9 @@ class Order extends BaseController
     //更新订单
     public function modifyDraftOrder(Request $request,Orders $order)
     {
-        try {
-            Validate(OrderValidate::class)->check($request->put());
-            $data = $this->logic->updateDraftOrder($request, $order);
-            return $this->success($data);
-        }catch (\Exception $e){
-            dump($e);
-        }
+        Validate(OrderValidate::class)->check($request->put());
+        $data = $this->logic->updateDraftOrder($request, $order);
+        return $this->success($data);
    }
 
     public function getPaymentMethod(Request $request)
@@ -48,6 +45,7 @@ class Order extends BaseController
     //下单
     public function placeOrder(Request $request,Orders $order)
     {
+        Validate(PlaceOrderValidate::class)->check($request->post());
         $data = $this->logic->placeOrder($request,$order);
         return $this->success($data);
     }

@@ -21,7 +21,6 @@ use think\Request;
  */
 class Shops extends BaseModel
 {
-    protected $table = 'shops';
     public $autoWriteTimestamp = true;
     protected $dateFormat = 'U';
     protected $field = [

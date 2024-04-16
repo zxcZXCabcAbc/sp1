@@ -10,7 +10,6 @@ use think\Model;
  */
 class ShippingLines extends BaseModel
 {
-    protected $table = 'shipping_lines';
     protected $field = [
         'order_id','shipping_id','carrier_identifier','carrier_identifier',
         'code','discounted_price','is_removed','phone',

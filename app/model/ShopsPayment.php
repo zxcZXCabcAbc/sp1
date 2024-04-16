@@ -24,7 +24,6 @@ use think\model\relation\HasOne;
  */
 class ShopsPayment extends BaseModel
 {
-    protected $table = 'shops_payment';
 
     protected $field = [
         'shop_id','account','merchant_no',

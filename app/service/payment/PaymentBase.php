@@ -9,10 +9,11 @@ use think\Request;
 class PaymentBase
 {
     protected $service;
+    protected ShopsPayment $payment;
     public function __construct(protected Orders $order,protected Request $request)
     {
-        $payment = $this->order->payment;
-        switch ($payment->pay_method){
+        $this->payment = $this->order->payment;
+        switch ($this->payment->pay_method){
             case ShopsPayment::PAY_METHOD_ASIABILL://asiabill
                 $service = AsiabillService::class;
                 break;

@@ -22,7 +22,6 @@ use think\model\relation\HasOne;
  */
 class Orders extends BaseModel
 {
-    protected $table = 'orders';
     protected $dateFormat = 'U';
     protected $field = [
         'admin_graphql_api_id','app_id','browser_ip',

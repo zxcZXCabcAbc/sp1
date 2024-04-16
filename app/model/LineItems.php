@@ -12,7 +12,6 @@ use think\Model;
  */
 class LineItems extends BaseModel
 {
-    protected $table = 'line_items';
     public $autoWriteTimestamp = false;
     protected $field = [
         'order_id','admin_graphql_api_id','attributed_staffs',

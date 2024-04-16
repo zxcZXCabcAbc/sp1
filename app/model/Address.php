@@ -26,7 +26,6 @@ use think\Model;
  */
 class Address extends BaseModel
 {
-    protected $table = 'address';
     protected $field = [
         'order_id','first_name','address1','phone',
         'city','zip','province','country',

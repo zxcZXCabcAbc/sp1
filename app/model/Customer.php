@@ -14,7 +14,6 @@ use think\Model;
  */
 class Customer extends BaseModel
 {
-    protected $table = 'customer';
     protected $dateFormat = 'U';
     protected $field = [
         'order_id','email','created_at','updated_at',
