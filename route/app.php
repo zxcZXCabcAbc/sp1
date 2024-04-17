@@ -18,6 +18,7 @@ Route::get('hello/:name', 'index/hello');
 
 Route::any('notify/:id',"notify/index")->model(\app\model\Orders::class);//异步通知地址
 Route::any('checkout/:id',"notify/checkout")->model(\app\model\Orders::class);//异步通知地址
+Route::any('/webhook','webhookController/index');//webhook地址
 
 Route::group('/api',function (){
     //版本V1
