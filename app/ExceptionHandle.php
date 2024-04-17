@@ -1,6 +1,7 @@
 <?php
 namespace app;
 
+use app\exception\BusinessException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\Handle;
@@ -51,11 +52,14 @@ class ExceptionHandle extends Handle
     public function render($request, Throwable $e): Response
     {
         // 添加自定义异常处理机制
-
-        if($e instanceof ValidateException){
+        switch (true){
+            case $e instanceof ValidateException:
             return json(['code'=>412,'msg'=>$e->getMessage(),'data'=>[]]);
-        }else{
-            return json(['code'=>500,'msg'=>$e->getMessage(),'data'=>[]]);
+            case $e instanceof BusinessException:
+                tplog($request->url(),$request->all());
+                return json(['code'=>101,'msg'=>$e->getMessage(),'data'=>[]]);
+            default:
+                return json(['code'=>500,'msg'=>$e->getMessage(),'data'=>[]]);
         }
         // 其他错误交给系统处理
         return parent::render($request, $e);

@@ -32,6 +32,7 @@ class Order extends BaseController
     //更新订单
     public function modifyDraftOrder(Request $request,Orders $order)
     {
+        if($order->order_status == Orders::ORDER_STATUS_COMPLETED) throw new \Exception('order has payed');
         Validate(OrderValidate::class)->check($request->put());
         $data = $this->logic->updateDraftOrder($request, $order);
         return $this->success($data);
@@ -45,6 +46,7 @@ class Order extends BaseController
     //下单
     public function placeOrder(Request $request,Orders $order)
     {
+        if($order->order_status == Orders::ORDER_STATUS_COMPLETED) throw new \Exception('order has payed');
         Validate(PlaceOrderValidate::class)->check($request->post());
         $data = $this->logic->placeOrder($request,$order);
         return $this->success($data);

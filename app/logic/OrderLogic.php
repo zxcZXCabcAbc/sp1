@@ -45,7 +45,6 @@ class OrderLogic
     {
         $draft_id = $order->admin_graphql_api_id;
         $draft_id = pathinfo($draft_id,PATHINFO_BASENAME);
-
         $draft = $this->rest->update_draft_order($draft_id,$request->all());
         $this->saveOrder($draft,$order);
         return compact('draft');
@@ -53,11 +52,12 @@ class OrderLogic
 
     public function placeOrder(Request $request,Orders $order)
     {
+        set_time_limit(0);
         #1.更新订单
         $order->payment_id = $request->post('payment_id');
         $order->save();
         #2.更新账单地址
-        $this->saveBillingAddress($order,$request->param('billingAddress'));
+        //$this->saveBillingAddress($order,$request->param('billingAddress'));
         #2.下单
         $payment = new PaymentBase($order,$request);
         return $payment->createThirdPayment();
@@ -67,7 +67,7 @@ class OrderLogic
     protected function saveBillingAddress(Orders $order,array $billingAddressData)
     {
         $billingAddress = $order->billingAddress;
-        $billingAddress->update($billingAddressData);
+        $billingAddress->save($billingAddressData);
         return true;
     }
 

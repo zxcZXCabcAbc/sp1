@@ -3,15 +3,13 @@
 namespace app\controller;
 
 use app\BaseController;
+use app\exception\BusinessException;
 
 
 class Index extends BaseController
 {
     public function index()
     {
-
-        // 验证通过
-        return '验证通过';
     }
 
     public function hello($name = 'ThinkPHP8')

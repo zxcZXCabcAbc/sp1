@@ -28,7 +28,10 @@
         "topthink/think-helper": "^3.1",
         "nesbot/carbon": "^2.72",
         "topthink/think-annotation": "^2.0",
-        "asiabill/asiabill_php_sdk": "^1.5"
+        "asiabill/asiabill_php_sdk": "^1.5",
+        "league/omnipay": "^3.2",
+        "omnipay/paypal": "^3.0",
+        "topthink/think-queue": "^3.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.0",
@@ -43,7 +46,10 @@
         }
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "scripts": {
         "post-autoload-dump": [

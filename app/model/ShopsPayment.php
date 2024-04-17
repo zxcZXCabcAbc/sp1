@@ -21,6 +21,7 @@ use think\model\relation\HasOne;
  * @property string $shopify_key
  * @property integer $mode
  * @property mixed $config
+ * @property mixed $redirect_urls
  */
 class ShopsPayment extends BaseModel
 {
@@ -42,6 +43,15 @@ class ShopsPayment extends BaseModel
     const MODE_SANDBOX = 1;
     const MODE_LIVE = 2;
 
+    public static $payMethodNames = [
+        self::PAY_METHOD_PAYPAL =>'paypal',
+        self::PAY_METHOD_ASIABILL =>'asiabill',
+        self::PAY_METHOD_PAYONEER =>'payoneer',
+        self::PAY_METHOD_AIRWALLEX =>'airwallex',
+        self::PAY_METHOD_STRIPE =>'stripe',
+    ];
+
+
     public function shop()
     {
         return $this->belongsTo(Shops::class,'shop_id');
@@ -60,5 +70,10 @@ class ShopsPayment extends BaseModel
     public function scopeStatus($query,$status)
     {
         return $query->where('status',$status);
+    }
+
+    public function getRedirectUrlsAttr()
+    {
+        return 1;
     }
 }

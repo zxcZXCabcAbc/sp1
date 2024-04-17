@@ -1,7 +1,9 @@
 <?php
 // 事件定义文件
 return [
-    'bind'      => [],
+    'bind'      => [
+        'PushOrder'=>'app\event\PushOrder',
+    ],
 
     'listen'    => [
         'AppInit'  => [],
@@ -9,6 +11,7 @@ return [
         'HttpEnd'  => [],
         'LogLevel' => [],
         'LogWrite' => [],
+        'PushOrder'=>['app\listener\PushOrderListener'],
     ],
 
     'subscribe' => [

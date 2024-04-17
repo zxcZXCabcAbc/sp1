@@ -9,11 +9,11 @@ class CustomerBuilder extends BuilderBase
     public function toArray()
     {
         return [
-                'description' => $this->order->shippingAddress->name,
+                'description' => $this->order->billingAddress->name,
                 'email' => $this->order->contact_email,
-                'firstName' => $this->order->shippingAddress->first_name,
-                'lastName' => $this->order->shippingAddress->last_name,
-                'phone' => $this->order->phone
+                'firstName' => $this->order->billingAddress->first_name,
+                'lastName' => $this->order->billingAddress->last_name,
+                'phone' => $this->order->billingAddress->phone
         ];
     }
 

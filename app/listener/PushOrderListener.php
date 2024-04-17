@@ -3,6 +3,8 @@ declare (strict_types = 1);
 
 namespace app\listener;
 
+use app\service\shopify\action\rest\OrderRest;
+
 class PushOrderListener
 {
     /**
@@ -10,8 +12,8 @@ class PushOrderListener
      *
      * @return mixed
      */
-    public function handle($event)
+    public function handle($order)
     {
-        return 1;
+        $rest = new OrderRest();
     }
 }

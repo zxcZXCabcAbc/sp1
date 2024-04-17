@@ -9,10 +9,9 @@ use think\facade\Event;
 
 class PushOrder
 {
-    public Orders $orders;
+    public Orders $order;
     public function __construct(Orders $orders)
     {
-        $this->orders = $orders;
-        //Event::listen(PushOrder::class,PushOrderListener::class);
+        $this->order = $orders;
     }
 }

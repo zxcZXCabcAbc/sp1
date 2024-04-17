@@ -23,6 +23,7 @@ trait OrderTrait
         try {
             if (empty($order)) throw new \Exception('create draft order error');
             $order['order_type'] = Orders::ORDER_DRAFT;
+            $order['shop_id'] = request()->middleware('x_shop_id');
             if(array_key_exists('email',$order)) $order['contact_email'] = $order['email'];
             $lineItems = $order['line_items'];
             $customer = $order['customer'] ?? [];

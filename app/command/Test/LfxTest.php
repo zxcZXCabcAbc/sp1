@@ -9,12 +9,18 @@ use app\model\Customer;
 use app\model\Orders;
 use app\model\Shops;
 use app\model\ShopsPayment;
+use app\queue\CapturePaymentQueue;
+use app\service\payment\PaymentBase;
 use app\trait\PaymentTrait;
 use Asiabill\Classes\AsiabillIntegration;
+use Omnipay\PayPal\RestGateway;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
 use think\facade\Event;
+use Omnipay\Omnipay;
+use think\facade\Log;
+use think\facade\Queue;
 
 class LfxTest extends Command
 {
@@ -29,27 +35,64 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
+            $data = [
+                'order_id'=>3,
+                'request'=>[],
+            ];
 
-            $path = 'a/b/c/test';
-            dd(pathinfo($path,PATHINFO_BASENAME));
-            //$rest = new CustomerRest();
-            //dd($rest->create_customer());
-            $order = Orders::query()->find(1);
-            $builder = new CheckoutBuilder($order);
-            $data = $builder->setCustomerId('cus_tomer_test001')
-                    ->setCustomerPaymentMethodId('test')
-                    ->toArray();
-            dd($data);
-
-            //$sp = $this->getShop();
-            //$this->setUp();
-
-
-
-            $order = Orders::query()->find(2);
-            Event::trigger(PushOrder::class,new PushOrder($order));
-
+            $order = Orders::find(3);
+           event('PushOrder',$order);
             dd(11);
+
+
+
+            Queue::push(CapturePaymentQueue::class,$data,'t1');
+            dd(11);
+            $paypal = new RestGateway();
+            $paypal->initialize(
+                [
+                    'clientId'=>'AStgX20Bx4ZGVF7OovRksHtjOvCXxOz4F0KsE35TRu_v-JbMSO61cTfpAnFfQ9G5KhOA4CwiOgRzoYaW',
+                    'secret'=>'EPivtk3r7bBXQIJlkFEctTb_poZXZnNvkQ_Me87I185b9xHtdADMlPgy30sWicsD2kZXmNTlXc5MoWHM',
+                    'testMode'=>true
+                ]
+            );
+            $url = 'https://www.baidu.com';
+            $amount = '1.00';
+            $currency = 'USD';
+            $params = [
+                'amount'=>$amount,
+                'return_url'=>$url,
+                'cancel_url'=>$url,
+                'currency'=>$currency,
+                'payer'=>['payment_method'=>'paypal'],
+                'transactions'=>[
+                    [
+                        'amount'=>[
+                            'total'=>$amount,
+                            'currency'=>$currency,
+                        ],
+                        'item_list'=>[
+                            'items'=>[
+                                [
+                                    "name"=> "hat",
+                                    "description"=> "Brown hat.",
+                                    "quantity"=> 1,
+                                    "price"=> $amount,
+                                    "sku"=> 'SKU0055',
+                                    "currency"=> $currency
+                                ]
+                            ],
+                        ],
+                        'notify_url'=>$url
+                    ]
+                ],
+                'redirect_urls'=>[
+                    'return_url'=>$url,
+                    'cancel_url'=>$url
+                ],
+            ];
+            $response = $paypal->purchase($params)->send();
+            dd($response);
 
 
 

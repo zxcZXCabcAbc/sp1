@@ -2,6 +2,7 @@
 
 namespace app\trait;
 
+use app\model\Orders;
 use app\model\Shops;
 use Shopify\Auth\FileSessionStorage;
 use Shopify\Auth\Session;
@@ -49,6 +50,8 @@ trait PaymentTrait
     {
         return $this->shop;
     }
+
+
 
 
 }

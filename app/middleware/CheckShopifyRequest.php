@@ -3,6 +3,7 @@ declare (strict_types = 1);
 
 namespace app\middleware;
 
+use app\model\Shops;
 use think\Response;
 
 class CheckShopifyRequest
@@ -20,6 +21,9 @@ class CheckShopifyRequest
         try {
             $shop = $request->header('X-Opc-Shop-Id');
             if(empty($shop)) throw new \Exception('miss shop host');
+            $shop = Shops::query()->host($shop)->find();
+           if(is_null($shop)) throw new \Exception('shop host not exists');
+           $request->x_shop_id = $shop->id;
             return $next($request);
             $path_prefix = $request->request('path_prefix', '');
             $timestamp = $request->request('timestamp');
