@@ -57,7 +57,7 @@ class OrderLogic
         $order->payment_id = $request->post('payment_id');
         $order->save();
         #2.更新账单地址
-        //$this->saveBillingAddress($order,$request->param('billingAddress'));
+        $this->saveBillingAddress($order,$request->param('billingAddress',[]));
         #2.下单
         $payment = new PaymentBase($order,$request);
         return $payment->createThirdPayment();
@@ -66,6 +66,7 @@ class OrderLogic
 
     protected function saveBillingAddress(Orders $order,array $billingAddressData)
     {
+        if(empty($billingAddressData)) return true;
         $billingAddress = $order->billingAddress;
         $billingAddress->save($billingAddressData);
         return true;
