@@ -4,11 +4,18 @@ declare (strict_types = 1);
 namespace app\middleware;
 
 use app\model\Shops;
+use think\helper\Arr;
+use think\helper\Str;
 use think\Response;
 
 class CheckShopifyRequest
 {
     const SHARED_SECRET = 'hush';
+    protected $whitelist = [
+        '/api/notify/:id',
+        '/api/checkout/:id',
+        '/api/webhook',
+    ];
     /**
      * 处理请求
      *
@@ -19,6 +26,11 @@ class CheckShopifyRequest
     public function handle($request, \Closure $next)
     {
         try {
+            $path = $request->url();
+            if(Str::contains($path,'?')){
+                $path = Arr::first(explode('?',$path));
+            }
+            if(in_array($path,$this->whitelist)) return $next($request);
             $shop = $request->header('X-Opc-Shop-Id');
             if(empty($shop)) throw new \Exception('miss shop host');
             $shop = Shops::query()->host($shop)->find();

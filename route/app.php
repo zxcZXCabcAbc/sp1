@@ -16,11 +16,14 @@ Route::get('think', function () {
 
 Route::get('hello/:name', 'index/hello');
 
-Route::any('notify/:id',"notify/index")->model(\app\model\Orders::class);//异步通知地址
-Route::any('checkout/:id',"notify/checkout")->model(\app\model\Orders::class);//异步通知地址
-Route::any('/webhook','webhookController/index');//webhook地址
+
 
 Route::group('/api',function (){
+
+    Route::any('/notify/:id',"notify/index")->model(\app\model\Orders::class);//异步通知地址
+    Route::any('/checkout/:id',"notify/checkout")->model(\app\model\Orders::class);//异步通知地址
+    Route::any('/webhook','webhookController/index');//webhook地址
+
     //版本V1
     Route::group('/v1',function (){
         Route::get('/product-list','product/index');//商品列表

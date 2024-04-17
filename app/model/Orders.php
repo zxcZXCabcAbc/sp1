@@ -124,7 +124,7 @@ class Orders extends BaseModel
 
     public function getNotifyUrlAttr(): string
     {
-        return domain(env('APP_HOST') . '/notify/' . $this->id);
+        return domain(env('APP_HOST') . '/api/notify/' . $this->id);
     }
 
     public function getCancelUrlAttr(): string
@@ -134,7 +134,7 @@ class Orders extends BaseModel
 
     public function getReturnUrlAttr(): string
     {
-       return domain($this->shop->host . '/checkout/'. $this->id);
+       return domain($this->shop->host . '/api/checkout/'. $this->id);
     }
 
     public function notifies(): HasMany
