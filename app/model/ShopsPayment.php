@@ -64,6 +64,7 @@ class ShopsPayment extends BaseModel
             'app_key' => $this->mode == self::MODE_SANDBOX ? $this->client_id_sandbox : $this->client_id,
             'app_secret' => $this->mode == self::MODE_SANDBOX ? $this->secrect_sandbox : $this->secrect,
             'shopify_key' => $this->shopify_key,
+            'shop_id'=>$this->shop_id
         ];
     }
 

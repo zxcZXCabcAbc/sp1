@@ -32,7 +32,8 @@
         "league/omnipay": "^3.2",
         "omnipay/paypal": "^3.0",
         "topthink/think-queue": "^3.0",
-        "uberphp/checkout-php-sdk": "^1.0"
+        "uberphp/checkout-php-sdk": "^1.0",
+        "stripe/stripe-php": "^13.16"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.0",
