@@ -27,10 +27,10 @@ class PlaceOrderValidate extends BaseValidate
         'billingAddress.city'=>['string'],
         'billingAddress.zip'=>['string'],
         'card'=>['array'],
-        'card.cardExpireMonth'=>['require','string'],
-        'card.cardExpireYear'=>['require','string'],
-        'card.cardNo'=>['require','string'],
-        'card.cardSecurityCode'=>['require','string'],
+        'card.cardExpireMonth'=>['string'],
+        'card.cardExpireYear'=>['string'],
+        'card.cardNo'=>['string'],
+        'card.cardSecurityCode'=>['string'],
     ];
 
     /**

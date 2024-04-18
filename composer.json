@@ -31,7 +31,8 @@
         "asiabill/asiabill_php_sdk": "^1.5",
         "league/omnipay": "^3.2",
         "omnipay/paypal": "^3.0",
-        "topthink/think-queue": "^3.0"
+        "topthink/think-queue": "^3.0",
+        "uberphp/checkout-php-sdk": "^1.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.0",

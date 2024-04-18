@@ -32,6 +32,8 @@ use think\model\relation\HasOne;
  * @property string $total_tip_received
  * @property integer $order_status
  * @property string $error_msg
+ * @property string $name
+ *
  */
 class Orders extends BaseModel
 {
@@ -134,7 +136,7 @@ class Orders extends BaseModel
 
     public function getReturnUrlAttr(): string
     {
-       return domain($this->shop->host . '/api/checkout/'. $this->id);
+       return domain(env('APP_HOST') . '/api/checkout/'. $this->id);
     }
 
     public function notifies(): HasMany

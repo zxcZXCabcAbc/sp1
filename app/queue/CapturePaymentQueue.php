@@ -11,6 +11,7 @@ use think\queue\Job;
 class CapturePaymentQueue
 {
     protected Orders $order;
+    protected array $request;
     public function fire(Job $job, $data)
     {
         // 执行任务
@@ -31,8 +32,8 @@ class CapturePaymentQueue
     public function run($data)
     {
         $order_id = $data['order_id'];
-        $request = $data['request'] ?? [];
-       $this->order = Orders::findOrEmpty($data);
+        $this->request = $data['request'] ?? [];
+       $this->order = Orders::findOrEmpty($order_id);
        if($this->order->isEmpty()) return true;
        if($this->order->order_status == Orders::ORDER_STATUS_COMPLETED) return true;
        $payment = $this->order->payment;
@@ -64,10 +65,25 @@ class CapturePaymentQueue
     protected function handleWithPaypal()
     {
         $client = new PurchasePaypal($this->order->payment);
-        $response = $client->completePurchase($this->order->transaction_id,'7W8EXFWVYHUPA');
-        $result = $response->getData();
-        $state = $result['state'] ?? '';
-        return $state == 'approved';
+        //获取详情
+        $payRes = $client->fetchPurchase($this->order->transaction_id);
+        $payRes = $payRes['result'];
+        if(empty($payRes)) throw new \Exception('订单异常');
+        if(isset($payRes['error']) && !empty($payRes['error'])) throw new \Exception('paypal error: ' . $payRes['error']['message']);
+        if(isset($payRes['status']) && $payRes['status'] != 'COMPLETED') {
+            #2.执行支付
+            $paymentSource = [
+                'payment_source'=>[
+                    'token'=>[
+                        'id'=>$this->order->transaction_id,
+                        'type'=>'BILLING_AGREEMENT'
+                    ],
+                ],
+            ];
+            $payRes = $client->completePurchase($this->order->transaction_id,$paymentSource);
+            $payRes = $payRes['result'];
+        }
+        return $payRes['status'] == 'COMPLETED';
     }
 
     //asiabill

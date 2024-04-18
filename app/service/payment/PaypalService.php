@@ -19,12 +19,18 @@ class PaypalService extends PaymentBase implements PaymentInterface
         $client = new PurchasePaypal($this->payment);
         $builder = new PurchaseBuilder($this->order);
         $response = $client->purchase($builder);
-        $result = $response->getData();
-        tplog('payments/payment',$builder->toArray(),CommonConstant::LOG_PAYPAL);
+        $result = $response['result'] ?? [];
+        if(empty($result)) throw new \Exception('create order error');
+        $log = [
+            'params'=> ['request'=>$builder->toArray(), 'result'=>$result,],
+            'created_at'=>time()
+        ];
+        $this->order->notifies()->save($log);
         $transaction_id = $result['id'] ?? 0;
         if(empty($transaction_id)) throw new \Exception($response->getMessage());
+
         $approval_urls = array_filter($result['links'],function ($link){
-            return $link['rel'] == 'approval_url';
+            return $link['rel'] == 'approve';
         });
         $approval_urls = Arr::first($approval_urls);
         $approval_url = $approval_urls['href'] ?? '';

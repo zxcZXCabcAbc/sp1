@@ -7,15 +7,12 @@ class PurchaseBuilder extends PaypalBuilder
     public function toArray()
     {
         return [
-            'amount'=>$this->order->total_price,
-            'return_url'=>$this->order->return_url,
-            'cancel_url'=>$this->order->cancel_url,
-            'currency'=>$this->order->currency,
-            'payer'=>['payment_method'=>'paypal'],
-            'transactions'=>$this->getTransactions(),
-            'redirect_urls'=>[
+            'intent'=>'CAPTURE',
+            'purchase_units'=>$this->getTransactions(),
+            'application_context'=>[
                 'return_url'=>$this->order->return_url,
                 'cancel_url'=>$this->order->cancel_url,
+                'shipping_preference'=>'SET_PROVIDED_ADDRESS'
             ],
         ];
     }
@@ -25,13 +22,16 @@ class PurchaseBuilder extends PaypalBuilder
         return [
             [
                 'amount'=>[
-                    'total'=>$this->order->subtotal_price,
-                    'currency'=>$this->order->currency,
+                    'value'=>$this->order->total_price,
+                    'currency_code'=>$this->order->currency,
+                    'breakdown'=>[
+                        'item_total'=>['value'=>$this->order->subtotal_price, 'currency_code'=>$this->order->currency,],
+                        'shipping'=> ['value'=>$this->order->total_shipping_price,'currency_code'=>$this->order->currency],
+                        'tax_total'=>['value'=>$this->order->total_tax,'currency_code'=>$this->order->currency]
+                    ],
                 ],
-                'item_list'=>[
-                    'items'=>$this->getItemLines(),
-                ],
-                'notify_url'=>$this->order->notify_url
+                'items'=>$this->getItemLines(),
+                'shipping'=>$this->getShippingAddress(),
             ]
         ];
     }
@@ -44,11 +44,29 @@ class PurchaseBuilder extends PaypalBuilder
                 'name'=>$item->name,
                 'description'=>$item->title,
                 'quantity'=>$item->quantity,
-                'price'=>$item->price,
+                'unit_amount'=>['value'=>$item->price,'currency_code'=>$this->order->currency],
                 'sku'=>$item->sku ?: pathinfo($item->admin_graphql_api_id,PATHINFO_FILENAME),
-                'currency'=>$this->order->currency
             ];
         }
         return $lines;
+    }
+
+    public function getShippingAddress()
+    {
+
+        return [
+            'type'=>'SHIPPING',
+            'name'=>[
+                'full_name'=>$this->order->shippingAddress->name,
+            ],
+            'address'=>[
+                'country_code'=>$this->order->shippingAddress->country_code,
+                'postal_code'=>$this->order->shippingAddress->zip,
+                'address_line_1'=>$this->order->shippingAddress->address1,
+                'admin_area_1'=>$this->order->shippingAddress->province,
+                'admin_area_2'=>$this->order->shippingAddress->city,
+            ],
+        ];
+
     }
 }

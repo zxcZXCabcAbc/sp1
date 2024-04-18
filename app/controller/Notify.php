@@ -5,6 +5,8 @@ namespace app\controller;
 
 use app\BaseController;
 use app\model\Orders;
+use app\queue\CapturePaymentQueue;
+use think\facade\Queue;
 use think\Request;
 
 class Notify extends BaseController
@@ -22,9 +24,11 @@ class Notify extends BaseController
         echo 'success';
     }
 
-    //跳转支付页面
+    //跳转加载页面
     public function checkout(Request $request,Orders $order)
     {
+        //队列处理
+        Queue::push(CapturePaymentQueue::class,['order_id'=>$order->id,'request'=>$request->all()],'checkout');
         $host = $order->shop->host;
         $path = 'checkout';
         $query = ['order_id'=>$order->id];
