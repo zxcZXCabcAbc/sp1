@@ -17,7 +17,7 @@ use think\annotation\Inject;
 use think\Request;
 
 
-class Order extends BaseController
+class OrderController extends BaseController
 {
     #[Inject]
     protected OrderLogic $logic;

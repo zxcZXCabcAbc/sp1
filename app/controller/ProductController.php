@@ -8,7 +8,7 @@ use app\exception\BusinessException;
 use app\service\shopify\action\store\Products;
 use think\Request;
 
-class Product extends BaseController
+class ProductController extends BaseController
 {
     /**
      * 显示资源列表

@@ -6,7 +6,7 @@ use app\BaseController;
 use app\exception\BusinessException;
 
 
-class Index extends BaseController
+class IndexController extends BaseController
 {
     public function index()
     {

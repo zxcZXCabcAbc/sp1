@@ -11,7 +11,7 @@ use app\service\shopify\ShopifyApiService;
 use think\exception\ValidateException;
 use think\Request;
 
-class Checkout extends BaseController
+class CheckoutController extends BaseController
 {
 
     //获取国家
