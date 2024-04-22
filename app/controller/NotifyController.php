@@ -19,6 +19,7 @@ class NotifyController extends BaseController
     {
         $params = $request->all();
         if(empty($params)) return $this->error('no params');
+        tplog('notify',$params);
         $notifyData = [
             ['order_id'=>$order->id,'params'=>$params,'created_at'=>Carbon::now()->toDateTimeString(),'type'=>Notify::TYPE_NOTIFY]
         ];
@@ -31,6 +32,7 @@ class NotifyController extends BaseController
     {
         $params = $request->all();
         if(empty($params)) return $this->error('no params');
+        tplog('checkout',$params);
         $notifyData =  ['order_id'=>$order->id,'params'=>$params,'created_at'=>Carbon::now()->toDateTimeString(),'type'=>Notify::TYPE_CHECKOUT];
         $order->notifies()->save($notifyData);
         echo 'success';
