@@ -56,7 +56,9 @@ class Order extends BaseController
     public function getSessionToken(Request $request,ShopsPayment $payment)
     {
         $session = new SessionAsiabill($payment);
-        return $this->success($session->get_session_token());
+        $session_token = $session->get_session_token();
+        $js_sdk = $session->getAsiabill()->getJsScript();
+        return $this->success(compact('session_token','js_sdk'));
     }
 
 

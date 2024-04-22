@@ -7,7 +7,7 @@ use Asiabill\Classes\AsiabillIntegration;
 
 class AsiabillClient
 {
-    protected AsiabillIntegration $asiabill;
+    public AsiabillIntegration $asiabill;
     protected string $requestType;
     protected array $body = [];
 
@@ -43,6 +43,11 @@ class AsiabillClient
     public function send()
     {
         return $this->asiabill->request($this->getRequestType(),$this->getBody());
+    }
+
+    public function getAsiabill()
+    {
+        return $this->asiabill;
     }
 
 }

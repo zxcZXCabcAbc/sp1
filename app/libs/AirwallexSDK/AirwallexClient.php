@@ -42,9 +42,9 @@ class AirwallexClient extends HttpService
 
     public function getAccessToken()
     {
-            if(RedisHelper::Exists(self::$cacheToken)){
+        if(RedisHelper::Exists(self::$cacheToken)){
             self::$access_token = RedisHelper::Get(self::$cacheToken);
-            }else{
+        }else{
             $result = $this
                 ->setPath("/api/v1/authentication/login")
                 ->setMethod('POST')
@@ -54,7 +54,5 @@ class AirwallexClient extends HttpService
             RedisHelper::Set(self::$cacheToken,self::$access_token,$this->expire);
         }
     }
-
-
 
 }

@@ -25,5 +25,14 @@ return [
             'serialize'  => [],
         ],
         // 更多的缓存连接
+        'redis'	=>	[
+            'type'	=>	'redis',
+            'host'	=> env('REDIS_HOST'),
+            'port'    => env('REDIS_PORT'),
+            'password' =>env('REDIS_PASSWORD'),
+            'expire'=>  0,
+            'prefix'=>  'redis_', // 缓存前缀
+        ],
+
     ],
 ];

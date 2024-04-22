@@ -15,14 +15,14 @@ class PaymentLInkBuilder
     public function toArray()
     {
         return [
-            'amount'=>$this->order->total_money,
+            'amount'=>$this->order->total_price,
             'collectable_shopper_info'=>$this->collectable_shopper_info(),
             'currency'=>$this->order->currency,
             //'default_currency'=>"USD",
             'metadata'=>$this->metadata(),
             'reusable'=>true,
             //'supported_currencies'=>["EUR",'USD'],
-            'title'=>optional($this->order->goods)->first_head ?? 'test',
+            'title'=>$this->order->name,
         ];
     }
 
@@ -39,8 +39,8 @@ class PaymentLInkBuilder
     public function metadata()
     {
         return [
-            'email'=>$this->order->email,
-            'order_sn'=>$this->order->order_sn
+            'email'=>$this->order->contact_email,
+            'order_sn'=>$this->order->transaction_id
         ];
     }
 }

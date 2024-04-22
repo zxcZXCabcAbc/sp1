@@ -18,6 +18,7 @@ use think\Request;
  * @property string $version
  * @property integer $status
  * @property HasMany $payments
+ * @property integer $pay_step
  */
 class Shops extends BaseModel
 {
@@ -26,7 +27,8 @@ class Shops extends BaseModel
     protected $field = [
         'host','name','api_key',
         'api_secret','admin_token','store_token',
-        'version','created_at','updated_at','status'
+        'version','created_at','updated_at','status',
+        'pay_step'
     ];
 
     public function payments()

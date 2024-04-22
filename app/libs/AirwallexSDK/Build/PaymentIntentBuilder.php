@@ -16,36 +16,33 @@ class PaymentIntentBuilder
 
     public function toArray()
     {
-        list($return_url,$cancel_url) = $this->getReturnUrl($this->order);
+
         return [
-            'amount'=>0 + $this->order->total_money,
+            'amount'=>$this->order->total_price,
             'currency'=>$this->order->currency,
             'customer'=>$this->getCustomer(),
-            'merchant_order_id'=>$this->order->payer_id,
+            'merchant_order_id'=>$this->order->transaction_id,
             'order' => $this->getOrder(),
-            'return_url'=>$return_url,
+            'return_url'=>$this->order->return_url,
             'request_id'=>uniqid(time()),
-            //'connected_account_id'=>'9562345678959589'
 
         ];
     }
 
     public function getCustomer()
     {
-        $address = $this->order->address;
-        $billing = $address['billing'];
         return [
-            'email'=>$this->order->email,
-            'first_name'=>$billing['first_name'],
-            'last_name'=>$billing['last_name'],
-            'phone_number'=>$billing['phone'],
+            'email'=>$this->order->contact_email,
+            'first_name'=>$this->order->billingAddress->first_name,
+            'last_name'=>$this->order->billingAddress->last_name,
+            'phone_number'=>$this->order->billingAddress->phone,
             'merchant_customer_id'=>md5(time()),
             'address'=>[
-                'city'=>$billing['city'],
-                'country_code'=>$billing['country_code'],
-                'postcode'=>$billing['postal_code'],
-                'state'=>$billing['state'],
-                'street'=>$billing['line1'],
+                'city'=>$this->order->billingAddress->city,
+                'country_code'=>$this->order->billingAddress->country_code,
+                'postcode'=>$this->order->billingAddress->zip,
+                'state'=>$this->order->billingAddress->province,
+                'street'=>$this->order->billingAddress->address1,
             ],
         ];
     }

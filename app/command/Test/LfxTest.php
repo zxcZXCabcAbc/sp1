@@ -4,6 +4,7 @@ declare (strict_types = 1);
 namespace app\command\Test;
 
 use app\event\PushOrder;
+use app\helpers\RedisHelper;
 use app\helpers\RedisLock;
 use app\libs\AsiabillSDK\builder\CheckoutBuilder;
 use app\libs\PaypalSDK\action\PurchasePaypal;
@@ -22,14 +23,13 @@ use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
-use think\cache\driver\Redis;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
 use think\facade\Event;
 use Omnipay\Omnipay;
 use think\facade\Log;
-use think\facade\Queue;
+use think\facade\Redis;
 
 class LfxTest extends Command
 {
@@ -46,8 +46,12 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
-            Queue::push(TestQueue::class,['name'=>'test'],'test');
-            dd(11);
+
+
+
+
+
+
             $environment = new SandboxEnvironment($this->clientId,$this->secret);
             $client = new PayPalHttpClient($environment);
             $request = new OrdersCreateRequest();
