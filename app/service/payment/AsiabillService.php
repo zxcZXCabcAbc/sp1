@@ -14,16 +14,13 @@ class AsiabillService extends PaymentBase implements PaymentInterface
 {
     public function placeOrder()
     {
-        try {
             $customerId = $this->request->param('customerId', '');
             $customerPaymentMethodId = $this->request->param('customerPaymentMethodId', 'pm_1782323329894969344');
             if (empty($customerPaymentMethodId)) throw new BusinessException('asibill payment require customerPaymentMethodId');
             $checkout = new CheckoutAsiabill($this->payment);
             $builder = new CheckoutBuilder($this->order);
             $result = $checkout->confirm_charge($customerId, $customerPaymentMethodId, $builder);
-            dd($result->getBody());
-        }catch (\Exception $e){
-            dd($e);
-        }
+            $this->saveSendRequest($result->getBody());
+            return ['transaction_id'=>$customerPaymentMethodId];
     }
 }

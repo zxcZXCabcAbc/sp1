@@ -3,8 +3,10 @@
 namespace app\service\payment;
 
 use app\exception\BusinessException;
+use app\model\Notify;
 use app\model\Orders;
 use app\model\ShopsPayment;
+use Carbon\Carbon;
 use think\Request;
 
 class PaymentBase
@@ -24,16 +26,12 @@ class PaymentBase
     {
         try {
             $result = $this->newServiceInstance()->placeOrder();
-            dd($result);
             $this->order->transaction_id = $result['transaction_id'];
             $this->order->save();
             return $result;
         }catch (\Exception $e){
-            dd($e);
-            if($this->order){
-                $this->order->error_msg = $e->getMessage();
-                $this->order->save();
-            }
+            $this->order->error_msg = $e->getMessage();
+            $this->order->save();
             throw new BusinessException($e->getMessage());
         }
     }
@@ -61,6 +59,11 @@ class PaymentBase
         return $class->newInstance($this->order,$this->request);
     }
 
-
+    public function saveSendRequest(array $params = [])
+    {
+        if(empty($params)) return false;
+        $insertData = ['params'=>$params,'type'=>Notify::TYPE_SEND,'created_at'=>Carbon::now()->toDateTimeString()];
+        return $this->order->notifies()->save($insertData);
+    }
 
 }
