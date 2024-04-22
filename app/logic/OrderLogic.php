@@ -5,6 +5,7 @@ namespace app\logic;
 use app\model\Orders;
 use app\service\payment\PaymentBase;
 use app\service\shopify\action\rest\DraftOrderRest;
+use app\service\shopify\action\rest\ShippingZoneRest;
 use app\trait\OrderTrait;
 use app\trait\PaymentTrait;
 use think\annotation\Inject;
@@ -52,15 +53,19 @@ class OrderLogic
 
     public function placeOrder(Request $request,Orders $order)
     {
-        set_time_limit(0);
-        #1.更新订单
-        $order->payment_id = $request->post('payment_id');
-        $order->save();
-        #2.更新账单地址
-        $this->saveBillingAddress($order,$request->param('billingAddress',[]));
-        #2.下单
-        $payment = new PaymentBase($order,$request);
-        return $payment->createThirdPayment();
+        try {
+            set_time_limit(0);
+            #1.更新订单
+            $order->payment_id = $request->post('payment_id');
+            $order->save();
+            #2.更新账单地址
+            $this->saveBillingAddress($order, $request->param('billingAddress', []));
+            #2.下单
+            $payment = new PaymentBase($order, $request);
+            return $payment->createThirdPayment();
+        }catch (\Exception $e){
+            dd($e);
+        }
 
     }
 
@@ -70,6 +75,23 @@ class OrderLogic
         $billingAddress = $order->billingAddress;
         $billingAddress->save($billingAddressData);
         return true;
+    }
+
+    public function getShippingZones(Request $request,Orders $order)
+    {
+        $rest = new ShippingZoneRest();
+        $data = $rest->get_shipping_zones();
+        $countryCode = $order->shippingAddress->country_code;
+        $shipping_fee_list = [];
+        foreach ($data as $item){
+            $temp = $item->toArray();
+            $countryies = $temp['countries'];
+            $countryCodes = array_column($countryies,'code');
+            if(in_array($countryCode,$countryCodes)){
+                $shipping_fee_list = $temp['price_based_shipping_rates'];
+            }
+        }
+        return $shipping_fee_list;
     }
 
 

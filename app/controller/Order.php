@@ -9,6 +9,7 @@ use app\logic\OrderLogic;
 use app\model\Orders;
 use app\model\Shops;
 use app\model\ShopsPayment;
+use app\service\shopify\action\rest\ShippingZoneRest;
 use app\validate\DraftOrderValidate;
 use app\validate\OrderValidate;
 use app\validate\PlaceOrderValidate;
@@ -59,6 +60,13 @@ class Order extends BaseController
         $session_token = $session->get_session_token();
         $js_sdk = $session->getAsiabill()->getJsScript();
         return $this->success(compact('session_token','js_sdk'));
+    }
+
+    //获取所有国家运费
+    public function getShippingZones(Request $request,Orders $order)
+    {
+        $data = $this->logic->getShippingZones($request,$order);
+        return $this->success($data);
     }
 
 

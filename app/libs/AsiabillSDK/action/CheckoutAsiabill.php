@@ -9,7 +9,10 @@ class CheckoutAsiabill extends AsiabillClient
 {
     public function confirm_charge(string $customer_id,string $payment_id,CheckoutBuilder $builder)
     {
-        $body = $builder->setCustomerId($customer_id)->setCustomerPaymentMethodId($payment_id)->toArray();
-        return $this->setRequestType('confirmCharge')->setBody(compact('body'));
+            $body = $builder->setCustomerPaymentMethodId($payment_id);
+            //if ($customer_id) $body->setCustomerId($customer_id);
+            $body = $body->toArray();
+            return $this->setRequestType('confirmCharge')->setBody(compact('body'));
+
     }
 }

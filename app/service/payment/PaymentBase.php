@@ -24,12 +24,16 @@ class PaymentBase
     {
         try {
             $result = $this->newServiceInstance()->placeOrder();
+            dd($result);
             $this->order->transaction_id = $result['transaction_id'];
             $this->order->save();
             return $result;
         }catch (\Exception $e){
-            $this->order->error_msg = $e->getMessage();
-            $this->order->save();
+            dd($e);
+            if($this->order){
+                $this->order->error_msg = $e->getMessage();
+                $this->order->save();
+            }
             throw new BusinessException($e->getMessage());
         }
     }

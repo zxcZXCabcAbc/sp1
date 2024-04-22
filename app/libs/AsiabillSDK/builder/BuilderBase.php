@@ -6,8 +6,8 @@ use app\model\Orders;
 
 class BuilderBase
 {
-    protected string $customerId;
-    protected string $customerPaymentMethodId;
+    protected string $customerId = '';
+    protected string $customerPaymentMethodId = '';
     public function __construct(protected Orders $order)
     {
     }

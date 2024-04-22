@@ -20,8 +20,8 @@ Route::get('hello/:name', 'index/hello');
 
 Route::group('/api',function (){
 
-    Route::any('/notify/:id',"notify/index")->model(\app\model\Orders::class);//异步通知地址
-    Route::any('/checkout/:id',"notify/checkout")->model(\app\model\Orders::class);//异步通知地址
+    Route::any('/notify/:id',"notifyController/index")->model(\app\model\Orders::class);//异步通知地址
+    Route::any('/checkout/:id',"notifyController/checkout")->model(\app\model\Orders::class);//异步通知地址
     Route::any('/webhook','webhookController/index');//webhook地址
 
     //版本V1
@@ -40,6 +40,7 @@ Route::group('/api',function (){
         Route::get('/payment-enable-get','Order/getPaymentMethod');//获取支付方式
         Route::post('/place-order/:id','Order/placeOrder')->model(\app\model\Orders::class);//下单
         Route::get('/session-token/:id','Order/getSessionToken')->model(\app\model\ShopsPayment::class);//sessionToken
+        Route::get('/shipping-zones/:id','Order/getShippingZones')->model(\app\model\Orders::class);//获取运货出运费
     });
 })
 ->middleware(\app\middleware\CheckShopifyRequest::class);//验证前端请求

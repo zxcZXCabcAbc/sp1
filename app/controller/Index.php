@@ -10,6 +10,7 @@ class Index extends BaseController
 {
     public function index()
     {
+        dump('success11');
     }
 
     public function hello($name = 'ThinkPHP8')
