@@ -15,15 +15,11 @@ class NotifyController extends BaseController
 {
 
     //异步通知
-    public function index(Request $request,Orders $order)
+    public function index(Request $request)
     {
         $params = $request->all();
         if(empty($params)) return $this->error('no params');
-        tplog('notify',$params);
-        $notifyData = [
-            ['order_id'=>$order->id,'params'=>$params,'created_at'=>Carbon::now()->toDateTimeString(),'type'=>Notify::TYPE_NOTIFY]
-        ];
-        $order->notifies()->saveAll($notifyData);
+        tplog('notify',$params,'notify');
         echo 'success';
     }
 

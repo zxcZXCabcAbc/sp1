@@ -35,6 +35,7 @@ use think\model\relation\HasOne;
  * @property string $name
  * @property string $order_id
  * @property string $last_order_name
+ * @property string $webhook_url
  *
  */
 class Orders extends BaseModel
@@ -128,7 +129,7 @@ class Orders extends BaseModel
 
     public function getNotifyUrlAttr(): string
     {
-        return domain(env('APP_HOST') . '/api/notify/' . $this->id);
+        return domain(env('APP_HOST') . '/api/notify');
     }
 
     public function getCancelUrlAttr(): string
@@ -144,6 +145,11 @@ class Orders extends BaseModel
     public function notifies(): HasMany
     {
         return $this->hasMany(Notify::class,'order_id');
+    }
+
+    public function getWebhookUrlAttr(): string
+    {
+        return domain(env('APP_HOST')) .'/api/webhook';
     }
 
 }

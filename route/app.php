@@ -13,7 +13,7 @@ use think\facade\Route;
 Route::any('/','indexController/index');
 
 Route::group('/api',function (){
-    Route::any('/notify/:id',"notifyController/index")->model(\app\model\Orders::class);//异步通知地址
+    Route::any('/notify',"notifyController/index");//异步通知地址
     Route::any('/checkout/:id',"notifyController/checkout")->model(\app\model\Orders::class);//异步通知地址
     Route::any('/webhook','webhookController/index');//webhook地址
     //版本V1
