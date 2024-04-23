@@ -3,6 +3,7 @@
 namespace app\libs\AirwallexSDK\Build;
 
 use app\model\Orders;
+use app\model\ShopsPayment;
 use app\trait\PaymentTrait;
 
 class PaymentIntentBuilder
@@ -50,22 +51,21 @@ class PaymentIntentBuilder
 
     public function getOrder()
     {
-        $address = $this->order->address;
-        $shipping = $address['shipping'];
+
         return [
-            'products'=>$this->transferProductsToThirdParty($this->order,Orders::PAY_METHOD_AIRWALLEX),
+            'products'=>$this->getProducts(),
             'shipping'=>[
                 'address'=>[
-                    'city'=>$shipping['city'],
-                    'country_code'=>$shipping['country_code'],
-                    'postcode'=>$shipping['postal_code'],
-                    'state'=>$shipping['state'],
-                    'street'=>$shipping['line1'],
+                    'city'=>$this->order->shippingAddress->city,
+                    'country_code'=>$this->order->shippingAddress->country_code,
+                    'postcode'=>$this->order->shippingAddress->zip,
+                    'state'=>$this->order->shippingAddress->province,
+                    'street'=>$this->order->shippingAddress->address1,
                 ],
-                'first_name'=>$shipping['first_name'],
-                'last_name'=>$shipping['last_name'],
-                'phone_number'=>$shipping['phone'],
-                'shipping_method'=>$this->order->logistics_id,
+                'first_name'=>$this->order->shippingAddress->first_name,
+                'last_name'=>$this->order->shippingAddress->last_name,
+                'phone_number'=>$this->order->shippingAddress->phone,
+                //'shipping_method'=>$this->order->shippings(),
             ]
         ];
     }
@@ -84,6 +84,21 @@ class PaymentIntentBuilder
                 'three_ds_action'=>'FORCE_3DS',
             ],
         ];
+    }
+
+    protected function getProducts()
+    {
+        $products = [];
+        foreach ($this->order->items as $product){
+            $products[] = [
+                'sku'=>$product->sku ?: pathinfo($product->admin_graphql_api_id,PATHINFO_BASENAME),
+                'name'=>substr($product->title,0,120),
+                'unit_price'    => 0 + $product->price,
+                'quantity'    => $product->quantity,
+            ];
+        }
+        return $products;
+
     }
 
 

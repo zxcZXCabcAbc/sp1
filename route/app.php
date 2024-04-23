@@ -12,10 +12,11 @@ use think\facade\Route;
 
 Route::any('/','indexController/index');
 
+Route::any('/api/notify',"notifyController/index");//异步通知地址
+Route::any('/api/checkout/:id',"notifyController/checkout")->model(\app\model\Orders::class);//异步通知地址
+Route::any('/api/webhook','webhookController/index');//webhook地址
+
 Route::group('/api',function (){
-    Route::any('/notify',"notifyController/index");//异步通知地址
-    Route::any('/checkout/:id',"notifyController/checkout")->model(\app\model\Orders::class);//异步通知地址
-    Route::any('/webhook','webhookController/index');//webhook地址
     //版本V1
     Route::group('/v1',function (){
         Route::get('/product-list','productController/index');//商品列表

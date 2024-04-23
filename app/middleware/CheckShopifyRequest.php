@@ -12,7 +12,7 @@ class CheckShopifyRequest
 {
     const SHARED_SECRET = 'hush';
     protected $whitelist = [
-        '/api/notify/:id',
+        '/api/notify',
         '/api/checkout/:id',
         '/api/webhook',
     ];
