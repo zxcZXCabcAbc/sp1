@@ -9,6 +9,7 @@ use app\service\shopify\action\admin\ShopifyPay;
 use app\service\shopify\action\store\Payment;
 use app\service\shopify\ShopifyApiService;
 use think\exception\ValidateException;
+use think\helper\Arr;
 use think\Request;
 
 class CheckoutController extends BaseController
@@ -36,18 +37,37 @@ class CheckoutController extends BaseController
     //创建结账ID
     public function createCheckout(Request $request)
     {
-        $lineItems = $request->post('lineItems');
-        foreach ($lineItems as &$item){
-            if(!isset($item['variantId']) || empty($item['variantId'])) throw new ValidateException('variantId require');
+        $checkout = $request->post('checkout',[]);
+        $defaultResponse = [
+            'checkout'=>[
+                'action'=>'live',
+                'id'=>'',
+                'funnel_type'=>'opc',
+                'btn_uid'=>'prod_page_checkout',
+                'approval_url'=>''
+            ]
+        ];
+        if(empty($checkout)) return $this->success($defaultResponse);
+        $lineItems = $checkout['cart']['items'];
+        $lines = [];
+        foreach ($lineItems as $item){
+            if(!isset($item['variant_id']) || empty($item['variant_id'])) throw new ValidateException('variantId require');
             if(!isset($item['quantity']) || empty($item['quantity'])) throw new ValidateException('quantity require');
             //gid://shopify/ProductVariant/
-            $item['variantId'] = sprintf('gid://shopify/ProductVariant/%s',$item['variantId']);
+            $lines[] = [
+                'variantId'=>sprintf('gid://shopify/ProductVariant/%s',$item['variant_id']),
+                'quantity'=>$item['quantity'],
+            ];
         }
         $api = new Payment();
-        $data = $api->createCheckOut($lineItems);
+        $data = $api->createCheckOut($lines);
         $checkoutId = $data['data']['checkoutCreate']['checkout']['id'] ?? '';
         if(empty($checkoutId)) throw new \Exception('create checkout fail');
-        return $this->success(compact('checkoutId'));
+        //$checkoutId = 'gid://shopify/Checkout/9132132cc47b9127ec1605a875f1edac?key=d7070e740cfa599411c11c3f441ad3f1';
+        $checkoutId = pathinfo($checkoutId,PATHINFO_BASENAME);
+        $checkoutId = Arr::first(explode('?',$checkoutId));
+        $defaultResponse['checkout']['id'] = $checkoutId;
+        return $this->success($defaultResponse);
 
     }
     /**

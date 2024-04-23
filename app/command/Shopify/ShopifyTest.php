@@ -34,9 +34,9 @@ class ShopifyTest extends Command
             $this->setUp();
             #1.查找产品
             //$variantId = $this->getProductsList();
-            $variantId = 'gid://shopify/ProductVariant/47310414577965';
+            $variantId = 'gid://shopify/ProductVariant/48623813722413';
             #2.创建结账
-            //$checkoutId = $this->createCheckOut($variantId);
+            $checkoutId = $this->createCheckOut($variantId);
 
             $checkoutId = 'gid://shopify/Checkout/93ea24e7933fa9ca8fdb8d99d472bb37?key=51a611dadecfe70ea34562cf6c45e93f';
             #3.更新结账
@@ -143,13 +143,9 @@ QUERY;
     {
         $items = [
             [
-                'variantId'=>'gid://shopify/ProductVariant/47310414577965',
+                'variantId'=>'gid://shopify/ProductVariant/48623813722413',
                 'quantity'=>1,
-            ],
-            [
-                'variantId'=>'gid://shopify/ProductVariant/47310414610733',
-                'quantity'=>2,
-            ],
+            ]
         ];
         $query = <<<QUERY
 mutation(\$lineItems:CheckoutCreateInput!,\$first:Int) {
@@ -165,7 +161,11 @@ mutation(\$lineItems:CheckoutCreateInput!,\$first:Int) {
        }
     }
     queueToken
-   
+   checkoutUserErrors{
+    code
+    field
+    message
+   }
   }
 }
 
