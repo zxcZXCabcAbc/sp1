@@ -62,7 +62,8 @@ class CheckoutController extends BaseController
         $api = new Payment();
         $data = $api->createCheckOut($lines);
         $checkoutId = $data['data']['checkoutCreate']['checkout']['id'] ?? '';
-        if(empty($checkoutId)) throw new \Exception('create checkout fail');
+        $error = $data['data']['checkoutCreate']['checkoutUserErrors'];
+        if($error) throw new \Exception($error['message']);
         //$checkoutId = 'gid://shopify/Checkout/9132132cc47b9127ec1605a875f1edac?key=d7070e740cfa599411c11c3f441ad3f1';
         $checkoutId = pathinfo($checkoutId,PATHINFO_BASENAME);
         $checkoutId = Arr::first(explode('?',$checkoutId));

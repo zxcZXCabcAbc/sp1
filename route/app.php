@@ -22,7 +22,7 @@ Route::group('/api',function (){
         Route::get('/product-list','productController/index');//商品列表
         Route::get('/country-list','checkoutController/getCountrys');//国家下拉
         Route::get('/provice-list','checkoutController/getProviceByCountry');//州省下拉
-        Route::post('/checkouId-create','checkoutController/createCheckout');//生成checkoutId
+        Route::post('/checkout','checkoutController/createCheckout');//生成checkoutId
         Route::post('/checkout-update','checkoutController/updateCheckout');//更新checkoutId
         Route::get('/shipping-list','checkoutController/getShippingLines');//查询运费
         Route::post('/set-shipping','checkoutController/setShippingFee');//设置运费

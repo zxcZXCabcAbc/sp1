@@ -21,12 +21,12 @@ mutation(\$lineItems:CheckoutCreateInput!,\$first:Int) {
              quantity
          }
        }
-       checkoutUserErrors{
+    }
+    checkoutUserErrors{
         code
         field
         message
        }
-    }
   }
 }
 
