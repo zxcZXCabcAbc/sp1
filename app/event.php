@@ -2,7 +2,7 @@
 // 事件定义文件
 return [
     'bind'      => [
-        'PushOrder'=>'app\event\PushOrder',
+        'PushOrder'=> 'app\event\PushOrderToShopify',
     ],
 
     'listen'    => [

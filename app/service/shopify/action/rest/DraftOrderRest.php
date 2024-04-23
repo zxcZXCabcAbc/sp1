@@ -81,4 +81,9 @@ class DraftOrderRest extends RestBase
         $this->rest->send_invoice([],['draft_order_invoice'=>$draft_order_invoice]);
         return $this->rest->toArray();
     }
+
+    public function receive_a_draft_order(int $draft_id)
+    {
+        return $this->rest->find($this->session,$draft_id);
+    }
 }

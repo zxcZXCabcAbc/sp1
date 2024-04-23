@@ -11,9 +11,9 @@ use Shopify\Context;
 trait PaymentTrait
 {
     protected ?Shops $shop = null;
-    public function setUp()
+    public function setUp($shop_id = 0)
     {
-        $this->setShop();//设置店铺
+        $this->setShop($shop_id);//设置店铺
         $path = runtime_path('/tmp/php_sessions');
         $scopes = [
             'unauthenticated_read_product_listings',
@@ -40,10 +40,15 @@ trait PaymentTrait
         return $session;
     }
 
-    protected function setShop()
+    protected function setShop($shop_id = 0)
     {
-        $host = request()->header('X-Opc-Shop-Id','');
-        $this->shop = Shops::query()->host($host)->find();
+        if($shop_id){
+            $this->shop = Shops::query()->findOrEmpty($shop_id);
+        }else{
+            $host = request()->header('X-Opc-Shop-Id','');
+            $this->shop = Shops::query()->host($host)->find();
+        }
+
     }
 
     public function getShop()

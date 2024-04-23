@@ -7,7 +7,7 @@ use app\listener\PushOrderListener;
 use app\model\Orders;
 use think\facade\Event;
 
-class PushOrder
+class PushOrderToShopify
 {
     public Orders $order;
     public function __construct(Orders $orders)

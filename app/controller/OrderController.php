@@ -85,4 +85,10 @@ class OrderController extends BaseController
         return $this->success($data);
     }
 
+    //获取订单状态
+    public function getOrderStatus(Request $request,Orders $order)
+    {
+        return $this->success(['order_status'=>$order->order_status]);
+    }
+
 }

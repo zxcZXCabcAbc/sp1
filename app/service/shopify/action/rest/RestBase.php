@@ -11,9 +11,9 @@ abstract class RestBase
     use PaymentTrait;
     protected $session;
     protected $rest;
-    public function __construct()
+    public function __construct(int $shop_id = 0)
     {
-        $this->setUp();//初始化
+        $this->setUp($shop_id);//初始化
         $this->session = $this->getPaySession();//获取session
         $this->getInstance();//获取实例化rest
     }

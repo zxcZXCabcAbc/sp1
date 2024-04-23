@@ -33,6 +33,8 @@ use think\model\relation\HasOne;
  * @property integer $order_status
  * @property string $error_msg
  * @property string $name
+ * @property string $order_id
+ * @property string $last_order_name
  *
  */
 class Orders extends BaseModel
@@ -43,8 +45,8 @@ class Orders extends BaseModel
         'cancel_reason','cancelled_at','cart_token',
         'checkout_id','checkout_token','client_details',
         'created_at','contact_email','currency',
-        'current_subtotal_price','current_total_discounts','current_total_price',
-        'current_total_tax','customer_locale','discount_codes',
+        'order_id','last_order_name',
+        'customer_locale','discount_codes',
         'name','note','note_attributes',
         'order_status_url','payment_gateway_names','phone',
         'po_number','processed_at','subtotal_price',

@@ -3,7 +3,7 @@ declare (strict_types = 1);
 
 namespace app\command\Test;
 
-use app\event\PushOrder;
+use app\event\PushOrderToShopify;
 use app\helpers\RedisHelper;
 use app\helpers\RedisLock;
 use app\libs\AsiabillSDK\builder\CheckoutBuilder;
@@ -46,10 +46,13 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
+            $order = Orders::query()->find(1);
+            \event('PushOrder',$order);
 
 
 
 
+            dd(11);
 
 
             $environment = new SandboxEnvironment($this->clientId,$this->secret);

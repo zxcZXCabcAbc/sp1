@@ -35,6 +35,7 @@ Route::group('/api',function (){
         Route::get('/shipping-zones/:id','orderController/getShippingZones')->model(\app\model\Orders::class);//获取运货出运费
         Route::post('/pre-paypal','orderController/prePayByPaypal');//paypal预下单
         Route::get('/paypal-config','orderController/getPaypalConfig');//获取paypal配置
+        Route::get('/order-status/:id','orderController/getOrderStatus')->model(\app\model\Orders::class);//获取订单状态
     });
 })
 ->middleware(\app\middleware\CheckShopifyRequest::class);//验证前端请求
