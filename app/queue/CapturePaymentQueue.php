@@ -89,7 +89,10 @@ class CapturePaymentQueue
     //asiabill
     protected function handleWithAsiabill()
     {
-        return true;
+        $data = $this->request['data'] ?? [];
+        if(empty($data)) return false;
+        $orderStatus = $data['orderStatus'];
+        return $orderStatus == 'success';
     }
 
     //payoneer

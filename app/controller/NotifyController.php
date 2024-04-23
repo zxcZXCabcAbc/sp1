@@ -19,6 +19,17 @@ class NotifyController extends BaseController
     {
         $params = $request->all();
         tplog('notify',$params,'notify');
+        $type = $request->param('type','');
+        if($type && $type == 'transaction.success'){//asiabill异步通知
+            $data = $request->param('data');
+            $tradeNo = $data['tradeNo'] ?? '';
+            $order = Orders::query()->where('transaction_id',$tradeNo)->findOrEmpty();
+            if($order){
+                Notify::saveParams($order->id,$params,Notify::TYPE_NOTIFY);//存数据库
+                Queue::push(CapturePaymentQueue::class,['order_id'=>$order->id,'request'=>$params],'checkout');
+            }
+        }
+
         echo 'success';
     }
 

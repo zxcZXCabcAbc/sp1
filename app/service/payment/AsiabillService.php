@@ -21,6 +21,8 @@ class AsiabillService extends PaymentBase implements PaymentInterface
             $builder = new CheckoutBuilder($this->order);
             $result = $checkout->confirm_charge($customerId, $customerPaymentMethodId, $builder);
             $this->saveSendRequest(['params'=>$builder->toArray(),'result'=>$result]);
-            return ['transaction_id'=>$customerPaymentMethodId];
+            $transaction_id = $result['data']['tradeNo'] ?? "";
+            $redirect_url = $result['data']['redirectUrl'] ?? '';
+            return ['transaction_id'=>$transaction_id,'approval_url'=>$redirect_url];
     }
 }
