@@ -14,9 +14,9 @@ class CapturePaymentQueue
     protected array $request;
     public function fire(Job $job, $data)
     {
+        dump('***************正在执行订单ID: ' . $data['order_id'] . ' *********支付');
         // 执行任务
         $isJobDone = $this->run($data);
-
         if ($isJobDone) {
             // 任务执行成功 删除任务
             $job->delete();
