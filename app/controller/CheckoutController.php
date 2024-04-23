@@ -47,7 +47,7 @@ class CheckoutController extends BaseController
                 'approval_url'=>''
             ]
         ];
-        if(empty($checkout)) return $this->success($defaultResponse);
+        if(empty($checkout)) return json($defaultResponse);
         $lineItems = $checkout['cart']['items'];
         $lines = [];
         foreach ($lineItems as $item){
@@ -68,7 +68,7 @@ class CheckoutController extends BaseController
         $checkoutId = pathinfo($checkoutId,PATHINFO_BASENAME);
         $checkoutId = Arr::first(explode('?',$checkoutId));
         $defaultResponse['checkout']['id'] = $checkoutId;
-        return $this->success($defaultResponse);
+        return json($defaultResponse);
 
     }
     /**
