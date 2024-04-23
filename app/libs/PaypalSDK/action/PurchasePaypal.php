@@ -2,6 +2,7 @@
 
 namespace app\libs\PaypalSDK\action;
 
+use app\libs\PaypalSDK\builder\PrePurchaseBuilder;
 use app\libs\PaypalSDK\builder\PurchaseBuilder;
 use app\libs\PaypalSDK\PaypalClient;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
@@ -10,7 +11,7 @@ use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 
 class PurchasePaypal extends PaypalClient
 {
-    public function purchase(PurchaseBuilder $builder)
+    public function purchase(PurchaseBuilder|PrePurchaseBuilder $builder)
     {
         $request = new OrdersCreateRequest();
         $request->body = $builder->toArray();

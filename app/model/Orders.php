@@ -99,12 +99,12 @@ class Orders extends BaseModel
      * @throws \think\db\exception\ModelNotFoundException
      * @property string $address1
      */
-    public function getShippingAddressAttr() :Address
+    public function getShippingAddressAttr() :Address|null
     {
         return $this->addresses()->where('type',Address::SHIPPING_ADDRESS)->find();
     }
 
-    public function getBillingAddressAttr():Address
+    public function getBillingAddressAttr():Address|null
     {
         return $this->addresses()->where('type',Address::BILLING_ADDRESS)->find();
     }

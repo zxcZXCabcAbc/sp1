@@ -13,6 +13,7 @@ use app\service\shopify\action\rest\ShippingZoneRest;
 use app\validate\DraftOrderValidate;
 use app\validate\OrderValidate;
 use app\validate\PlaceOrderValidate;
+use app\validate\PrePayValidate;
 use think\annotation\Inject;
 use think\Request;
 
@@ -69,5 +70,19 @@ class OrderController extends BaseController
         return $this->success($data);
     }
 
+    //预下单
+    public function prePayByPaypal(Request $request)
+    {
+        Validate(PrePayValidate::class)->check($request->post());
+        $data = $this->logic->prePayPaypal($request);
+        return $this->success($data);
+    }
+
+    //获取贝宝配置
+    public function getPaypalConfig(Request $request)
+    {
+        $data = $this->logic->getPaypalConfig($request);
+        return $this->success($data);
+    }
 
 }

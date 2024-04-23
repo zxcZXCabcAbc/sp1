@@ -2,14 +2,25 @@
 
 namespace app\logic;
 
+use app\constant\CommonConstant;
+use app\exception\BusinessException;
+use app\libs\PaypalSDK\action\PurchasePaypal;
+use app\libs\PaypalSDK\builder\PrePurchaseBuilder;
+use app\libs\PaypalSDK\PaypalClient;
+use app\model\Notify;
 use app\model\Orders;
+use app\model\Shops;
+use app\model\ShopsPayment;
 use app\service\payment\PaymentBase;
+use app\service\payment\PaypalService;
 use app\service\shopify\action\rest\DraftOrderRest;
 use app\service\shopify\action\rest\ShippingZoneRest;
 use app\trait\OrderTrait;
 use app\trait\PaymentTrait;
 use think\annotation\Inject;
+use think\helper\Arr;
 use think\Request;
+use function Clue\StreamFilter\fun;
 
 class OrderLogic
 {
@@ -92,6 +103,43 @@ class OrderLogic
             }
         }
         return $shipping_fee_list;
+    }
+
+    //预下单
+    public function prePayPaypal(Request $request)
+    {
+        $result = $this->createDraftOrder($request);
+        $order = Orders::query()->findOrEmpty($result['order_id']);
+        $payment = ShopsPayment::payment($request->middleware('x_shop_id'),ShopsPayment::PAY_METHOD_PAYPAL);
+        if(empty($payment)) throw new \Exception('paypal no setting');
+        $builder = new PrePurchaseBuilder($order);
+        Notify::saveParams($order->id,$builder->toArray());
+        $paypal = new PurchasePaypal($payment);
+        $response = $paypal->purchase($builder);
+        $result = $response['result'] ?? [];
+        if(empty($result)) throw new BusinessException("create pre paypal order error");
+        $order->transaction_id = $result['id'];
+        $order->payment_id = $payment->id;
+        $order->save();
+        $links = array_filter($result['links'],function ($item){
+            return $item['rel'] == 'approve';
+        });
+        $approval_urls = Arr::first($links);
+        $approval_url = $approval_urls['href'] ?? '';
+        return [
+            'order_id'=>$order->id,
+            'approval_url'=>$approval_url
+        ];
+    }
+
+    public function getPaypalConfig(Request $request)
+    {
+        $payment = ShopsPayment::payment($request->middleware('x_shop_id'),ShopsPayment::PAY_METHOD_PAYPAL);
+        if(empty($payment)) throw new \Exception('paypal no setting');
+        return [
+            'mode'=>$payment->mode == ShopsPayment::MODE_SANDBOX ? CommonConstant::MODE_SANDBOX_WORD : CommonConstant::MODE_LIVE_WORD,
+            'client_id'=>$payment->mode == ShopsPayment::MODE_SANDBOX ? $payment->client_id_sandbox : $payment->client_id,
+        ];
     }
 
 

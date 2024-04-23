@@ -2,7 +2,7 @@
 
 namespace app\libs\PaypalSDK\builder;
 
-class PurchaseBuilder extends PaypalBuilder
+class PrePurchaseBuilder extends PaypalBuilder
 {
     public function toArray()
     {
@@ -10,11 +10,9 @@ class PurchaseBuilder extends PaypalBuilder
             'intent'=>'CAPTURE',
             'purchase_units'=>$this->getTransactions(),
             'application_context'=>[
-                'return_url'=>$this->order->return_url,
+                'return_url'=>sprintf('%s?%s',$this->order->return_url,http_build_query(['isPreOrder'=>1])),
                 'cancel_url'=>$this->order->cancel_url,
-                'shipping_preference'=>'SET_PROVIDED_ADDRESS'
             ],
         ];
     }
-
 }

@@ -3,6 +3,8 @@ declare (strict_types = 1);
 
 namespace app\model;
 
+use app\constant\CommonConstant;
+use app\constant\ModelConstant;
 use think\Model;
 use think\model\relation\HasOne;
 
@@ -76,5 +78,14 @@ class ShopsPayment extends BaseModel
     public function getRedirectUrlsAttr()
     {
         return 1;
+    }
+
+    public static function payment(int $shopid,$pay_method)
+    {
+        return self::query()
+                   ->where('shop_id',$shopid)
+                   ->where('pay_method',$pay_method)
+                   ->where('status',ModelConstant::STATUS_ON)
+                   ->findOrEmpty();
     }
 }
