@@ -18,7 +18,6 @@ class NotifyController extends BaseController
     public function index(Request $request)
     {
         $params = $request->all();
-        if(empty($params)) return $this->error('no params');
         tplog('notify',$params,'notify');
         echo 'success';
     }
