@@ -20,6 +20,7 @@ trait OrderTrait
      */
     protected function saveOrder(array $order,Orders $orders = null)
     {
+        $orders = null;
         try {
             if (empty($order)) throw new \Exception('create draft order error');
             $order['order_type'] = Orders::ORDER_DRAFT;
@@ -29,7 +30,7 @@ trait OrderTrait
             $customer = $order['customer'] ?? [];
             $shippingAddress = $order['shipping_address'] ?: [];
             if ($shippingAddress) $shippingAddress['type'] = Address::SHIPPING_ADDRESS;
-            $shippingLines = $order['shipping_lines'] ?? [];
+            $shippingLines = $order['shipping_line'] ?? [];
             $orderModel = new Orders();
             if(is_null($orders)) {
                 $orderId = $orderModel->setIsConvert(true)->fill($order)->saveData();
@@ -45,7 +46,14 @@ trait OrderTrait
             $this->saveCustomer($orders, $customer);//保存顾客
             return $orderId;
         }catch (\Exception $e){
-            dd($e);
+            if($orders){
+                $orders->addresses()->delete();
+                $orders->customer()->delete();
+                $orders->items()->delete();
+                $orders->shippings()->delete();
+                $orders->delete();
+            }
+            throw new \Exception($e->getMessage());
         }
     }
 
@@ -90,7 +98,7 @@ trait OrderTrait
         if(empty($shippingLines)) return false;
         $shippingLinesData = (new ShippingLines())->fill($shippingLines)->getDatas();
         $orders->shippings()->delete();
-        return $orders->shippings()->saveAll($shippingLinesData);
+        return $orders->shippings()->save($shippingLinesData);
     }
 
     /**

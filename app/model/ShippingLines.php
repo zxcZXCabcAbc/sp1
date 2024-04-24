@@ -11,13 +11,10 @@ use think\Model;
 class ShippingLines extends BaseModel
 {
     protected $field = [
-        'order_id','shipping_id','carrier_identifier','carrier_identifier',
-        'code','discounted_price','is_removed','phone',
-        'price','requested_fulfillment_service_id','source','title',
-        'tax_lines','discount_allocations'
+        'order_id','handle','custom',
+        'price','title',
+
     ];
-    protected $json = ['tax_lines','discount_allocations'];
-    protected $jsonAssoc = true;
 
     public function orders()
     {

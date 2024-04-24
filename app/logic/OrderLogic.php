@@ -182,7 +182,7 @@ class OrderLogic
             ];
         }
         $shipping_address = $request->param('shipping_address');
-        $shipping_line = $request->param('shipping_lines');
+        $shipping_line = $request->param('shipping_line');
         $email = $request->param('email');
         return compact('line_items','shipping_address','shipping_line','email');
 

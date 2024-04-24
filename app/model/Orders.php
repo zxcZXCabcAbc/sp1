@@ -36,6 +36,7 @@ use think\model\relation\HasOne;
  * @property string $order_id
  * @property string $last_order_name
  * @property string $webhook_url
+ * @property ShippingLines $shoppingLine
  *
  */
 class Orders extends BaseModel
@@ -82,7 +83,7 @@ class Orders extends BaseModel
 
     public function shippings()
     {
-        return $this->hasMany(ShippingLines::class,'order_id');
+        return $this->hasOne(ShippingLines::class,'order_id');
     }
 
     public function shop()
@@ -152,5 +153,9 @@ class Orders extends BaseModel
         return domain(env('APP_HOST')) .'/api/webhook';
     }
 
+    public function getShippingLineAttr():ShippingLines
+    {
+        return $this->shippings()->find();
+    }
 
 }
