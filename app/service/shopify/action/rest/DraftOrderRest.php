@@ -11,11 +11,14 @@ class DraftOrderRest extends RestBase
      * @doc https://shopify.dev/docs/api/admin-rest/2024-04/resources/draftorder#post-draft-orders
      * @desc 创建
      */
-    public function create_draft_order(Request $request) :array
+    public function create_draft_order(array $data) :array
     {
- 
-        $this->rest->line_items = $request->post('line_items');
+        $this->rest->line_items = $data['line_items'];
+        $this->rest->shipping_address = $data['shipping_address'];
+        $this->rest->email = $data['email'];
+        $this->rest->shipping_line = $data['shipping_line'];
         $this->rest->use_customer_default_address = true;
+
 //        $this->rest->customer = [
 //            "id" => 207119551
 //        ];

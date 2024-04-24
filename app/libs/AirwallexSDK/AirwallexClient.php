@@ -27,10 +27,10 @@ class AirwallexClient extends HttpService
         self::$apiUrl = $payment->mode == ShopsPayment::MODE_LIVE ? self::BASE_URL : self::SANDBOX_URL;
         $paymentCnf = $payment->config;
         self::$appKey = $paymentCnf['app_key'];
-        self::$appSecrect = $paymentCnf['app_secrect'];
+        self::$appSecrect = $paymentCnf['app_secret'];
         self::$appUser = $paymentCnf['merchant_no'];
         self::$shopId = $paymentCnf['shop_id'];
-        self::$cacheToken = 'AIRWALLEX_KEY_ACCOUNT_' . self::$shopId . '_MODE_' . $paymentCnf['mode'];
+        self::$cacheToken = 'AIRWALLEX_KEY_ACCOUNT_' . self::$shopId . '_MODE_' . $payment->mode;
         $this->setBaseUrl(self::$apiUrl)
              ->setChannel(self::CHANNEL);
         $this->getAccessToken();

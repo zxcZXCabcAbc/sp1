@@ -15,7 +15,7 @@ class HttpService
     protected $channel = 'default';
     protected $header = [];
     protected $debug;
-    protected array $auth;
+    protected array $auth = [];
 
     public function getAuth(): array
     {

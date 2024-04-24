@@ -6,6 +6,8 @@ namespace app\command\Test;
 use app\event\PushOrderToShopify;
 use app\helpers\RedisHelper;
 use app\helpers\RedisLock;
+use app\libs\AirwallexSDK\Action\PaymentIntent;
+use app\libs\AirwallexSDK\Build\PaymentIntentBuilder;
 use app\libs\AsiabillSDK\builder\CheckoutBuilder;
 use app\libs\PaypalSDK\action\PurchasePaypal;
 use app\model\Customer;
@@ -47,7 +49,14 @@ class LfxTest extends Command
     {
         try {
             $order = Orders::query()->find(1);
-            \event('PushOrder',$order);
+            $payment = ShopsPayment::query()->find(3);
+            $airwallex = new PaymentIntent($payment);
+            $builder = new PaymentIntentBuilder($order);
+            $res = $airwallex->create_payment_intent($builder);
+            dd($res);
+
+
+            //\event('PushOrder',$order);
 
 
 

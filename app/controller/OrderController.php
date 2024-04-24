@@ -26,7 +26,7 @@ class OrderController extends BaseController
     //创建订单
     public function createDraftOrder(Request $request)
     {
-        validate(DraftOrderValidate::class)->check($request->post());
+
         $data = $this->logic->createDraftOrder($request);
         return $this->success($data);
     }
@@ -64,10 +64,11 @@ class OrderController extends BaseController
     }
 
     //获取所有国家运费
-    public function getShippingZones(Request $request,Orders $order)
+    public function getShippingZones(Request $request)
     {
-        $data = $this->logic->getShippingZones($request,$order);
-        return $this->success($data);
+        $this->validate($request->all(),['country_code'=>'require','sub_total'=>'require']);
+        $data = $this->logic->getShippingZones($request);
+        return $this->success(['shipping_line'=>$data]);
     }
 
     //预下单

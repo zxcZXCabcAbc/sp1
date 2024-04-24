@@ -33,7 +33,7 @@ Route::group('/api',function (){
         Route::get('/payment-enable-get','orderController/getPaymentMethod');//获取支付方式
         Route::post('/place-order/:id','orderController/placeOrder')->model(\app\model\Orders::class);//下单
         Route::get('/session-token/:id','orderController/getSessionToken')->model(\app\model\ShopsPayment::class);//sessionToken
-        Route::get('/shipping-zones/:id','orderController/getShippingZones')->model(\app\model\Orders::class);//获取运货出运费
+        Route::get('/shipping-lines','orderController/getShippingZones');//根据国家获取运费
         Route::post('/pre-paypal','orderController/prePayByPaypal');//paypal预下单
         Route::get('/paypal-config','orderController/getPaypalConfig');//获取paypal配置
         Route::get('/order-status/:id','orderController/getOrderStatus')->model(\app\model\Orders::class);//获取订单状态

@@ -38,7 +38,8 @@ class OrderLogic
      */
     public function createDraftOrder(Request $request)
     {
-        $draft = $this->rest->create_draft_order($request);
+        $draftData = $this->formatDraft($request);
+        $draft = $this->rest->create_draft_order($draftData);
         //存订单
         $order_id = $this->saveOrder($draft);
         return compact('draft','order_id');
@@ -88,11 +89,13 @@ class OrderLogic
         return true;
     }
 
-    public function getShippingZones(Request $request,Orders $order)
+    public function getShippingZones(Request $request)
     {
         $rest = new ShippingZoneRest();
         $data = $rest->get_shipping_zones();
-        $countryCode = $order->shippingAddress->country_code;
+        $countryCode = $request->param('country_code');
+        $countryCode = strtoupper($countryCode);
+        $sub_total = $request->param('sub_total');
         $shipping_fee_list = [];
         foreach ($data as $item){
             $temp = $item->toArray();
@@ -101,6 +104,23 @@ class OrderLogic
             if(in_array($countryCode,$countryCodes)){
                 $shipping_fee_list = $temp['price_based_shipping_rates'];
             }
+        }
+
+        if($shipping_fee_list){
+            $shipping_lines = [];
+            foreach ($shipping_fee_list as $key => $line){
+                $min_price = $line['min_order_subtotal'] ?: 0;
+                $max_price = $line['max_order_subtotal'] ?: 9999999;
+                if($sub_total < $max_price && $sub_total > $min_price){
+                    $shipping_lines = [
+                        'title'=>$line['name'],
+                        'price'=>$line['price'],
+                        'handle'=>null,
+                        'custom'=>true
+                    ];
+                }
+            }
+            $shipping_fee_list = $shipping_lines;
         }
         return $shipping_fee_list;
     }
@@ -140,6 +160,33 @@ class OrderLogic
             'mode'=>$payment->mode == ShopsPayment::MODE_SANDBOX ? CommonConstant::MODE_SANDBOX_WORD : CommonConstant::MODE_LIVE_WORD,
             'client_id'=>$payment->mode == ShopsPayment::MODE_SANDBOX ? $payment->client_id_sandbox : $payment->client_id,
         ];
+    }
+
+    protected function formatDraft(Request $request):array
+    {
+        $checkout = $request->param('checkout',[]);
+        if(empty($checkout)) throw new \Exception("miss checkout");
+        $line_items = [];
+        $cart = $checkout['cart'] ?? [];
+        if(empty($cart)) throw new \Exception('cart is empty');
+        $items = $cart['items'];
+        foreach ($items as $item){
+            $line_items[] = [
+               'variant_id'=>$item['variant_id'],
+                'product_id'=>$item['product_id'],
+                'variant_title'=>$item['variant_title'] ?: $item['title'],
+                'title'=>$item['title'],
+                'price'=>bcdiv($item['price'],100,2),
+                'quantity'=>$item['quantity'],
+                'sku'=>$item['sku'],
+            ];
+        }
+        $shipping_address = $request->param('shipping_address');
+        $shipping_line = $request->param('shipping_lines');
+        $email = $request->param('email');
+        return compact('line_items','shipping_address','shipping_line','email');
+
+
     }
 
 
