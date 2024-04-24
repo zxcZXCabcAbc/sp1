@@ -14,6 +14,10 @@ class CapturePaymentQueue
     protected array $request;
     public function fire(Job $job, $data)
     {
+        if(empty($data) || !isset($data['order_id'])){
+            $job->delete();
+            return false;
+        }
         dump('***************正在执行订单ID: ' . $data['order_id'] . ' *********支付');
         // 执行任务
         $isJobDone = $this->run($data);
@@ -26,39 +30,44 @@ class CapturePaymentQueue
                 $job->delete();
             }
         }
-        $job->delete();
+
     }
 
     public function run($data)
     {
-        $order_id = $data['order_id'];
-        $this->request = $data['request'] ?? [];
-       $this->order = Orders::findOrEmpty($order_id);
-       if($this->order->isEmpty()) return true;
-       if($this->order->order_status == Orders::ORDER_STATUS_COMPLETED) return true;
-       $payment = $this->order->payment;
-       switch ($payment->pay_method){
-           case ShopsPayment::PAY_METHOD_PAYPAL:
-               $result = $this->handleWithPaypal();
-               break;
-           case ShopsPayment::PAY_METHOD_ASIABILL:
-               $result = $this->handleWithAsiabill();
-               break;
-           case ShopsPayment::PAY_METHOD_PAYONEER:
-               $result = $this->handleWithPayoneer();
-               break;
-           default:
-               $result =  true;
-       }
+        try {
+            $order_id = $data['order_id'];
+            $this->request = $data['request'] ?? [];
+            $this->order = Orders::findOrEmpty($order_id);
+            if ($this->order->isEmpty()) return true;
+            if ($this->order->order_status == Orders::ORDER_STATUS_COMPLETED) return true;
+            $payment = $this->order->payment;
+            switch ($payment->pay_method) {
+                case ShopsPayment::PAY_METHOD_PAYPAL:
+                    $result = $this->handleWithPaypal();
+                    break;
+                case ShopsPayment::PAY_METHOD_ASIABILL:
+                    $result = $this->handleWithAsiabill();
+                    break;
+                case ShopsPayment::PAY_METHOD_PAYONEER:
+                    $result = $this->handleWithPayoneer();
+                    break;
+                default:
+                    $result = true;
+            }
 
-       if($result){
-           $this->order->order_status = Orders::ORDER_STATUS_COMPLETED;
-           $this->order->save();
-           //创建shopify订单
-          event('PushOrder',$this->order);
-       }
+            if ($result) {
+                $this->order->order_status = Orders::ORDER_STATUS_COMPLETED;
+                $this->order->save();
+                //创建shopify订单
+                event('PushOrder', $this->order);
+            }
 
-       return $result;
+            return $result;
+        }catch (\Exception $e){
+            tplog('capture order',$e->getMessage());
+            return false;
+        }
     }
 
     //paypal

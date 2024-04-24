@@ -9,8 +9,8 @@ function domain(string $url, string $protocol = 'https')
 }
 
 
- function tplog(string $msg,array $data,$channel = 'request')
+ function tplog(string $msg, array|string $data,$channel = 'request')
 {
-    $json = json_encode($data,JSON_UNESCAPED_UNICODE);
+    $json = is_array($data) ? json_encode($data,JSON_UNESCAPED_UNICODE) : $data;
     Log::channel($channel)->record(sprintf('%s: %s',$msg,$json));
 }
