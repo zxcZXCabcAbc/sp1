@@ -17,10 +17,10 @@ use think\model\relation\HasOne;
  * @property string $contact_email
  * @property string $phone
  * @property integer $shop_id
- * @property Shops $shop
- * @property ShopsPayment $payment
+ * @property Shops|null $shop
+ * @property ShopsPayment|null $payment
  * @property integer $payment_id
- * @property Customer $customer
+ * @property Customer|null $customer
  * @property string $notify_url
  * @property string $return_url
  * @property string $cancel_url
@@ -36,7 +36,7 @@ use think\model\relation\HasOne;
  * @property string $order_id
  * @property string $last_order_name
  * @property string $webhook_url
- * @property ShippingLines $shippingLine
+ * @property ShippingLines|null $shippingLine
  * @property string $token
  *
  */
@@ -114,17 +114,17 @@ class Orders extends BaseModel
         return $this->addresses()->where('type',Address::BILLING_ADDRESS)->find();
     }
 
-    public function getShopAttr():Shops
+    public function getShopAttr():Shops|null
     {
         return $this->shop()->find();
     }
 
-    public function getCustomerAttr(): Customer
+    public function getCustomerAttr(): Customer|null
     {
         return $this->customer()->find();
     }
 
-    public function getPaymentAttr(): ShopsPayment
+    public function getPaymentAttr(): ShopsPayment|null
     {
         return $this->payment()->find();
     }
@@ -156,7 +156,7 @@ class Orders extends BaseModel
         return domain(env('APP_HOST')) .'/api/webhook';
     }
 
-    public function getShippingLineAttr():ShippingLines
+    public function getShippingLineAttr():ShippingLines|null
     {
         return $this->shippings()->find();
     }
