@@ -40,7 +40,7 @@ trait OrderTrait
                 $billingAddress['type'] = Address::BILLING_ADDRESS;
                 $addresses[] = $billingAddress;
             }
-            $shippingLines = $order['shipping_line'] ?? [];
+            $shippingLines = $request->param('shipping_line',[]);
             $orderModel = new Orders();
             $order['total_shipping_price'] = $shippingLines['price'] ?? '0.00';
             $order['browser_ip'] = $request->ip();
