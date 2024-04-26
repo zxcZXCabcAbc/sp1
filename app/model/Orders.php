@@ -36,7 +36,8 @@ use think\model\relation\HasOne;
  * @property string $order_id
  * @property string $last_order_name
  * @property string $webhook_url
- * @property ShippingLines $shoppingLine
+ * @property ShippingLines $shippingLine
+ * @property string $token
  *
  */
 class Orders extends BaseModel
@@ -140,7 +141,9 @@ class Orders extends BaseModel
 
     public function getReturnUrlAttr(): string
     {
-       return domain(env('APP_HOST') . '/api/checkout/'. $this->id);
+        $url = domain(env('APP_HOST') . '/api/checkout/'. $this->id);
+        $query = ['success'=>"true",'token'=>$this->token];
+        return sprintf('%s?%s',$url,http_build_query($query));
     }
 
     public function notifies(): HasMany

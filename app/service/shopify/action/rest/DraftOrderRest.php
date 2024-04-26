@@ -18,6 +18,9 @@ class DraftOrderRest extends RestBase
         $this->rest->email = $data['email'];
         $this->rest->shipping_line = $data['shipping_line'];
         $this->rest->use_customer_default_address = true;
+        if(isset($data['billing_address']) && !empty($data['billing_address'])){
+            $this->rest->billing_address = $data['billing_address'];
+        }
 
 //        $this->rest->customer = [
 //            "id" => 207119551
@@ -39,10 +42,11 @@ class DraftOrderRest extends RestBase
     public function update_draft_order($draft_id,array $params = []):array
     {
         $this->rest->id = $draft_id;
-        if(isset($params['line_items'])) $this->rest->line_items = $params['line_items'];
-        if(isset($params['shipping_address'])) $this->rest->shipping_address = $params['shipping_address'];
-        if(isset($params['email'])) $this->rest->email = $params['email'];
-        if(isset($params['shipping_line'])) $this->rest->shipping_line = $params['shipping_line'];
+        if(isset($params['line_items']) && !empty($params['line_items'])) $this->rest->line_items = $params['line_items'];
+        if(isset($params['shipping_address']) && !empty($params['shipping_address'])) $this->rest->shipping_address = $params['shipping_address'];
+        if(isset($params['billing_address']) && !empty($params['billing_address'])) $this->rest->shipping_address = $params['billing_address'];
+        if(isset($params['email']) && !empty($params['email'])) $this->rest->email = $params['email'];
+        if(isset($params['shipping_line']) && !empty($params['shipping_line'])) $this->rest->shipping_line = $params['shipping_line'];
         /*
          $draft_order->applied_discount = [
             "description" => "Custom discount",
@@ -52,7 +56,7 @@ class DraftOrderRest extends RestBase
             "title" => "Custom"
 ];
          */
-        if(isset($params['applied_discount'])) $this->rest->applied_discount = $params['applied_discount'];
+        if(isset($params['applied_discount']) && !empty($params['applied_discount'])) $this->rest->applied_discount = $params['applied_discount'];
         $this->rest->save(true);
         return $this->rest->toArray();
     }

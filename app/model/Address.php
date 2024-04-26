@@ -23,6 +23,7 @@ use think\Model;
  * @property integer $order_id
  * @property integer $type
  * @property integer $is_default
+ * @property string $address_message
  */
 class Address extends BaseModel
 {
@@ -39,5 +40,16 @@ class Address extends BaseModel
     public function orders()
     {
         return $this->belongsTo(Orders::class,'order_id');
+    }
+
+    public function getAddressMessageAttr(): string
+    {
+        return sprintf(
+            '%s,%s,%s,%s,%s,%s,%s',
+            $this->name,$this->address1,
+            $this->city,$this->province,
+            $this->zip,$this->country_code,
+            $this->phone
+        );
     }
 }

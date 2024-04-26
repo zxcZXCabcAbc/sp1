@@ -12,7 +12,7 @@ class HttpService
     protected $method = 'GET';
     protected $path = '';
     protected $options = [];
-    protected $channel = 'default';
+    protected $channel = 'file';
     protected $header = [];
     protected $debug;
     protected array $auth = [];

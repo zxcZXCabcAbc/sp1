@@ -5,6 +5,7 @@ namespace app\service\payment;
 use app\constant\CommonConstant;
 use app\libs\AirwallexSDK\Action\PaymentIntent;
 use app\libs\AirwallexSDK\Build\PaymentIntentBuilder;
+use app\model\Notify;
 use app\model\ShopsPayment;
 use app\Request;
 use app\service\payment\PaymentInterface;
@@ -19,7 +20,11 @@ class AirwallexService extends PaymentBase implements PaymentInterface
         $client = new PaymentIntent($this->payment);
         $builder = new PaymentIntentBuilder($this->order);
         $result = $client->create_payment_intent($builder);
-
+        Notify::saveParams($this->order->id,['params'=>$builder->toArray(),'result'=>$result]);
+        if(empty($result)) throw new \Exception('create airwallex order error');
+        $approval_url = $this->get_payment_url($result);
+        $transaction_id = $result['id'];
+        return compact('approval_url','transaction_id');
     }
 
 

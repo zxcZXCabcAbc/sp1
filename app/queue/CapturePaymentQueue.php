@@ -66,7 +66,6 @@ class CapturePaymentQueue
             return $result;
         }catch (\Exception $e){
             tplog('capture order',$e->getMessage());
-            dump($e);
             return false;
         }
     }

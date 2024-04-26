@@ -18,17 +18,26 @@ abstract class BaseAbstract
     //商品信息
     public function getProducts($b_shop_id = 0)
     {
-        dump('*************组装B站数据: ' . time());
-        $products =  $this->transferProductsToThirdParty($this->order,Orders::PAY_METHOD_PAYONEER,$b_shop_id);
-        dump('*************组装B站数据: ' . time());
-        //增加运费
-        $shippingFee = [
-            'amount'=>$this->order->shipping,
-            'name'=>$this->order->logistics_id ?: 'Shipping fees',
-            'currency'=>$this->order->currency,
-            'quantity'=>1,
-        ];
-        array_push($products,$shippingFee);
+        $products = [];
+        foreach ($this->order->items as $product){
+          $products[] = [
+              'amount'=>$product->price,
+              'name'=>$product->name,
+              'currency'=>$this->order->currency,
+              'quantity'=>1,
+          ];
+        }
+
+        if($this->order->shippingLine){
+            //增加运费
+            $shippingFee = [
+                'amount'=>$this->order->shippingLine->price,
+                'name'=>$this->order->shippingLine->title ?: 'Shipping fees',
+                'currency'=>$this->order->currency,
+                'quantity'=>1,
+            ];
+            array_push($products,$shippingFee);
+        }
         return $products;
 
     }
@@ -51,10 +60,10 @@ abstract class BaseAbstract
     public function getPayment()
     {
         return [
-            'reference'=>$this->order->order_sn,
-            'amount'=>0 + $this->order->total_money,
+            'reference'=>pathinfo($this->order->admin_graphql_api_id,PATHINFO_BASENAME),
+            'amount'=>$this->order->total_price,
             'currency'=>$this->order->currency,
-            'taxAmount'=>0 + $this->order->tax_total,
+            'taxAmount'=>$this->order->total_tax,
         ];
     }
 
@@ -74,11 +83,10 @@ abstract class BaseAbstract
     }
 
     //回调地址
-    protected function getCallback($b_shop_id = 0){
-        list($returnUrl,$cancelUrl) = $this->getReturnUrl($this->order,$b_shop_id);
-        $domainUrl = optional($this->order->shopB)->domain_url;
-        $domainUrl = FormateHelper::handleDomainUrl($domainUrl);
-        $notifyUrl = $domainUrl . '/notify/payoneer';
+    protected function getCallback(){
+        $returnUrl = $this->order->return_url;
+        $cancelUrl = $this->order->cancel_url;
+        $notifyUrl = $this->order->notify_url;
         return [
             'returnUrl'=>$returnUrl,
             'notificationUrl'=>$notifyUrl,

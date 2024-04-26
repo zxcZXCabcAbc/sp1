@@ -42,7 +42,7 @@ class PayoneerClient extends HttpService
         $mode = $payment->mode == ShopsPayment::MODE_SANDBOX ? CommonConstant::MODE_SANDBOX_WORD : CommonConstant::MODE_LIVE_WORD;
         self::$base_url = "https://api.{$mode}.oscato.com";
         $paymentCnf = $payment->config;
-        $this->authorization = $paymentCnf['app_secrect'];
+        $this->authorization = $paymentCnf['app_secret'];
         $this->username = $paymentCnf['merchant_no'];
         self::$division = $paymentCnf['app_key'];
         $this->setHeader($this->header)

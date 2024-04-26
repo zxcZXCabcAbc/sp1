@@ -48,7 +48,11 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
-            $order = Orders::query()->find(1);
+            $order = Orders::query()->find(10);
+            $builder = new CheckoutBuilder($order);
+            dd($builder->toArray());
+
+
             $payment = ShopsPayment::query()->find(3);
             $airwallex = new PaymentIntent($payment);
             $builder = new PaymentIntentBuilder($order);

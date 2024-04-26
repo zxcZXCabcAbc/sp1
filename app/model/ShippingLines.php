@@ -6,7 +6,11 @@ namespace app\model;
 use think\Model;
 
 /**
- * @mixin \think\Model
+ * @property int $order_id
+ * @property string $handle
+ * @property string $title
+ * @property float $price
+ * @property integer $custom
  */
 class ShippingLines extends BaseModel
 {

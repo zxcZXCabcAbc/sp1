@@ -14,7 +14,7 @@ class CheckoutBuilder extends BuilderBase
             //'customerId'=>$this->getCustomerId(),
             'customerPaymentMethodId'=>$this->getCustomerPaymentMethodId(),
             'isMobile'=>'0',
-            'customerIp'=>$this->order->browser_ip,
+            'customerIp'=>request()->ip(),
             'orderAmount'=>$this->order->total_price,
             'orderCurrency'=>$this->order->currency,
             'platform'=>'php_SDK',
@@ -57,6 +57,15 @@ class CheckoutBuilder extends BuilderBase
                 'goodsTitle' => $items->title
             ];
         }
+
+        if($this->order->shippingLine){
+            $products[] = [
+                'goodsCount' => 1,
+                'goodsPrice' => $this->order->shippingLine->price,
+                'goodsTitle' => $this->order->shippingLine->title,
+            ];
+        }
+
         return $products;
     }
 

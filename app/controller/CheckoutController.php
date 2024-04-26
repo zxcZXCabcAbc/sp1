@@ -16,20 +16,28 @@ class CheckoutController extends BaseController
 {
 
     //获取国家
+    /**
+     * @param Request $request
+     * @return \think\response\Json
+     * @deprecated
+     */
     public function getCountrys(Request $request)
     {
-        $api = new Location(ShopifyApiService::ADMIN_API);
-        $data = $api->getCountry($request->get('since_id',0));
+        $data = [];
         return $this->success($data);
     }
 
 
     //根据国家获取州省
+
+    /**
+     * @param Request $request
+     * @return \think\response\Json
+     * @deprecated 
+     */
     public function getProviceByCountry(Request $request)
     {
-        $this->validate($request->all(),['country_id'=>'require']);
-        $api = new Location(ShopifyApiService::ADMIN_API);
-        $list = $api->getProvices($request->get('country_id'));
+        $list = [];
         return $this->success($list);
 
     }
@@ -61,6 +69,7 @@ class CheckoutController extends BaseController
         }
         $api = new Payment();
         $data = $api->createCheckOut($lines);
+        //dd($data);
         $checkoutId = $data['data']['checkoutCreate']['checkout']['id'] ?? '';
         $error = $data['data']['checkoutCreate']['checkoutUserErrors'];
         if($error) throw new \Exception($error['message']);

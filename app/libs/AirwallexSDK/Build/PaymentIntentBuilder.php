@@ -98,7 +98,14 @@ class PaymentIntentBuilder
             ];
         }
 
-
+        if($this->order->shippingLine){
+            $products[] = [
+                'name'=>$this->order->shippingLine->title,
+                'unit_price'=>$this->order->shippingLine->price,
+                'quantity'=>1,
+                'type'=>'shipping'
+            ];
+        }
 
         return $products;
 

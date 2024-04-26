@@ -3,17 +3,21 @@
 namespace app\libs\StripeSDK;
 
 
+use app\model\ShopsPayment;
+use Stripe\StripeClient;
+
 class StripeAPI
 {
-    protected $client;
-    public function __construct(array $paymentCnf)
+    protected StripeClient $client;
+    public function __construct(ShopsPayment $payment)
     {
-
-        $this->client = $paymentCnf['app_secrect'];
+        $config = $payment->config;
+        $this->client = new StripeClient($config['app_secret']);
     }
 
-    public function getPrivateKey()
+    public function getStripe():StripeClient
     {
         return $this->client;
     }
+
 }

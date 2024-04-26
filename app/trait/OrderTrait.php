@@ -7,6 +7,7 @@ use app\model\Customer;
 use app\model\LineItems;
 use app\model\Orders;
 use app\model\ShippingLines;
+use think\Request;
 
 trait OrderTrait
 {
@@ -18,7 +19,7 @@ trait OrderTrait
      * @throws \think\db\exception\ModelNotFoundException
      * @dec 保存订单
      */
-    protected function saveOrder(array $order,Orders $orders = null)
+    protected function saveOrder(array $order,Request $request,Orders $orders = null)
     {
         $orders = null;
         try {
@@ -28,11 +29,26 @@ trait OrderTrait
             if(array_key_exists('email',$order)) $order['contact_email'] = $order['email'];
             $lineItems = $order['line_items'];
             $customer = $order['customer'] ?? [];
-            $shippingAddress = $order['shipping_address'] ?: [];
-            if ($shippingAddress) $shippingAddress['type'] = Address::SHIPPING_ADDRESS;
+            $addresses = [];
+            $billingAddress = $shippingAddress = $request->param('shipping_address') ?: [];
+            if($request->has('billing_address')) $billingAddress = $request->param('billing_address');
+            if ($shippingAddress) {
+                $shippingAddress['type'] = Address::SHIPPING_ADDRESS;
+                $addresses[] = $shippingAddress;
+            }
+            if ($billingAddress) {
+                $billingAddress['type'] = Address::BILLING_ADDRESS;
+                $addresses[] = $billingAddress;
+            }
             $shippingLines = $order['shipping_line'] ?? [];
             $orderModel = new Orders();
+            $order['total_shipping_price'] = $shippingLines['price'] ?? '0.00';
+            $order['browser_ip'] = $request->ip();
             if(is_null($orders)) {
+                //存token
+                $checkout = $request->param('checkout',[]);
+                $token = $checkout['cart']['token'] ?? '';
+                if($token) $order['token'] = $token;
                 $orderId = $orderModel->setIsConvert(true)->fill($order)->saveData();
                 $orders = Orders::query()->find($orderId);
             }else{
@@ -41,7 +57,7 @@ trait OrderTrait
                 $orderId = $orders->id;
             }
             $this->saveLineItems($orders, $lineItems);//保存商品
-            $this->saveAddress($orders, $shippingAddress);//保存地址
+            $this->saveAddress($orders, $addresses);//保存地址
             $this->saveShippingLines($orders, $shippingLines);//保存物流
             $this->saveCustomer($orders, $customer);//保存顾客
             return $orderId;
@@ -79,10 +95,7 @@ trait OrderTrait
     protected function saveAddress(Orders $orders,$shippingAddress)
     {
         if(empty($shippingAddress)) return false;
-        $billingAddress = $shippingAddress;
-        $billingAddress['type'] = Address::BILLING_ADDRESS;
-        $addressList = [$shippingAddress,$billingAddress];
-        $addressData = (new Address())->fill($addressList)->getDatas();
+        $addressData = (new Address())->fill($shippingAddress)->getDatas();
         $orders->addresses()->delete();
         return $orders->addresses()->saveAll($addressData);
     }
@@ -97,6 +110,7 @@ trait OrderTrait
     {
         if(empty($shippingLines)) return false;
         $shippingLinesData = (new ShippingLines())->fill($shippingLines)->getDatas();
+        $shippingLinesData['custom'] = $shippingLinesData['custom'] ? 1 : 0;
         $orders->shippings()->delete();
         return $orders->shippings()->save($shippingLinesData);
     }

@@ -5,7 +5,6 @@ namespace app\libs\PayoneerSDK\Builder;
 use app\libs\PayoneerSDK\PayoneerClient;
 use app\model\Shops;
 use app\trait\PaymentTrait;
-use support\FormateHelper;
 use app\model\Orders;
 
 class PaymentBuilder extends BaseAbstract
@@ -21,15 +20,14 @@ class PaymentBuilder extends BaseAbstract
   }
     public function toArray()
     {
-        $shopType = optional($this->order->shop)->shop_type ?? Shops::SHOP_TYPE_A;
         $data =  [
             //'integration'=>in_array($shopType,[Shops::SHOP_TYPE_A,Shops::SHOP_TYPE_LP_A]) ? 'HOSTED' : 'DISPLAY_NATIVE',//hosted
             'integration'=>'HOSTED',//hosted
-            'country'=>$this->order->country_code ?? 'US',
+            'country'=>$this->order->shippingAddress->country_code ?? 'US',
             'channel'=>'WEB_ORDER',
-            'transactionId'=>$this->order->payer_id,
+            'transactionId'=>$this->order->name,
             'division'=>PayoneerClient::$division,
-            'callback'=>$this->getCallback($this->getBShopId()),
+            'callback'=>$this->getCallback(),
             'customer'=>$this->getCustomer(),
             'payment'=>$this->getPayment(),
             'products'=>$this->getProducts(),
@@ -40,7 +38,7 @@ class PaymentBuilder extends BaseAbstract
         if(!$this->getIsUpdate()) {
             $data['style'] = $this->getStyle();
         }
-        if($this->getIsUpdate()) $data['transactionId'] = $this->order->payer_id;
+        if($this->getIsUpdate()) $data['transactionId'] = $this->order->name;
 
         return $data;
     }
@@ -50,35 +48,32 @@ class PaymentBuilder extends BaseAbstract
     //获取顾客信息
     public function getCustomer()
     {
-        $address = $this->order->address;
-        $shipping = $address['shipping'];
-        $billing = $address['billing'];
         return [
 
-                'email'=>$this->order->email,
+                'email'=>$this->order->contact_email,
                 //'email'=>'james.blond@example.com',
                 'name'=>[
-                    'firstName'=>$shipping['first_name'],
-                    'lastName'=>$shipping['last_name'],
+                    'firstName'=>$this->order->shippingAddress->first_name,
+                    'lastName'=>$this->order->shippingAddress->last_name,
                 ],
                 'addresses'=>[
                     'shipping'=>[
-                        'street'=>$shipping['line1'],
-                        'zip'=>$shipping['postal_code'],
-                        'city'=>$shipping['city'],
-                        'state'=>$shipping['state'],
-                        'country'=>$shipping['country_code'],
+                        'street'=>$this->order->shippingAddress->address1,
+                        'zip'=>$this->order->shippingAddress->zip,
+                        'city'=>$this->order->shippingAddress->city,
+                        'state'=>$this->order->shippingAddress->province,
+                        'country'=>$this->order->shippingAddress->country_code,
                     ],
                     'billing'=>[
-                        'street'=>$billing['line1'],
-                        'zip'=>$billing['postal_code'],
-                        'city'=>$billing['city'],
-                        'state'=>$billing['state'],
-                        'country'=>$billing['country_code'],
+                        'street'=>$this->order->billingAddress->address1,
+                        'zip'=>$this->order->billingAddress->zip,
+                        'city'=>$this->order->billingAddress->city,
+                        'state'=>$this->order->billingAddress->province,
+                        'country'=>$this->order->billingAddress->country_code,
                     ],
                 ],
                 'phones'=>[
-                    'mobile'=>['unstructuredNumber'=>$shipping['phone']],
+                    'mobile'=>['unstructuredNumber'=>$this->order->shippingAddress->phone],
                 ],
 
         ];

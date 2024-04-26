@@ -48,10 +48,12 @@ class OrderController extends BaseController
     //下单
     public function placeOrder(Request $request,Orders $order)
     {
-        if($order->order_status == Orders::ORDER_STATUS_COMPLETED) throw new \Exception('order has payed');
+
+        if ($order->order_status == Orders::ORDER_STATUS_COMPLETED) throw new \Exception('order has payed');
         Validate(PlaceOrderValidate::class)->check($request->post());
-        $data = $this->logic->placeOrder($request,$order);
+        $data = $this->logic->placeOrder($request, $order);
         return $this->success($data);
+
     }
 
     //获取sessionToken

@@ -21,13 +21,14 @@ trait PaymentTrait
             'unauthenticated_read_checkouts',
             'unauthenticated_write_checkouts'
         ];
+        //dd($this->shop->api_key,$this->shop->api_secret,$this->shop->host,$this->shop->version);
         Context::initialize(
-            apiKey: $this->shop ? $this->shop->api_key : env('SHOPIFY_API_KEY'),
-            apiSecretKey: $this->shop ? $this->shop->api_secret : env('SHOPIFY_API_SECRET'),
+            apiKey: $this->shop->api_key,
+            apiSecretKey: $this->shop->api_secret,
             scopes: $scopes,
-            hostName: $this->shop ? $this->shop->host : env('SHOPIFY_APP_HOST_NAME'),
+            hostName: $this->shop->host,
             sessionStorage: new FileSessionStorage($path),
-            apiVersion: $this->shop ? $this->shop->version : env('SHOPIFY_API_VERSION'),
+            apiVersion: $this->shop->version,
             isEmbeddedApp: true,
             isPrivateApp: false,
         );
@@ -35,20 +36,15 @@ trait PaymentTrait
 
     public function getPaySession() : Session
     {
-        $session = new Session(uniqid(time()), env('SHOPIFY_APP_HOST_NAME'), true, md5(time()));
-        $session->setAccessToken($this->shop ? $this->shop->admin_token :env('SHOPIFY_API_ADMIN_TOKEN'));
+        $session = new Session(uniqid(time()), $this->shop->host, true, md5(time()));
+        $session->setAccessToken($this->shop->admin_token);
         return $session;
     }
 
     protected function setShop($shop_id = 0)
     {
-        if($shop_id){
-            $this->shop = Shops::query()->findOrEmpty($shop_id);
-        }else{
-            $host = request()->header('X-Opc-Shop-Id','');
-            $this->shop = Shops::query()->host($host)->find();
-        }
-
+        $shop_id = $shop_id ?: request()->middleware('x_shop_id');
+        $this->shop = Shops::query()->find($shop_id);
     }
 
     public function getShop()
