@@ -144,7 +144,7 @@ class Orders extends BaseModel
     public function getReturnUrlAttr(): string
     {
         $url = domain(env('APP_HOST') . '/api/checkout/'. $this->id);
-        $query = ['success'=>"true",'token'=>$this->token];
+        $query = ['success'=>"true",'access_token'=>$this->token];
         return sprintf('%s?%s',$url,http_build_query($query));
     }
 

@@ -41,11 +41,11 @@ class NotifyController extends BaseController
         try {
             $params = $request->all();
             if (empty($params)) throw new \Exception("no params");
-            tplog('checkout', $params);
+            tplog('checkout', $params,'paypal');
             Notify::saveParams($order->id,$params,Notify::TYPE_CHECKOUT,$order->payment->pay_method);//存数据库
             $success = $request->param('success','');
-            $token = $request->param('token','');
-            if($token != $order->token) throw new \Exception('token invalid');
+            $access_token = $request->param('access_token','');
+            //if($access_token != $order->token) throw new \Exception('token invalid');
             if($success != 'true') throw new \Exception('checkout exception');
             $order->token = $order->token . '_' . time();//修改token
             $order->save();
