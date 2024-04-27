@@ -4,6 +4,7 @@ declare (strict_types = 1);
 namespace app\controller;
 
 use app\BaseController;
+use app\constant\CommonConstant;
 use app\libs\AsiabillSDK\action\SessionAsiabill;
 use app\logic\OrderLogic;
 use app\model\Orders;
@@ -48,8 +49,7 @@ class OrderController extends BaseController
     //下单
     public function placeOrder(Request $request,Orders $order)
     {
-
-        if ($order->order_status == Orders::ORDER_STATUS_COMPLETED) throw new \Exception('order has payed');
+        if ($order->order_status == Orders::ORDER_STATUS_COMPLETED) throw new \Exception('order has payed',CommonConstant::ORDER_HAS_PAYED_ERROR_CODE);
         Validate(PlaceOrderValidate::class)->check($request->post());
         $data = $this->logic->placeOrder($request, $order);
         return $this->success($data);
@@ -92,6 +92,13 @@ class OrderController extends BaseController
     public function getOrderStatus(Request $request,Orders $order)
     {
         return $this->success(['order_status'=>$order->order_status]);
+    }
+
+    //获取订单详情
+    public function getOrderDetail(Request $request,Orders $order)
+    {
+        $data = $this->logic->getOrderDetail($order);
+        return $this->success($data);
     }
 
 }

@@ -24,6 +24,7 @@ use think\model\relation\HasOne;
  * @property integer $mode
  * @property mixed $config
  * @property mixed $redirect_urls
+ * @property string $pay_method_name
  */
 class ShopsPayment extends BaseModel
 {
@@ -87,5 +88,10 @@ class ShopsPayment extends BaseModel
                    ->where('pay_method',$pay_method)
                    ->where('status',ModelConstant::STATUS_ON)
                    ->findOrEmpty();
+    }
+
+    public function getPayMethodNameAttr()
+    {
+        return $this->pay_method > ShopsPayment::PAY_METHOD_PAYPAL ? CommonConstant::LOG_CREDIT_CARD : CommonConstant::LOG_PAYPAL;
     }
 }

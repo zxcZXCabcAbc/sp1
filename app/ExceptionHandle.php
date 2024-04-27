@@ -59,7 +59,7 @@ class ExceptionHandle extends Handle
                 tplog($request->url(),$request->all());
                 return json(['code'=>101,'msg'=>$e->getMessage(),'data'=>[]]);
             default:
-                return json(['code'=>500,'msg'=>$e->getMessage(),'data'=>[]]);
+                return json(['code'=>$e->getCode() ?: 500,'msg'=>$e->getMessage(),'data'=>[]]);
         }
         // 其他错误交给系统处理
         return parent::render($request, $e);

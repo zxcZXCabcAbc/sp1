@@ -24,6 +24,7 @@ use think\Model;
  * @property integer $type
  * @property integer $is_default
  * @property string $address_message
+ * @property string $username
  */
 class Address extends BaseModel
 {
@@ -51,5 +52,10 @@ class Address extends BaseModel
             $this->zip,$this->country_code,
             $this->phone
         );
+    }
+
+    public function getUsernameAttr():string
+    {
+        return sprintf('%s %s',$this->last_name,$this->first_name);
     }
 }

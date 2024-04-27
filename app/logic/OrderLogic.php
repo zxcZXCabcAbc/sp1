@@ -186,5 +186,39 @@ class OrderLogic
 
     }
 
+    //获取订单详情
+    public function getOrderDetail(Orders $order)
+    {
+
+        return [
+            'order_num'=>$order->last_order_name,
+            'order_details'=>['email'=>$order->contact_email,],
+            'payment_method'=>[
+                'pay_method_name'=>$order->payment->pay_method_name,
+                'currency'=>$order->currency,
+                'total_price'=>$order->total_price
+            ],
+            'shipping_address'=>[
+                'username'=>$order->shippingAddress->username,
+                'address1'=>$order->shippingAddress->address1,
+                'province'=>$order->shippingAddress->province,
+                'city'=>$order->shippingAddress->city,
+                'province_code'=>$order->shippingAddress->province_code,
+                'country'=>$order->shippingAddress->country,
+                'phone'=>$order->shippingAddress->phone,
+            ],
+            'billing_address'=>[
+                'username'=>$order->billingAddress->username,
+                'address1'=>$order->billingAddress->address1,
+                'province'=>$order->billingAddress->province,
+                'city'=>$order->billingAddress->city,
+                'province_code'=>$order->billingAddress->province_code,
+                'country'=>$order->billingAddress->country,
+                'phone'=>$order->billingAddress->phone,
+            ],
+            'shipping_method'=>$order->shippingLine->title,
+        ];
+    }
+
 
 }
