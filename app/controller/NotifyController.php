@@ -52,7 +52,7 @@ class NotifyController extends BaseController
             //队列处理
             Queue::push(CapturePaymentQueue::class, ['order_id' => $order->id, 'request' => $request->all()], 'checkout');
             $query = ['cid'=>$order->app_id];
-            $path = sprintf('%s/%s/%s','/a/s/checkout',$order->checkout_id,'credit-card-3ds-redirect-loading');
+            $path = sprintf('%s/%s/%s','a/s/checkout',$order->checkout_id,'credit-card-3ds-redirect-loading');
             $url = sprintf('%s/%s?%s',$host,$path,http_build_query($query));
             return redirect(domain($url));
         }catch (\Exception $e){
