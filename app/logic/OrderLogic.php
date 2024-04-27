@@ -216,7 +216,7 @@ class OrderLogic
                 'country'=>$order->billingAddress->country,
                 'phone'=>$order->billingAddress->phone,
             ],
-            'shipping_method'=>$order->shippingLine->title,
+            'shipping_method'=>$order->shippingLine ? $order->shippingLine->title : 'Free International Shipping',
         ];
     }
 
