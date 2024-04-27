@@ -78,6 +78,7 @@ class CapturePaymentQueue
     //paypal
     protected function handleWithPaypal()
     {
+        dump('*****************paypal支付: order_id: ' . $this->order->id . ', transaction_id: '. $this->order->transaction_id);
         $client = new PurchasePaypal($this->order->payment);
         //获取详情
         $payRes = $client->fetchPurchase($this->order->transaction_id);
