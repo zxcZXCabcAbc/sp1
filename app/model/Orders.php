@@ -38,6 +38,8 @@ use think\model\relation\HasOne;
  * @property string $webhook_url
  * @property ShippingLines|null $shippingLine
  * @property string $token
+ * @property string $checkout_id
+ * @property string $app_id
  *
  */
 class Orders extends BaseModel

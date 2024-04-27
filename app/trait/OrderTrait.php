@@ -44,11 +44,14 @@ trait OrderTrait
             $orderModel = new Orders();
             $order['total_shipping_price'] = $shippingLines['price'] ?? '0.00';
             $order['browser_ip'] = $request->ip();
+            $order['app_id'] = $request->header('X-Opc-Client-Id','');
             if(is_null($orders)) {
                 //存token
                 $checkout = $request->param('checkout',[]);
+                $checkout_id = $request->param('checkout_id','');
                 $token = $checkout['cart']['token'] ?? '';
                 if($token) $order['token'] = $token;
+                if($checkout_id) $order['checkout_id'] = $checkout_id;
                 $orderId = $orderModel->setIsConvert(true)->fill($order)->saveData();
                 $orders = Orders::query()->find($orderId);
             }else{
