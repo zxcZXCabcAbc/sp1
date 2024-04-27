@@ -45,6 +45,6 @@ class Shops extends BaseModel
     {
         $shop = self::query()->host($request->header('X-Opc-Shop-Id'))->find();
 
-        return $shop->payments()->status(ModelConstant::STATUS_ON)->field(['id as payment_id','pay_method','account'])->select();
+        return $shop->payments()->status(ModelConstant::STATUS_ON)->field(['id as payment_id','pay_method','account'])->order('pay_method','DESC')->select();
     }
 }
