@@ -6,6 +6,7 @@ namespace app\controller;
 use app\BaseController;
 use app\model\Notify;
 use app\model\Orders;
+use app\model\ShopsPayment;
 use app\queue\CapturePaymentQueue;
 use Carbon\Carbon;
 use think\facade\Queue;
@@ -25,7 +26,7 @@ class NotifyController extends BaseController
             $tradeNo = $data['tradeNo'] ?? '';
             $order = Orders::query()->where('transaction_id',$tradeNo)->findOrEmpty();
             if($order){
-                Notify::saveParams($order->id,$params,Notify::TYPE_NOTIFY);//存数据库
+                Notify::saveParams($order->id,$params,Notify::TYPE_NOTIFY,ShopsPayment::PAY_METHOD_ASIABILL);//存数据库
                 Queue::push(CapturePaymentQueue::class,['order_id'=>$order->id,'request'=>$params],'checkout');
             }
         }
@@ -41,8 +42,7 @@ class NotifyController extends BaseController
             $params = $request->all();
             if (empty($params)) throw new \Exception("no params");
             tplog('checkout', $params);
-            $notifyData = ['order_id' => $order->id, 'params' => $params, 'created_at' => Carbon::now()->toDateTimeString(), 'type' => Notify::TYPE_CHECKOUT];
-            $order->notifies()->save($notifyData);
+            Notify::saveParams($order->id,$params,Notify::TYPE_CHECKOUT,$order->payment->pay_method);//存数据库
             $success = $request->param('success','');
             $token = $request->param('token','');
             if($token != $order->token) throw new \Exception('token invalid');
