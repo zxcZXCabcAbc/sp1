@@ -96,6 +96,8 @@ class CapturePaymentQueue
             ];
             $payRes = $client->completePurchase($this->order->transaction_id,$paymentSource);
             $payRes = $payRes['result'];
+            dump($payRes);
+            tplog("paypal_order_". $this->order->id,$payRes,'paypal');
         }
         return $payRes['status'] == 'COMPLETED';
     }
