@@ -57,7 +57,7 @@ class Orders extends BaseModel
         'total_line_items_price','total_outstanding','total_price',
         'total_shipping_price','total_tax','total_tip_received',
         'total_weight','updated_at','user_id','tax_lines','status','order_type',
-        'shop_id','payment_id','transaction_id','error_msg'
+        'shop_id','payment_id','transaction_id','error_msg','order_status'
     ];
 
     protected $json = ['client_details','note_attributes','payment_gateway_names','discount_codes','tax_lines'];
