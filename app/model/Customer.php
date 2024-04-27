@@ -11,6 +11,7 @@ use think\Model;
  * @property string $last_name
  * @property string $phone
  * @property string $note
+ * @property string $username
  */
 class Customer extends BaseModel
 {
@@ -28,5 +29,10 @@ class Customer extends BaseModel
     public function orders()
     {
         return $this->belongsTo(Orders::class,'order_id');
+    }
+
+    public function getUsernameAttr()
+    {
+        return sprintf('%s %s',$this->last_name,$this->first_name);
     }
 }
