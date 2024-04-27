@@ -66,8 +66,7 @@ class OrderLogic
 
     public function placeOrder(Request $request,Orders $order)
     {
-        try {
-            set_time_limit(0);
+
             #1.更新订单
             $order->payment_id = $request->post('payment_id');
             $order->save();
@@ -76,10 +75,6 @@ class OrderLogic
             #2.下单
             $payment = new PaymentBase($order, $request);
             return $payment->createThirdPayment();
-        }catch (\Exception $e){
-            dd($e);
-        }
-
     }
 
     protected function saveBillingAddress(Orders $order,array $billingAddressData)

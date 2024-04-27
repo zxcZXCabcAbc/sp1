@@ -62,7 +62,7 @@ class PaymentBase
     public function saveSendRequest(array $params = [])
     {
         if(empty($params)) return false;
-        $insertData = ['params'=>$params,'type'=>Notify::TYPE_SEND,'created_at'=>Carbon::now()->toDateTimeString()];
+        $insertData = ['params'=>$params,'type'=>Notify::TYPE_SEND,'created_at'=>Carbon::now()->toDateTimeString(),'pay_method'=>$this->order->payment->pay_method];
         return $this->order->notifies()->save($insertData);
     }
 
