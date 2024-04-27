@@ -48,9 +48,32 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
-            $order = Orders::query()->find(10);
-            $builder = new CheckoutBuilder($order);
-            dd($builder->toArray());
+            $order = Orders::query()->find(77);
+            $client = new PurchasePaypal($order->payment);
+            //获取详情
+            $payRes = $client->fetchPurchase($order->transaction_id);
+            $payRes = $payRes['result'];
+            //dd($payRes);
+            if(empty($payRes)) throw new \Exception('订单异常');
+            if(isset($payRes['error']) && !empty($payRes['error'])) throw new \Exception('paypal error: ' . $payRes['error']['message']);
+            if(isset($payRes['status']) && $payRes['status'] != 'COMPLETED') {
+                #2.执行支付
+                $paymentSource = [
+                    'payment_source'=>[
+                        'token'=>[
+                            'id'=>$order->transaction_id,
+                            'type'=>'BILLING_AGREEMENT'
+                        ],
+                    ],
+                ];
+                $payRes = $client->completePurchase($order->transaction_id,$paymentSource);
+                $payRes = $payRes['result'];
+            }
+
+            dd($payRes);
+
+
+
 
 
             $payment = ShopsPayment::query()->find(3);

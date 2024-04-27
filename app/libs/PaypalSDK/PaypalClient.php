@@ -25,7 +25,7 @@ class PaypalClient
     public function send(HttpRequest $request)
     {
         try {
-            $request->prefer('return=representation');
+            //$request->prefer('return=representation');
             $response = $this->gateway->execute($request);
             return json_decode(json_encode($response, JSON_UNESCAPED_UNICODE), true);
         }catch (\Exception $e){
