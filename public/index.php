@@ -14,7 +14,7 @@ namespace think;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// 执行HTTP应用并响应 测试自动推送1122
+// 执行HTTP应用并响应 测试自动推送1122233
 $http = (new App())->http;
 
 $response = $http->run();
