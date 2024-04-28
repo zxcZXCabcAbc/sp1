@@ -192,7 +192,7 @@ class OrderLogic
 
         return [
              'order_num'=>$order->last_order_name,
-             'username'=>$order->customer->username,
+             'username'=>$order->customer->first_name,
             'order_details'=>['email'=>$order->contact_email,],
             'payment_method'=>[
                 'pay_method_name'=>$order->payment->pay_method_name,
