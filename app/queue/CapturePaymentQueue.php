@@ -57,9 +57,6 @@ class CapturePaymentQueue
             }
 
             if ($result) {
-                $this->order->order_status = Orders::ORDER_STATUS_COMPLETED;
-                $this->order->error_msg = '';
-                $this->order->save();
                 //创建shopify订单
                 event('PushOrder', $this->order);
             }
