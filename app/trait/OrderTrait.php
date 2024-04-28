@@ -28,6 +28,7 @@ trait OrderTrait
             $order['shop_id'] = request()->middleware('x_shop_id');
             if(array_key_exists('email',$order)) $order['contact_email'] = $order['email'];
             $lineItems = $order['line_items'];
+            $this->formatLineItems($lineItems,$request);
             $customer = $order['customer'] ?? [];
             $addresses = [];
             $billingAddress = $shippingAddress = $request->param('shipping_address') ?: [];
@@ -130,6 +131,16 @@ trait OrderTrait
         $customerData = (new Customer())->fill($customer)->getDatas();
         $orders->customer()->delete();
         return $orders->customer()->save($customerData);
+    }
+
+    protected function formatLineItems(array &$lineItems,Request $request)
+    {
+        $checkout = $request->param('checkout');
+        $items = $checkout['cart']['items'];
+        $images = array_column($items,'image','variant_id');
+        foreach ($lineItems as &$item){
+            $item['image'] = $images[$item['variant_id']] ?? '';
+        }
     }
 
 }

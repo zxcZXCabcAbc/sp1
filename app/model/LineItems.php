@@ -9,6 +9,7 @@ use think\Model;
  * @property integer $quantity
  * @property string $price
  * @property string $title
+ * @property string $image
  */
 class LineItems extends BaseModel
 {
@@ -22,7 +23,7 @@ class LineItems extends BaseModel
         'requires_shipping','sku','taxable',
         'title','total_discount','variant_id',
         'variant_inventory_management','variant_title','vendor',
-        'tax_lines','duties','discount_allocations',
+        'tax_lines','duties','discount_allocations','image'
     ];
     protected $json = ['attributed_staffs','duties','tax_lines','properties','discount_allocations'];
     protected $jsonAssoc = true;

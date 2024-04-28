@@ -192,7 +192,7 @@ class OrderLogic
 
         return [
              'order_num'=>$order->last_order_name,
-             'username'=>$order->customer->first_name,
+             'first_name'=>$order->customer->first_name,
             'order_details'=>['email'=>$order->contact_email,],
             'payment_method'=>[
                 'pay_method_name'=>$order->payment->pay_method_name,
@@ -218,6 +218,11 @@ class OrderLogic
                 'phone'=>$order->billingAddress->phone,
             ],
             'shipping_method'=>$order->shippingLine ? $order->shippingLine->title : 'Free International Shipping',
+            'item_lines'=>$order->items()->field(['name','price','quantity','image'])->select(),
+            'total_price'=>$order->total_price,
+            'subtotal_price'=>$order->subtotal_price,
+            'shipping_line'=>['price'=>$order->shippingLine->price,'title'=>$order->shippingLine->title,],
+
         ];
     }
 
