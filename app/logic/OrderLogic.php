@@ -14,6 +14,7 @@ use app\model\ShopsPayment;
 use app\service\payment\PaymentBase;
 use app\service\payment\PaypalService;
 use app\service\shopify\action\rest\DraftOrderRest;
+use app\service\shopify\action\rest\OrderRest;
 use app\service\shopify\action\rest\ShippingZoneRest;
 use app\trait\OrderTrait;
 use app\trait\PaymentTrait;
@@ -243,6 +244,18 @@ class OrderLogic
             'shipping_line'=>['price'=>$order->shippingLine->price,'title'=>$order->shippingLine->title,],
 
         ];
+    }
+
+    //获取订单成功页面
+    public function getSuccessUrl(Orders $order)
+    {
+        if($order->order_status_url) return $order->order_status_url;
+        $rest = new OrderRest($order->shop_id);
+        $result = $rest->retrieve_a_specific_order($order->order_id,['order_status_url']);
+        $order_status_url = $result['order_status_url'] ?? '';
+        $order->order_status_url = $order_status_url;
+        $order->save();
+        return $order_status_url;
     }
 
 

@@ -98,4 +98,15 @@ class OrderRest extends RestBase
         $this->rest->save(true);
         return $this->rest->toArray();
     }
+
+    /**
+     * @param $order_id
+     * @return mixed
+     * @doc https://shopify.dev/docs/api/admin-rest/2024-04/resources/order#get-orders-order-id?fields=id,line-items,name,total-price
+     */
+    public function retrieve_a_specific_order($order_id,$field = [])
+    {
+        $res = $this->rest->find($this->session,$order_id,[],['fields'=>implode(',',$field)]);
+        return $res->toArray();
+    }
 }

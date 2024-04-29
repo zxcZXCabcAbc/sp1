@@ -7,29 +7,28 @@ class DraftOrderRest extends RestBase
 {
     /**
      * @param Request $request
-     * @return mixed
      * @doc https://shopify.dev/docs/api/admin-rest/2024-04/resources/draftorder#post-draft-orders
      * @desc 创建
      */
     public function create_draft_order(array $data) :array
     {
-        $this->rest->line_items = $data['line_items'];
-        $this->rest->shipping_address = $data['shipping_address'];
-        $this->rest->email = $data['email'];
-        $this->rest->shipping_line = $data['shipping_line'];
-        $this->rest->use_customer_default_address = true;
-        if(isset($data['billing_address']) && !empty($data['billing_address'])){
-            $this->rest->billing_address = $data['billing_address'];
-        }
+            $this->rest->line_items = $data['line_items'];
+            $this->rest->shipping_address = $data['shipping_address'];
+            $this->rest->email = $data['email'];
+            $this->rest->shipping_line = $data['shipping_line'];
+            $this->rest->use_customer_default_address = true;
+            if (isset($data['billing_address']) && !empty($data['billing_address'])) {
+                $this->rest->billing_address = $data['billing_address'];
+            }
 
 //        $this->rest->customer = [
 //            "id" => 207119551
 //        ];
-        $this->rest->save(
-            true, // Update Object
-        );
+            $this->rest->save(
+                true, // Update Object
+            );
 
-        return $this->rest->toArray();
+            return $this->rest->toArray();
     }
 
     /**

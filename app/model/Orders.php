@@ -40,6 +40,7 @@ use think\model\relation\HasOne;
  * @property string $token
  * @property string $checkout_id
  * @property string $app_id
+ * @property string $order_status_url
  *
  */
 class Orders extends BaseModel

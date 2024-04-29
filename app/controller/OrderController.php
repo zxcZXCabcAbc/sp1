@@ -101,4 +101,12 @@ class OrderController extends BaseController
         return $this->success($data);
     }
 
+    public function getOrderStatusUrl(Request $request,Orders $order)
+    {
+        if($order->order_status != Orders::ORDER_STATUS_COMPLETED) throw new \Exception("order not completed");
+        $data = $this->logic->getSuccessUrl($order);
+        return $this->success($data);
+    }
+
+
 }

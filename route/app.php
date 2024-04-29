@@ -38,6 +38,7 @@ Route::group('/api',function (){
         Route::get('/paypal-config','orderController/getPaypalConfig');//获取paypal配置
         Route::get('/order-status/:id','orderController/getOrderStatus')->model(\app\model\Orders::class);//获取订单状态
         Route::get('/order-detail/:id','orderController/getOrderDetail')->model(\app\model\Orders::class);//获取订单详情
+        Route::get('/order-status-url/:id','orderController/getOrderStatusUrl')->model(\app\model\Orders::class);//获取成功页面
     });
 })
 ->middleware(\app\middleware\CheckShopifyRequest::class);//验证前端请求

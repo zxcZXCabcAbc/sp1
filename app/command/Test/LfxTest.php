@@ -19,6 +19,7 @@ use app\model\ShopsPayment;
 use app\queue\CapturePaymentQueue;
 use app\queue\TestQueue;
 use app\service\payment\PaymentBase;
+use app\service\shopify\action\rest\OrderRest;
 use app\trait\PaymentTrait;
 use Asiabill\Classes\AsiabillIntegration;
 use Omnipay\PayPal\RestGateway;
@@ -50,6 +51,14 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
+            $rest = new OrderRest(2);
+            $res = $rest->retrieve_a_specific_order(5675156340988,['id','order_status_url']);
+            dd($res);
+
+
+
+
+
             //$order = Orders::query()->find(83);
             $payment = ShopsPayment::query()->find(6);
             //$asiabill = new CheckoutAsiabill($payment);
