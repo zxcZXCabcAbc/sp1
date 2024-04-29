@@ -41,6 +41,7 @@ use think\model\relation\HasOne;
  * @property string $checkout_id
  * @property string $app_id
  * @property string $order_status_url
+ * @property string $order_no
  *
  */
 class Orders extends BaseModel
@@ -60,7 +61,7 @@ class Orders extends BaseModel
         'total_line_items_price','total_outstanding','total_price',
         'total_shipping_price','total_tax','total_tip_received',
         'total_weight','updated_at','user_id','tax_lines','status','order_type',
-        'shop_id','payment_id','transaction_id','error_msg','order_status'
+        'shop_id','payment_id','transaction_id','error_msg','order_status','order_no'
     ];
 
     protected $json = ['client_details','note_attributes','payment_gateway_names','discount_codes','tax_lines'];

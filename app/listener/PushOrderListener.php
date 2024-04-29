@@ -4,6 +4,7 @@ declare (strict_types = 1);
 namespace app\listener;
 
 use app\model\Orders;
+use app\model\ShopsPayment;
 use app\service\shopify\action\rest\DraftOrderRest;
 use app\service\shopify\action\rest\OrderRest;
 
@@ -30,5 +31,29 @@ class PushOrderListener
        $order->order_status = Orders::ORDER_STATUS_COMPLETED;
        $order->error_msg = '';
        $order->save();
+       # 更新订单增加note
+        $this->addShopifyOrderNote($order);
+    }
+
+
+    //增加note日志
+    protected function addShopifyOrderNote(Orders $order)
+    {
+        try {
+            $pay_method = $order->payment->pay_method;
+            if ($pay_method == ShopsPayment::PAY_METHOD_PAYPAL) return true;
+            $rest = new OrderRest($order->shop_id);
+            $note = "交易号: " . $order->transaction_id . ',订单号: ' . $order->order_no;
+            $tags = $order->transaction_id .','.$order->order_no.',' .$order->payment->pay_method_name;
+            $note_attributes = [
+                ['name' => 'tradeNo', 'value' => $order->transaction_id],
+                ['name' => 'orderNo', 'value' => $order->order_no],
+
+            ];
+            $res = $rest->update_order($order->order_id, compact('note', 'note_attributes','tags'));
+            tplog('update_shopify_order_'. $order->id,$res,'shopify');
+        }catch (\Exception $e){
+            tplog('update_shopify_order_err_'. $order->id,$e->getMessage(),'shopify');
+        }
     }
 }

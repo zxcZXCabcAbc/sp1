@@ -23,7 +23,7 @@ class CheckoutBuilder extends BuilderBase
             'webSite'=>$this->order->shop->host,
             'shipping'=>$this->getShipping(),
             'goodsDetails'=>$this->getGoodsDetails(),
-            'orderNo'=>$this->order->last_order_name,//订单号
+            'orderNo'=>$this->order->order_no,//订单号
         ];
         if($this->getCustomerId()) $requestData['customerId'] = $this->getCustomerId();
         return $requestData;

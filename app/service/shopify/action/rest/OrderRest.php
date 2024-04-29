@@ -73,13 +73,13 @@ class OrderRest extends RestBase
     }
 
     /**
-     * @param int $order_id
+     * @param $order_id
      * @param array $data
      * @return array
      * @doc https://shopify.dev/docs/api/admin-rest/2024-04/resources/order#put-orders-order-id
      * @desc 修改订单
      */
-    public function update_order(int $order_id,array $data):array
+    public function update_order($order_id,array $data):array
     {
         $this->rest->id = $order_id;
         if(isset($data['financial_status'])) $this->rest->financial_status = $data['financial_status'];
@@ -95,6 +95,9 @@ class OrderRest extends RestBase
                 ]
             ];
         }
+        if(isset($data['note']))  $this->rest->note = $data['note'];
+        if(isset($data['tags']))  $this->rest->tags = $data['tags'];
+        if(isset($data['note_attributes']))  $this->rest->note = $data['note_attributes'];
         $this->rest->save(true);
         return $this->rest->toArray();
     }
