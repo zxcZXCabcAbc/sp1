@@ -91,30 +91,45 @@ class OrderLogic
         $data = $rest->get_shipping_zones();
         $countryCode = $request->param('country_code');
         $countryCode = strtoupper($countryCode);
-        $sub_total = $request->param('sub_total');
         $shipping_fee_list = [];
+        $subTotal = $request->param('sub_total',0);
         foreach ($data as $item){
             $temp = $item->toArray();
             $countryies = $temp['countries'];
             $countryCodes = array_column($countryies,'code');
             if(in_array($countryCode,$countryCodes)){
-                $shipping_fee_list = $temp['price_based_shipping_rates'];
+                if(isset($temp['price_based_shipping_rates']) && !empty($temp['price_based_shipping_rates'])){
+                   foreach ($temp['price_based_shipping_rates'] as $price_based_shipping_rate){
+                       $shipping_fee_list[] = $price_based_shipping_rate;
+                   }
+                }
+
             }
         }
 
         if($shipping_fee_list){
             $shipping_lines = [];
             foreach ($shipping_fee_list as $key => $line){
-                $min_price = $line['min_order_subtotal'] ?: 0;
-                $max_price = $line['max_order_subtotal'] ?: 9999999;
-                if($sub_total < $max_price && $sub_total > $min_price){
-                    $shipping_lines = [
-                        'title'=>$line['name'],
-                        'price'=>$line['price'],
-                        'handle'=>null,
-                        'custom'=>true
-                    ];
-                }
+                    if(is_null($line['min_order_subtotal']) && is_null($line['max_order_subtotal'])){
+                        $shipping_lines[] = [
+                            'title'=>$line['name'],
+                            'price'=>$line['price'],
+                            'handle'=>null,
+                            'custom'=>true
+                        ];
+                    }else{
+                        $min_order_subtotal =  $line['min_order_subtotal'] ?: 0;
+                        $max_order_subtotal =  $line['min_order_subtotal'] ?: 9999999;
+                        if($subTotal<= $max_order_subtotal && $subTotal >= $min_order_subtotal){
+                            $shipping_lines[] = [
+                                'title'=>$line['name'],
+                                'price'=>$line['price'],
+                                'handle'=>null,
+                                'custom'=>true
+                            ];
+                        }
+                    }
+
             }
             $shipping_fee_list = $shipping_lines;
         }
