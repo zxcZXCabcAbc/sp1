@@ -4,7 +4,7 @@ namespace app\constant;
 
 class CommonConstant
 {
-    const LOG_PAYPAL = 'Paypal';
+    const LOG_PAYPAL = 'PP';
     const LOG_CREDIT_CARD = 'Credit Card';
     const LOG_FILE = 'file';
     const LOG_REQUEST = 'request';
