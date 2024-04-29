@@ -119,7 +119,7 @@ class OrderLogic
                         ];
                     }else{
                         $min_order_subtotal =  $line['min_order_subtotal'] ?: 0;
-                        $max_order_subtotal =  $line['min_order_subtotal'] ?: 9999999;
+                        $max_order_subtotal =  $line['max_order_subtotal'] ?: 9999999;
                         if($subTotal<= $max_order_subtotal && $subTotal >= $min_order_subtotal){
                             $shipping_lines[] = [
                                 'title'=>$line['name'],
