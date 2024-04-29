@@ -8,6 +8,8 @@ use app\helpers\RedisHelper;
 use app\helpers\RedisLock;
 use app\libs\AirwallexSDK\Action\PaymentIntent;
 use app\libs\AirwallexSDK\Build\PaymentIntentBuilder;
+use app\libs\AsiabillSDK\action\CheckoutAsiabill;
+use app\libs\AsiabillSDK\action\TransactionsAsiabill;
 use app\libs\AsiabillSDK\builder\CheckoutBuilder;
 use app\libs\PaypalSDK\action\PurchasePaypal;
 use app\model\Customer;
@@ -48,30 +50,21 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
-            $order = Orders::query()->find(77);
-            $client = new PurchasePaypal($order->payment);
-            //获取详情
-            $payRes = $client->fetchPurchase($order->transaction_id);
-            $payRes = $payRes['result'];
-            //dd($payRes);
-            if(empty($payRes)) throw new \Exception('订单异常');
-            if(isset($payRes['error']) && !empty($payRes['error'])) throw new \Exception('paypal error: ' . $payRes['error']['message']);
-            if(isset($payRes['status']) && $payRes['status'] != 'COMPLETED') {
-                #2.执行支付
-                $paymentSource = [
-                    'payment_source'=>[
-                        'token'=>[
-                            'id'=>$order->transaction_id,
-                            'type'=>'BILLING_AGREEMENT'
-                        ],
-                    ],
-                ];
-                $payRes = $client->completePurchase($order->transaction_id,$paymentSource);
-                $payRes = $payRes['result'];
-            }
-
-            dd($payRes);
-
+            //$order = Orders::query()->find(83);
+            $payment = ShopsPayment::query()->find(6);
+            //$asiabill = new CheckoutAsiabill($payment);
+            $asiabill = new TransactionsAsiabill($payment);
+            //$builder = new CheckoutBuilder($order);
+            //dd($builder->toArray());
+            //$res = $asiabill->confirm_charge('','pm_1784518746061651968',$builder);
+            $res = $asiabill->query_a_transaction([
+                'tradeNo'=>'2024042817455202638284',
+                'startTime'=>'2024-04-28T00:00:00',
+                'endTime'=>'2024-04-28T23:59:59',
+                'pageSize'=>10,
+                'pageIndex'=>1
+            ]);
+            dd($res);
 
 
 

@@ -35,7 +35,7 @@ class OrderController extends BaseController
     //更新订单
     public function modifyDraftOrder(Request $request,Orders $order)
     {
-        if($order->order_status == Orders::ORDER_STATUS_COMPLETED) throw new \Exception('order has payed');
+        if($order->order_status == Orders::ORDER_STATUS_COMPLETED) throw new \Exception('order has payed',CommonConstant::ORDER_HAS_PAYED_ERROR_CODE);
         Validate(OrderValidate::class)->check($request->put());
         $data = $this->logic->updateDraftOrder($request, $order);
         return $this->success($data);

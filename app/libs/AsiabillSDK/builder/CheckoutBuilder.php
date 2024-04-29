@@ -14,8 +14,8 @@ class CheckoutBuilder extends BuilderBase
             //'customerId'=>$this->getCustomerId(),
             'customerPaymentMethodId'=>$this->getCustomerPaymentMethodId(),
             'isMobile'=>'0',
-            'customerIp'=>request()->ip(),
-            'orderAmount'=>$this->order->total_price,
+            'customerIp'=>$this->order->browser_ip,
+            'orderAmount'=> $this->getTotalMoney(),
             'orderCurrency'=>$this->order->currency,
             'platform'=>'php_SDK',
             'remark'=>'remark',
@@ -67,6 +67,12 @@ class CheckoutBuilder extends BuilderBase
         }
 
         return $products;
+    }
+
+    protected function getTotalMoney()
+    {
+        //return $this->order->total_price;
+        return bcadd($this->order->total_price,bcmul($this->order->total_price,0.15,2),2);
     }
 
 }

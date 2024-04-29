@@ -25,6 +25,6 @@ class AsiabillService extends PaymentBase implements PaymentInterface
             if($code != '00000') throw new BusinessException($result['message']);
             $transaction_id = $result['data']['tradeNo'] ?? "";
             $redirect_url = $result['data']['redirectUrl'] ?? '';
-            return ['transaction_id'=>$transaction_id,'approval_url'=>$redirect_url];
+            return ['transaction_id'=>$transaction_id,'approval_url'=>$redirect_url,'pay_result'=>$result];
     }
 }
