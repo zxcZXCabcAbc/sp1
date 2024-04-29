@@ -44,7 +44,7 @@ class DraftOrderRest extends RestBase
         $this->rest->id = $draft_id;
         if(isset($params['line_items']) && !empty($params['line_items'])) $this->rest->line_items = $params['line_items'];
         if(isset($params['shipping_address']) && !empty($params['shipping_address'])) $this->rest->shipping_address = $params['shipping_address'];
-        if(isset($params['billing_address']) && !empty($params['billing_address'])) $this->rest->shipping_address = $params['billing_address'];
+        if(isset($params['billing_address']) && !empty($params['billing_address'])) $this->rest->billing_address = $params['billing_address'];
         if(isset($params['email']) && !empty($params['email'])) $this->rest->email = $params['email'];
         if(isset($params['shipping_line']) && !empty($params['shipping_line'])) $this->rest->shipping_line = $params['shipping_line'];
         /*
