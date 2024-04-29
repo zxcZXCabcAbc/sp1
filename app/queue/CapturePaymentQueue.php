@@ -6,6 +6,7 @@ use app\libs\PaypalSDK\action\PurchasePaypal;
 use app\model\Orders;
 use app\model\ShopsPayment;
 use think\facade\Event;
+use think\helper\Arr;
 use think\queue\Job;
 
 class CapturePaymentQueue
@@ -94,7 +95,18 @@ class CapturePaymentQueue
             ];
             $payRes = $client->completePurchase($this->order->transaction_id,$paymentSource);
             $payRes = $payRes['result'];
-            //dump($payRes);
+            //交易ID
+            $purchase_units = $payRes['purchase_units'] ?? [];
+            $tradeId = '';
+            if($purchase_units){
+                $purchaseFirst = Arr::first($purchase_units);
+                $payments = $purchaseFirst['payments'];
+                $capturesFirst = Arr::first($payments['captures']);
+                $tradeId = $capturesFirst['id'];
+            }
+            $this->order->order_no = $tradeId;
+            $this->order->save();
+
             tplog("paypal_order_". $this->order->id,$payRes,'paypal');
         }
         return $payRes['status'] == 'COMPLETED';

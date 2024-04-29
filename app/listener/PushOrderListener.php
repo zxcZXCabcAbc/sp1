@@ -40,8 +40,6 @@ class PushOrderListener
     protected function addShopifyOrderNote(Orders $order)
     {
         try {
-            $pay_method = $order->payment->pay_method;
-            if ($pay_method == ShopsPayment::PAY_METHOD_PAYPAL) return true;
             $rest = new OrderRest($order->shop_id);
             $note = "交易号: " . $order->transaction_id . ',订单号: ' . $order->order_no;
             $tags = $order->transaction_id .','.$order->order_no.',' .$order->payment->pay_method_name;
