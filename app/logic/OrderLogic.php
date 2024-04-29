@@ -133,7 +133,7 @@ class OrderLogic
             }
             $shipping_fee_list = $shipping_lines;
         }
-        return $shipping_fee_list;
+        return array_reverse($shipping_fee_list);
     }
 
     //预下单
