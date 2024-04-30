@@ -51,9 +51,12 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
-            $order = Orders::query()->find(67);
-            $this->addShopifyOrderNote($order);
-            dd(11);
+            $order = Orders::query()->find(230);
+            $builder = new CheckoutBuilder($order);
+            $builder->setCustomerPaymentMethodId("pm_12451111");
+            dd($builder->toArray());
+
+
             //$order = Orders::query()->find(83);
             $payment = ShopsPayment::query()->find(6);
             //$asiabill = new CheckoutAsiabill($payment);

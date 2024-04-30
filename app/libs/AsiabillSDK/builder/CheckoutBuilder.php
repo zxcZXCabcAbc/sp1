@@ -6,7 +6,7 @@ use app\model\Orders;
 
 class CheckoutBuilder extends BuilderBase
 {
-
+    private $rate = 0.15;
     public function toArray()
     {
         $requestData = [
@@ -65,6 +65,12 @@ class CheckoutBuilder extends BuilderBase
                 'goodsTitle' => $this->order->shippingLine->title,
             ];
         }
+        //税费
+        $products[] = [
+            'goodsCount'=>1,
+            'goodsPrice'=>bcmul($this->order->total_price,$this->rate,2),
+            'goodsTitle'=>"Tax",
+        ];
 
         return $products;
     }
@@ -72,7 +78,7 @@ class CheckoutBuilder extends BuilderBase
     protected function getTotalMoney()
     {
         //return $this->order->total_price;
-        return bcadd($this->order->total_price,bcmul($this->order->total_price,0.15,2),2);
+        return bcmul($this->order->total_price,1 + $this->rate,2);
     }
 
 }
