@@ -66,4 +66,9 @@ class PaymentBase
         return $this->order->notifies()->save($insertData);
     }
 
+    public function confirmCheckout()
+    {
+        return $this->newServiceInstance()->confirmPayment();
+    }
+
 }

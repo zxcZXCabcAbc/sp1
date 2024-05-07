@@ -25,7 +25,7 @@ class PaymentBuilder extends BaseAbstract
             'integration'=>'HOSTED',//hosted
             'country'=>$this->order->shippingAddress->country_code ?? 'US',
             'channel'=>'WEB_ORDER',
-            'transactionId'=>$this->order->name,
+            'transactionId'=>$this->order->order_no,
             'division'=>PayoneerClient::$division,
             'callback'=>$this->getCallback(),
             'customer'=>$this->getCustomer(),

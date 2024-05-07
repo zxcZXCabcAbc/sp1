@@ -27,4 +27,9 @@ class AsiabillService extends PaymentBase implements PaymentInterface
             $redirect_url = $result['data']['redirectUrl'] ?? '';
             return ['transaction_id'=>$transaction_id,'approval_url'=>$redirect_url,'pay_result'=>$result];
     }
+
+    public function confirmPayment()
+    {
+        // TODO: Implement confirmPayment() method.
+    }
 }

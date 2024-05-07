@@ -132,6 +132,7 @@ class HttpService
             tplog($this->getPath(),$log,$channel);
             return $response;
         } catch (ClientException $e) {
+            dd($e);
             $log['error']['code'] = $e->getCode();
             $log['error']['message'] = $e->getMessage();
              tplog($this->getPath(),$log,$channel);

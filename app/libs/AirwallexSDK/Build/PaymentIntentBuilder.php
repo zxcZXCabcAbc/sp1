@@ -22,11 +22,10 @@ class PaymentIntentBuilder
             'amount'=>$this->order->total_price,
             'currency'=>$this->order->currency,
             'customer'=>$this->getCustomer(),
-            'merchant_order_id'=>$this->order->name,
+            'merchant_order_id'=>$this->order->order_no,
             'order' => $this->getOrder(),
             'return_url'=>$this->order->return_url,
             'request_id'=>uniqid(time()),
-
         ];
     }
 

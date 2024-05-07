@@ -51,11 +51,10 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
-            $order = Orders::query()->find(230);
-            $builder = new CheckoutBuilder($order);
-            $builder->setCustomerPaymentMethodId("pm_12451111");
-            dd($builder->toArray());
-
+//            $order = Orders::query()->find(230);
+//            $builder = new CheckoutBuilder($order);
+//            $builder->setCustomerPaymentMethodId("pm_12451111");
+//            dd($builder->toArray());
 
             //$order = Orders::query()->find(83);
             $payment = ShopsPayment::query()->find(6);
@@ -65,7 +64,7 @@ class LfxTest extends Command
             //dd($builder->toArray());
             //$res = $asiabill->confirm_charge('','pm_1784518746061651968',$builder);
             $res = $asiabill->query_a_transaction([
-                'tradeNo'=>'2024042817455202638284',
+                //'tradeNo'=>'2024042817455202638284',
                 'startTime'=>'2024-04-28T00:00:00',
                 'endTime'=>'2024-04-28T23:59:59',
                 'pageSize'=>10,

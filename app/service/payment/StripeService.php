@@ -39,4 +39,9 @@ class StripeService extends PaymentBase implements PaymentInterface
             throw new \Exception($e->getMessage());
         }
     }
+
+    public function confirmPayment()
+    {
+        // TODO: Implement confirmPayment() method.
+    }
 }

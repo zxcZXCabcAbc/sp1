@@ -35,5 +35,8 @@ class PaypalService extends PaymentBase implements PaymentInterface
     }
 
 
-
+    public function confirmPayment()
+    {
+        // TODO: Implement confirmPayment() method.
+    }
 }

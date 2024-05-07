@@ -42,7 +42,12 @@ class AsiabillClient
     //请求
     public function send()
     {
-        return $this->asiabill->request($this->getRequestType(),$this->getBody());
+        try {
+            return $this->asiabill->request($this->getRequestType(),$this->getBody());
+        }catch (\Exception $e){
+            dd($e);
+        }
+
     }
 
     public function getAsiabill()

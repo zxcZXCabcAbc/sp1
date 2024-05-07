@@ -7,4 +7,6 @@ use app\Request;
 interface PaymentInterface
 {
     public function placeOrder();
+
+    public function confirmPayment();
 }

@@ -32,5 +32,20 @@ class PaymentIntent extends AirwallexClient
                     ->setPath("/api/v1/pa/payment_intents/{$id}")
                     ->send();
     }
+
+
+    /**
+     * @param $id
+     * @return mixed|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @doc https://www.airwallex.com/docs/api#/Payment_Acceptance/Payment_Intents/_api_v1_pa_payment_intents__id__confirm/post
+     */
+    public function confirm_a_paymentIntent($id,$params)
+    {
+        return $this->setMethod('POST')
+            ->setPath("/api/v1/pa/payment_intents/{$id}/confirm")
+            ->setOption(['json'=>$params])
+            ->send();
+    }
     
 }

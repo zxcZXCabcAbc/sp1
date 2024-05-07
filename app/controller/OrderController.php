@@ -10,7 +10,9 @@ use app\logic\OrderLogic;
 use app\model\Orders;
 use app\model\Shops;
 use app\model\ShopsPayment;
+use app\service\payment\PaymentBase;
 use app\service\shopify\action\rest\ShippingZoneRest;
+use app\validate\CardValidate;
 use app\validate\DraftOrderValidate;
 use app\validate\OrderValidate;
 use app\validate\PlaceOrderValidate;
@@ -63,6 +65,7 @@ class OrderController extends BaseController
         $session_token = $session->get_session_token();
         $js_sdk = $session->getAsiabill()->getJsScript();
         return $this->success(compact('session_token','js_sdk'));
+
     }
 
     //获取所有国家运费
@@ -106,6 +109,15 @@ class OrderController extends BaseController
         if($order->order_status != Orders::ORDER_STATUS_COMPLETED) throw new \Exception("order not completed");
         $data = $this->logic->getSuccessUrl($order);
         return $this->success($data);
+    }
+
+    public function confirmCheckout(Request $request,Orders $order)
+    {
+        Validate(CardValidate::class)->check($request->post());
+        if ($order->order_status == Orders::ORDER_STATUS_COMPLETED) throw new \Exception('order has payed',CommonConstant::ORDER_HAS_PAYED_ERROR_CODE);
+        $payment = new PaymentBase($order,$request);
+        $result = $payment->confirmCheckout();
+        return $this->success($result);
     }
 
 
