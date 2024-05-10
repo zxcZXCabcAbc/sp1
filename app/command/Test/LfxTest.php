@@ -12,6 +12,8 @@ use app\libs\AsiabillSDK\action\CheckoutAsiabill;
 use app\libs\AsiabillSDK\action\TransactionsAsiabill;
 use app\libs\AsiabillSDK\builder\CheckoutBuilder;
 use app\libs\PaypalSDK\action\PurchasePaypal;
+use app\libs\StripeSDK\Action\Cards;
+use app\libs\StripeSDK\Builder\CardsBuilder;
 use app\model\Customer;
 use app\model\Orders;
 use app\model\Shops;
@@ -35,6 +37,7 @@ use think\facade\Event;
 use Omnipay\Omnipay;
 use think\facade\Log;
 use think\facade\Redis;
+use think\Request;
 
 class LfxTest extends Command
 {
@@ -51,7 +54,38 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
-//            $order = Orders::query()->find(230);
+            $order = Orders::query()->find(85);
+            $payment = ShopsPayment::query()->find(5);
+            $account = [
+                "holderName"=> "Jhone",
+                "number"=> "4242424242424242",
+                "expiryMonth"=> "02",
+                "expiryYear"=> "2026",
+                "verificationCode"=> "421"
+            ];
+            $card = new Cards($payment);
+            //$builder = new CardsBuilder($order,$account);
+            //$res = $card->create_payment_method($builder);
+            $params = [
+                'card'=>[
+                    'exp_month'=>$account['expiryMonth'],
+                    'exp_year'=>$account['expiryYear'],
+                    'number'=>$account['number'],
+                    'cvc'=>$account['verificationCode'],
+                    'name'=>$account['holderName'],
+                    'address_city'=>$order->billingAddress->city,
+                    'address_country'=>$order->billingAddress->country_code,
+                    'address_line1'=>$order->billingAddress->address1,
+                    'address_state'=>$order->billingAddress->province,
+                    'address_zip'=>$order->billingAddress->zip,
+                    'currency'=>$order->currency,
+                ],
+            ];
+
+            $res = $card->create_card_token($params);
+            dd($res);
+
+
 //            $builder = new CheckoutBuilder($order);
 //            $builder->setCustomerPaymentMethodId("pm_12451111");
 //            dd($builder->toArray());

@@ -5,25 +5,20 @@ namespace app\libs\StripeSDK\Builder;
 use app\model\Orders;
 use app\trait\PaymentTrait;
 
-class StripeOrder
+class StripeOrder extends StripeBaseBuilder
 {
-    use PaymentTrait;
-    public function __construct(protected Orders $order)
-    {
-    }
 
     public function toArray()
     {
 
-        list($return_url,$cancel_url) = $this->getReturnUrl($this->order);
         return [
-            'amount'=>$this->order->total_money * 100,
+            'amount'=>$this->order->total_price * 100,
             'currency' => $this->order->currency,
             'payment_method_types'=>['card'],
             'shipping'=>$this->getShipping(),
             'receipt_email'=>$this->order->contact_email,
             'confirm'=>true,
-            'return_url'=>$return_url,
+            'return_url'=>$this->order->return_url,
         ];
     }
 

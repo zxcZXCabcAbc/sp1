@@ -46,7 +46,7 @@ trait OrderTrait
             $order['total_shipping_price'] = $shippingLines['price'] ?? '0.00';
             $order['browser_ip'] = $request->ip();
             $order['app_id'] = $request->header('X-Opc-Client-Id','');
-            $order['order_no'] = $customer['last_order_name'] ?? $order['name'];
+            $order['order_no'] = $customer['last_order_name'] ?: $order['name'];
             if(is_null($orders)) {
                 //存token
                 $checkout = $request->param('checkout',[]);
