@@ -26,7 +26,7 @@ class CapturePaymentQueue
             // 任务执行成功 删除任务
             $job->delete();
         } else {
-            if ($job->attempts() > 3) {
+            if ($job->attempts() > 1) {
                 // 任务重试3次后 删除任务
                 $job->delete();
             }
