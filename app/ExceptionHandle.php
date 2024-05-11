@@ -1,6 +1,7 @@
 <?php
 namespace app;
 
+use app\constant\CommonConstant;
 use app\exception\BusinessException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
@@ -57,7 +58,7 @@ class ExceptionHandle extends Handle
             return json(['code'=>412,'msg'=>$e->getMessage(),'data'=>[]]);
             case $e instanceof BusinessException:
                 tplog($request->url(),$request->all());
-                return json(['code'=>101,'msg'=>$e->getMessage(),'data'=>[]]);
+                return json(['code'=>CommonConstant::API_REQUEST_ERROR,'msg'=>$e->getMessage(),'data'=>[]]);
             default:
                 return json(['code'=>$e->getCode() ?: 500,'msg'=>$e->getMessage(),'data'=>[]]);
         }
