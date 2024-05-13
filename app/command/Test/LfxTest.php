@@ -55,6 +55,203 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
+            $js = <<<JS
+{
+            "applied_discount": null,
+            "billing_address": {
+                "first_name": "first name",
+                "address1": "address",
+                "phone": "15586473397",
+                "city": "city",
+                "zip": "13041",
+                "province": "Alabama",
+                "country": "United States",
+                "last_name": "last name",
+                "address2": "",
+                "company": null,
+                "latitude": null,
+                "longitude": null,
+                "name": "first name last name",
+                "country_code": "US",
+                "province_code": "AL"
+            },
+            "completed_at": null,
+            "created_at": "2024-05-12T23:00:51-08:00",
+            "currency": "USD",
+            "customer": {
+                "accepts_marketing": false,
+                "accepts_marketing_updated_at": null,
+                "created_at": "2024-05-12T23:00:51-08:00",
+                "currency": "USD",
+                "default_address": {
+                    "id": 10261942894879,
+                    "customer_id": 8152357830943,
+                    "first_name": "first name",
+                    "last_name": "last name",
+                    "company": null,
+                    "address1": "address",
+                    "address2": "",
+                    "city": "city",
+                    "province": "Alabama",
+                    "country": "United States",
+                    "zip": "13041",
+                    "phone": "15586473397",
+                    "name": "first name last name",
+                    "province_code": "AL",
+                    "country_code": "US",
+                    "country_name": "United States",
+                    "default": true
+                },
+                "email": "yxiaoyan233@163.com",
+                "email_marketing_consent": {
+                    "state": "not_subscribed",
+                    "opt_in_level": "single_opt_in",
+                    "consent_updated_at": null
+                },
+                "first_name": "first name",
+                "id": 8152357830943,
+                "last_name": "last name",
+                "last_order_id": null,
+                "last_order_name": null,
+                "marketing_opt_in_level": "single_opt_in",
+                "multipass_identifier": null,
+                "note": null,
+                "orders_count": 0,
+                "phone": null,
+                "sms_marketing_consent": null,
+                "state": "disabled",
+                "tags": "",
+                "tax_exempt": false,
+                "tax_exemptions": [],
+                "total_spent": "0.00",
+                "updated_at": "2024-05-12T23:00:51-08:00",
+                "verified_email": true,
+                "admin_graphql_api_id": "gid:\/\/shopify\/Customer\/8152357830943"
+            },
+            "email": "yxiaoyan233@163.com",
+            "id": 1152288293151,
+            "invoice_sent_at": null,
+            "invoice_url": "https:\/\/comfortablet.shop\/78971437343\/invoices\/12e0afa91b19ef7c20036c43883ccfb5",
+            "line_items": [
+                {
+                    "id": 58365435642143,
+                    "variant_id": 48049922998559,
+                    "product_id": 9028635689247,
+                    "title": "Raw Hem High Waist Jeans",
+                    "variant_title": "Medium \/ S",
+                    "sku": "100100760685324",
+                    "vendor": "Forward Fashions",
+                    "quantity": 2,
+                    "requires_shipping": true,
+                    "taxable": true,
+                    "gift_card": false,
+                    "fulfillment_service": "manual",
+                    "grams": 454,
+                    "tax_lines": [],
+                    "applied_discount": null,
+                    "name": "Raw Hem High Waist Jeans - Medium \/ S",
+                    "properties": [],
+                    "custom": false,
+                    "price": "43.00",
+                    "admin_graphql_api_id": "gid:\/\/shopify\/DraftOrderLineItem\/58365435642143"
+                },
+                {
+                    "id": 58365435674911,
+                    "variant_id": 48049886167327,
+                    "product_id": 9028632248607,
+                    "title": "Notched Blouse",
+                    "variant_title": "Floral \/ S",
+                    "sku": "CCC-Blouse-S-1PC",
+                    "vendor": "Trendsi",
+                    "quantity": 1,
+                    "requires_shipping": true,
+                    "taxable": true,
+                    "gift_card": false,
+                    "fulfillment_service": "manual",
+                    "grams": 203,
+                    "tax_lines": [],
+                    "applied_discount": null,
+                    "name": "Notched Blouse - Floral \/ S",
+                    "properties": [],
+                    "custom": false,
+                    "price": "28.00",
+                    "admin_graphql_api_id": "gid:\/\/shopify\/DraftOrderLineItem\/58365435674911"
+                },
+                {
+                    "id": 58365435707679,
+                    "variant_id": 48588770771231,
+                    "product_id": 9211012874527,
+                    "title": "Sexy Lace Deep-V Neck Bodysuit",
+                    "variant_title": "Black \/ S",
+                    "sku": "CCC-DeepNeck-BK-S*1",
+                    "vendor": "mysite",
+                    "quantity": 1,
+                    "requires_shipping": true,
+                    "taxable": true,
+                    "gift_card": false,
+                    "fulfillment_service": "manual",
+                    "grams": 0,
+                    "tax_lines": [],
+                    "applied_discount": null,
+                    "name": "Sexy Lace Deep-V Neck Bodysuit - Black \/ S",
+                    "properties": [],
+                    "custom": false,
+                    "price": "24.99",
+                    "admin_graphql_api_id": "gid:\/\/shopify\/DraftOrderLineItem\/58365435707679"
+                }
+            ],
+            "name": "#D7",
+            "note": null,
+            "note_attributes": [],
+            "order_id": null,
+            "payment_terms": null,
+            "shipping_address": {
+                "first_name": "first name",
+                "address1": "address",
+                "phone": "15586473397",
+                "city": "city",
+                "zip": "13041",
+                "province": "Alabama",
+                "country": "United States",
+                "last_name": "last name",
+                "address2": "",
+                "company": null,
+                "latitude": null,
+                "longitude": null,
+                "name": "first name last name",
+                "country_code": "US",
+                "province_code": "AL"
+            },
+            "shipping_line": {
+                "title": "International shipping",
+                "custom": true,
+                "handle": null,
+                "price": "5.99"
+            },
+            "status": "open",
+            "subtotal_price": "138.99",
+            "tags": "",
+            "tax_exempt": false,
+            "tax_lines": [],
+            "taxes_included": false,
+            "total_price": "144.98",
+            "total_tax": "0.00",
+            "updated_at": "2024-05-12T23:00:51-08:00",
+            "use_customer_default_address": true,
+            "admin_graphql_api_id": "gid:\/\/shopify\/DraftOrder\/1152288293151"
+        }
+JS;
+
+            $draft = json_decode($js,true);
+            $customer = $draft['customer'];
+            $orderNo = $customer['last_order_name'] ?: $draft['name'];
+            $order_no = $this->formatOrderNo(4,$orderNo);
+
+
+            dd($order_no);
+
+
+
             dd($this->formatOrderNo(10,"#1001"));
 
 

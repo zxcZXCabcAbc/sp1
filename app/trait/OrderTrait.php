@@ -53,11 +53,11 @@ trait OrderTrait
                 $token = $checkout['cart']['token'] ?? '';
                 if($token) $order['token'] = $token;
                 if($checkout_id) $order['checkout_id'] = $checkout_id;
+                $orderNo = $customer['last_order_name'] ?: $order['name'];
+                $order['order_no'] = $this->formatOrderNo($order['shop_id'],$orderNo);
                 $orderId = $orderModel->setIsConvert(true)->fill($order)->saveData();
                 $orders = Orders::query()->find($orderId);
             }else{
-                $orderNo = $customer['last_order_name'] ?: $order['name'];
-                $order['order_no'] = $this->formatOrderNo($order['shop_id'],$orderNo);
                 $orderData = $orderModel->setIsConvert(true)->fill($order)->getDatas();
                 $orders->save($orderData);
                 $orderId = $orders->id;
