@@ -66,11 +66,11 @@ class CheckoutBuilder extends BuilderBase
             ];
         }
         //税费
-        $products[] = [
-            'goodsCount'=>1,
-            'goodsPrice'=>bcmul($this->order->total_price,$this->rate,2),
-            'goodsTitle'=>"Tax",
-        ];
+//        $products[] = [
+//            'goodsCount'=>1,
+//            'goodsPrice'=>bcmul($this->order->total_price,$this->rate,2),
+//            'goodsTitle'=>"Tax",
+//        ];
 
         return $products;
     }
