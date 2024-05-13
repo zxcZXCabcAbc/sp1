@@ -28,8 +28,6 @@ class PushOrderListener
        tplog('shopify_order_'. $order->id,$data,'shopify');
        $order->order_id = $data['customer']['last_order_id'] ?? 0;
        $order->last_order_name = $data['customer']['last_order_name'] ?? '';
-       $order->order_status = Orders::ORDER_STATUS_COMPLETED;
-       $order->error_msg = '';
        $order->save();
        # 更新订单增加note
         $this->addShopifyOrderNote($order);
