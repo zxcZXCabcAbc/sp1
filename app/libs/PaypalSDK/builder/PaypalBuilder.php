@@ -12,17 +12,21 @@ class PaypalBuilder
     }
     public function getItemLines()
     {
-        $lines = [];
-        foreach ($this->order->items as $item){
-            $lines[] = [
-                'name'=>substr($item->name,0,120),
-                'description'=>substr($item->title,0,255),
-                'quantity'=>$item->quantity,
-                'unit_amount'=>['value'=>$item->price,'currency_code'=>$this->order->currency],
-                'sku'=>$item->sku ?: pathinfo($item->admin_graphql_api_id,PATHINFO_FILENAME),
-            ];
+        try {
+            $lines = [];
+            foreach ($this->order->items as $item) {
+                $lines[] = [
+                    'name' => substr($item->name, 0, 120),
+                    'description' => substr($item->title, 0, 255),
+                    'quantity' => $item->quantity,
+                    'unit_amount' => ['value' => $item->price, 'currency_code' => $this->order->currency],
+                    'sku' => $item->sku ?: pathinfo($item->admin_graphql_api_id, PATHINFO_FILENAME),
+                ];
+            }
+            return $lines;
+        }catch (\Exception $e){
+            dd($e);
         }
-        return $lines;
     }
 
     public function getTransactions()

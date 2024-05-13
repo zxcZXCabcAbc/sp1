@@ -25,10 +25,10 @@ class ShippingLines extends BaseModel
         return $this->belongsTo(Orders::class,'order_id');
     }
 
-    public function getTitleAttr()
+    public function getTitleAttr($title)
     {
-        if(!isJson($this->title)) return $this->title;
-        $obj = json_decode($this->title,true);
+        if(!isJson($title)) return $title;
+        $obj = json_decode($title,true);
         return $obj['title'];
     }
 }

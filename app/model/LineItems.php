@@ -35,23 +35,23 @@ class LineItems extends BaseModel
         return $this->belongsTo(Orders::class,'order_id');
     }
 
-    public function getTitleAttr()
+    public function getTitleAttr($title)
     {
-        if(!isJson($this->title)) return $this->title;
-        $obj = json_decode($this->title,true);
+        if(!isJson($title)) return $title;
+        $obj = json_decode($title,true);
         return $obj['title'];
     }
 
-    public function getVariantTitleAttr()
+    public function getVariantTitleAttr($variant_title)
     {
-        if(!isJson($this->variant_title)) return $this->variant_title;
-        $obj = json_decode($this->variant_title,true);
+        if(!isJson($variant_title)) return $variant_title;
+        $obj = json_decode($variant_title,true);
         return $obj['title'];
     }
-    public function getNameAttr()
+    public function getNameAttr($name)
     {
-        if(!isJson($this->name)) return $this->name;
-        $obj = json_decode($this->name,true);
+        if(!isJson($name)) return $name;
+        $obj = json_decode($name,true);
         return $obj['title'];
     }
 }
