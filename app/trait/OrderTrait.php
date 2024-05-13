@@ -148,8 +148,9 @@ trait OrderTrait
     protected function formatOrderNo($shopId,$orderNo)
     {
         $shopId = $shopId < 10 ? '0' . $shopId : $shopId ;
+        $time = date("His");
         $orderNo = str_replace('#','',$orderNo);
-        return sprintf('#%s%s',$shopId,$orderNo);
+        return sprintf('#%s%s%s',$shopId,$orderNo,$time);
     }
 
 }
