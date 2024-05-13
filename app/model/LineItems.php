@@ -10,6 +10,8 @@ use think\Model;
  * @property string $price
  * @property string $title
  * @property string $image
+ * @property string $variant_title
+ * @property string $name
  */
 class LineItems extends BaseModel
 {
@@ -31,5 +33,25 @@ class LineItems extends BaseModel
     public function orders()
     {
         return $this->belongsTo(Orders::class,'order_id');
+    }
+
+    public function getTitleAttr()
+    {
+        if(!isJson($this->title)) return $this->title;
+        $obj = json_decode($this->title,true);
+        return $obj['title'];
+    }
+
+    public function getVariantTitleAttr()
+    {
+        if(!isJson($this->variant_title)) return $this->variant_title;
+        $obj = json_decode($this->variant_title,true);
+        return $obj['title'];
+    }
+    public function getNameAttr()
+    {
+        if(!isJson($this->name)) return $this->name;
+        $obj = json_decode($this->name,true);
+        return $obj['title'];
     }
 }
