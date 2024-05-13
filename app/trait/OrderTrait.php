@@ -46,7 +46,8 @@ trait OrderTrait
             $order['total_shipping_price'] = $shippingLines['price'] ?? '0.00';
             $order['browser_ip'] = $request->ip();
             $order['app_id'] = $request->header('X-Opc-Client-Id','');
-            $order['order_no'] = $customer['last_order_name'] ?: $order['name'].date('YmdHis');
+            $orderNo = $customer['last_order_name'] ?: $order['name'];
+            $order['order_no'] = $this->formatOrderNo($order['shop_id'],$orderNo);
             if(is_null($orders)) {
                 //存token
                 $checkout = $request->param('checkout',[]);
@@ -142,6 +143,13 @@ trait OrderTrait
         foreach ($lineItems as &$item){
             $item['image'] = $images[$item['variant_id']] ?? '';
         }
+    }
+
+    protected function formatOrderNo($shopId,$orderNo)
+    {
+        $shopId = $shopId < 10 ? '0' . $shopId : $shopId ;
+        $orderNo = str_replace('#','',$orderNo);
+        return sprintf('#%s%s',$shopId,$orderNo);
     }
 
 }

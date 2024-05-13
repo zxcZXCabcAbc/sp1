@@ -22,6 +22,7 @@ use app\queue\CapturePaymentQueue;
 use app\queue\TestQueue;
 use app\service\payment\PaymentBase;
 use app\service\shopify\action\rest\OrderRest;
+use app\trait\OrderTrait;
 use app\trait\PaymentTrait;
 use Asiabill\Classes\AsiabillIntegration;
 use Omnipay\PayPal\RestGateway;
@@ -41,7 +42,7 @@ use think\Request;
 
 class LfxTest extends Command
 {
-    use PaymentTrait;
+    use PaymentTrait,OrderTrait;
     protected $clientId = 'AStgX20Bx4ZGVF7OovRksHtjOvCXxOz4F0KsE35TRu_v-JbMSO61cTfpAnFfQ9G5KhOA4CwiOgRzoYaW';
     protected $secret = 'EPivtk3r7bBXQIJlkFEctTb_poZXZnNvkQ_Me87I185b9xHtdADMlPgy30sWicsD2kZXmNTlXc5MoWHM';
     protected function configure()
@@ -54,6 +55,11 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
+            dd($this->formatOrderNo(10,"#1001"));
+
+
+
+
             $order = Orders::query()->find(85);
             $payment = ShopsPayment::query()->find(5);
             $account = [
