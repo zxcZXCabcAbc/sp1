@@ -114,6 +114,8 @@ trait OrderTrait
      */
     protected function saveShippingLines(Orders $orders,$shippingLines)
     {
+        //dump($shippingLines);
+        $shippingLines['title'] = json_encode(['title'=>$shippingLines['title']]);
         if(empty($shippingLines)) return false;
         $shippingLinesData = (new ShippingLines())->fill($shippingLines)->getDatas();
         $shippingLinesData['custom'] = $shippingLinesData['custom'] ? 1 : 0;
@@ -142,7 +144,11 @@ trait OrderTrait
         $images = array_column($items,'image','variant_id');
         foreach ($lineItems as &$item){
             $item['image'] = $images[$item['variant_id']] ?? '';
+            $item['variant_title'] = json_encode(['title'=>$item['variant_title']]);
+            $item['name'] = json_encode(['title'=>$item['name']]);
+            $item['title'] = json_encode(['title'=>$item['title']]);
         }
+
     }
 
     protected function formatOrderNo($shopId,$orderNo)
