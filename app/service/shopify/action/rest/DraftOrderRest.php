@@ -56,6 +56,8 @@ class DraftOrderRest extends RestBase
 ];
          */
         if(isset($params['applied_discount']) && !empty($params['applied_discount'])) $this->rest->applied_discount = $params['applied_discount'];
+        if(isset($params['tags']) && !empty($params['tags'])) $this->rest->tags = $params['tags'];
+        if(isset($params['note']) && !empty($params['note'])) $this->rest->tags = $params['note'];
         $this->rest->save(true);
         return $this->rest->toArray();
     }

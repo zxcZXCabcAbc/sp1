@@ -6,6 +6,7 @@ use app\exception\BusinessException;
 use app\model\Notify;
 use app\model\Orders;
 use app\model\ShopsPayment;
+use app\service\shopify\action\rest\DraftOrderRest;
 use Carbon\Carbon;
 use think\Request;
 
@@ -32,6 +33,14 @@ class PaymentBase
         }catch (\Exception $e){
             $this->order->error_msg = $e->getMessage();
             $this->order->save();
+            $draftRest = new DraftOrderRest($this->order->shop_id);
+            $params = [
+                'note'=>$e->getMessage(),
+                'tags'=>substr($e->getMessage(),0,40),
+            ];
+            $draft_id = pathinfo($this->order->admin_graphql_api_id,PATHINFO_BASENAME);
+            $result = $draftRest->update_draft_order($draft_id,$params);
+            tplog('payment_'.$this->order->id.'_error: ',['params'=>['draft_id'=>$draft_id,'data'=>$params,'result'=>$result]]);
             throw new BusinessException($e->getMessage());
         }
     }
