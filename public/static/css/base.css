@@ -1,0 +1,7 @@
+.input-width{
+    width:800px;
+}
+.label-width{
+    /*width: 120px !important;*/
+    white-space: nowrap;
+}
