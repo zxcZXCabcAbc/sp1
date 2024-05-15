@@ -40,6 +40,7 @@ Route::group('/api',function (){
         Route::get('/order-detail/:id','app\controller\api\orderController@getOrderDetail')->model(\app\model\Orders::class);//获取订单详情
         Route::get('/order-status-url/:id','app\controller\api\orderController@getOrderStatusUrl')->model(\app\model\Orders::class);//获取成功页面
         Route::post('/order-confirm/:id','app\controller\api\orderController@confirmCheckout')->model(\app\model\Orders::class);//完成支付
+        Route::post('/order-logs','app\controller\api\orderController@saveOrderLogs');//保存订单日志
     });
 })
 ->middleware(\app\middleware\CheckShopifyRequest::class);//验证前端请求

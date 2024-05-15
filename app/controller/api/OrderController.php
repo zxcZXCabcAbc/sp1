@@ -7,6 +7,7 @@ use app\BaseController;
 use app\constant\CommonConstant;
 use app\libs\AsiabillSDK\action\SessionAsiabill;
 use app\logic\OrderLogic;
+use app\model\OrderLogs;
 use app\model\Orders;
 use app\model\Shops;
 use app\model\ShopsPayment;
@@ -116,6 +117,13 @@ class OrderController extends BaseController
         $payment = new PaymentBase($order,$request);
         $result = $payment->confirmCheckout();
         return $this->success($result);
+    }
+
+    public function saveOrderLogs(Request $request)
+    {
+        $this->validate($request->all(),['checkout_id'=>'require','logs'=>'require']);
+        OrderLogs::saveLogs($request);
+        return $this->success();
     }
 
 
