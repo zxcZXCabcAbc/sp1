@@ -36,7 +36,6 @@ class PaymentBase
             $draftRest = new DraftOrderRest($this->order->shop_id);
             $params = [
                 'note'=>$e->getMessage(),
-                'tags'=>substr($e->getMessage(),0,40),
             ];
             $draft_id = pathinfo($this->order->admin_graphql_api_id,PATHINFO_BASENAME);
             $result = $draftRest->update_draft_order($draft_id,$params);

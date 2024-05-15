@@ -39,7 +39,7 @@ class PushOrderListener
     {
         try {
             $rest = new OrderRest($order->shop_id);
-            $note = "交易号: " . $order->transaction_id . ',订单号: ' . $order->order_no;
+            $note = '';
             $tags = $order->transaction_id .','.$order->order_no.',' .$order->payment->pay_method_name;
             $tags = substr($tags,0,40);
             $note_attributes = [

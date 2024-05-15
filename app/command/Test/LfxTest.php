@@ -22,6 +22,7 @@ use app\model\ShopsPayment;
 use app\queue\CapturePaymentQueue;
 use app\queue\TestQueue;
 use app\service\payment\PaymentBase;
+use app\service\shopify\action\rest\DraftOrderRest;
 use app\service\shopify\action\rest\OrderRest;
 use app\trait\OrderTrait;
 use app\trait\PaymentTrait;
@@ -57,18 +58,15 @@ class LfxTest extends Command
     {
         try {
 
-            $json = '{"title": "test"}';
-            dd(get_json_key($json));
+            $draftRest = new DraftOrderRest(5);
+            $order_id = 905895051397;
+            $params = [
+                'note'=>''
+            ];
 
-            $order = Orders::query()->find(320);
-            $builder = new PurchaseBuilder($order);
-            dd($builder->toArray());
+            $result = $draftRest->update_draft_order($order_id,$params);
 
-
-
-            dd($this->formatOrderNo(10,"#1001"));
-
-
+            dd($result);
 
 
             $order = Orders::query()->find(85);
