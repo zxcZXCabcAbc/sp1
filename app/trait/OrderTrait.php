@@ -21,7 +21,6 @@ trait OrderTrait
      */
     protected function saveOrder(array $order,Request $request,Orders $orders = null)
     {
-        $orders = null;
         try {
             if (empty($order)) throw new \Exception('create draft order error');
             $order['order_type'] = Orders::ORDER_DRAFT;
