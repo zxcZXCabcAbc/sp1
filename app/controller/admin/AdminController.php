@@ -1,36 +1,23 @@
 <?php
 declare (strict_types = 1);
 
-namespace app\controller;
+namespace app\controller\admin;
 
 use app\BaseController;
-use app\exception\BusinessException;
-use app\service\shopify\action\store\Products;
 use think\Request;
 
-class ProductController extends BaseController
+class AdminController extends BaseController
 {
-    /**
-     * 显示资源列表
-     *
-     * @return \think\Response
-     */
-    public function index(Request $request)
+
+    public function index()
     {
-        throw new BusinessException("api err");
-        $products = new Products();
-        $data = $products->getProductList(10);
-        dd($data);
+
     }
 
-    /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
-     */
-    public function create()
+
+    public function create(Request $request)
     {
-        //
+
     }
 
     /**

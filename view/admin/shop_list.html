@@ -1,0 +1,126 @@
+{extend name="admin/layout" /}
+
+{block name="content"}
+
+<div class="layui-card layui-card-panel">
+    <div class="layui-card-header">
+        <form class="layui-form layui-row layui-col-space16">
+            <div class="layui-col-md4">
+                <div class="layui-input-wrap">
+                    <input type="text" name="shop_id" value="" placeholder="店铺ID" class="layui-input" lay-affix="clear">
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-input-wrap">
+                    <input type="text" name="name" placeholder="店铺名" lay-affix="clear" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-col-md4">
+                <div class="layui-input-wrap">
+                <button class="layui-btn" lay-submit lay-filter="demo-table-search">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div class="layui-card-body">
+        <table class="layui-hide" id="shop-list-search"></table>
+    </div>
+</div>
+
+{/block}
+
+{block name="js"}
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
+    </div>
+</script>
+
+<script type="text/html" id="shop-operation">
+    <div class="layui-clear-space">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除
+        </a>
+    </div>
+</script>
+
+<script>
+    layui.use(function(){
+        var table = layui.table;
+        var form = layui.form;
+        // 创建表格实例
+        table.render({
+            elem: '#shop-list-search',
+            url: "{:url('/admin/shop/json')}", // 此处为静态模拟数据，实际使用时需换成真实接口
+            toolbar: '#toolbarDemo',
+            cols: [[
+                {type: 'radio', title: '😊', fixed: true}, // 单选框
+                {field:'id', title: 'ID', width:80, sort: true, fixed: true},
+                {field:'name', title: '店铺名', width:120},
+                {field:'host', title: '域名', width:260},
+                {field:'status', title: '状态', width:80},
+                {field:'created_at', title: '创建时间',},
+                {fixed: 'right', title:'操作', width: 134, minWidth: 125, toolbar: '#shop-operation'}
+            ]],
+            page: true,
+            height: 500
+        });
+        // 搜索提交
+        form.on('submit(demo-table-search)', function(data){
+            var field = data.field; // 获得表单字段
+            // 执行搜索重载
+            table.reload('shop-list-search', {
+                page: {
+                    curr: 1 // 重新从第 1 页开始
+                },
+                where: field // 搜索的字段
+            });
+
+            return false; // 阻止默认 form 跳转
+        });
+
+
+        table.on('tool(shop-list-search)', function(obj){ // 双击 toolDouble
+            var data = obj.data; // 获得当前行数据
+            // console.log(obj)
+            if(obj.event === 'edit'){
+                layer.open({
+                    title: '编辑 - id:'+ data.id,
+                    type: 1,
+                    area: ['80%','80%'],
+                    content: '<div style="padding: 16px;">自定义表单元素</div>'
+                });
+            } else if(obj.event === 'del'){
+                layer.open({
+                    title: '删除 - id:'+ data.id,
+                    type: 1,
+                    area: ['80%','80%'],
+                    content: '<div style="padding: 16px;">自定义表单元素</div>'
+                });
+            }
+        });
+
+        // 工具栏事件
+        table.on('toolbar(shop-list-search)', function(obj){
+            var id = obj.config.id;
+            switch(obj.event){
+                case 'add':
+                    layer.open({
+                        title: '新增店铺',
+                        type: 2,
+                        area: ['60%','80%'],
+                        content:"{:url('/admin/shop/add')}"
+                    });
+                    break;
+            };
+        });
+
+    });
+</script>
+
+{/block}
+
+

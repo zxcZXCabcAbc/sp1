@@ -12,6 +12,8 @@ use think\Model;
  * @property string $image
  * @property string $variant_title
  * @property string $name
+ * @property integer $order_id
+ * @property string $sku
  */
 class LineItems extends BaseModel
 {
@@ -37,21 +39,16 @@ class LineItems extends BaseModel
 
     public function getTitleAttr($title)
     {
-        if(!isJson($title)) return $title;
-        $obj = json_decode($title,true);
-        return $obj['title'];
+        return get_json_key($title);
     }
 
     public function getVariantTitleAttr($variant_title)
     {
-        if(!isJson($variant_title)) return $variant_title;
-        $obj = json_decode($variant_title,true);
-        return $obj['title'];
+        return get_json_key($variant_title);
     }
     public function getNameAttr($name)
     {
-        if(!isJson($name)) return $name;
-        $obj = json_decode($name,true);
-        return $obj['title'];
+       return get_json_key($name);
     }
+
 }

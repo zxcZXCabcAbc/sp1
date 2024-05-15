@@ -1,10 +1,9 @@
 <?php
 declare (strict_types = 1);
 
-namespace app\controller;
+namespace app\controller\api;
 
 use app\BaseController;
-use app\service\shopify\action\admin\Location;
 use app\service\shopify\action\admin\ShopifyPay;
 use app\service\shopify\action\store\Payment;
 use app\service\shopify\ShopifyApiService;

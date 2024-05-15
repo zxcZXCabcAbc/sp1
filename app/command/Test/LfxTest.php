@@ -57,6 +57,9 @@ class LfxTest extends Command
     {
         try {
 
+            $json = '{"title": "test"}';
+            dd(get_json_key($json));
+
             $order = Orders::query()->find(320);
             $builder = new PurchaseBuilder($order);
             dd($builder->toArray());

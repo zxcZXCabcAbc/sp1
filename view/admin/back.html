@@ -1,0 +1,29 @@
+{{extend name="admin/layout" /}}
+
+{{block name="content"}}
+
+<div class="layui-card layui-card-panel">
+    <div class="layui-card-header">
+        <form action="" class="layui-form"></form>
+    </div>
+
+    <div class="layui-card-body">
+        <table class="layui-table" lay-data="{height:315, url:'{{:url('/admin/shop/json')}}', page:true,limit:10}" id="shopManage">
+            <thead>
+            <tr>
+                <th lay-data="{field:'id', width:80, sort: true}">ID</th>
+                <th lay-data="{field:'name', width:120}">店铺名</th>
+                <th lay-data="{field:'host', width:260}">域名</th>
+                <th lay-data="{field:'status',width:80}">状态</th>
+                <th lay-data="{field:'created_at'}">创建时间</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+
+{{/block}}
+
+

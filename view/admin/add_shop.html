@@ -1,0 +1,182 @@
+
+{include file="admin/header" title="新增店铺" /}
+<script src="__JS__/vue.min.js"></script>
+<div id="app">
+
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">店铺域名</label>
+            <div class="layui-input-block">
+                <input type="text" name="host" lay-verify="required" placeholder="请输入店铺域名" autocomplete="off"
+                       class="layui-input input-width">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">店铺名称</label>
+            <div class="layui-input-inline layui-input-wrap">
+                <input type="text" name="name" lay-verify="required" autocomplete="off" lay-affix="clear"
+                       class="layui-input input-width" placeholder="请输入店铺名称">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">API Key</label>
+            <div class="layui-input-inline layui-input-wrap">
+                <input type="text" name="api_key" lay-verify="required" autocomplete="off" lay-affix="clear"
+                       class="layui-input input-width" placeholder="请输入API Key">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">API秘钥</label>
+            <div class="layui-input-inline layui-input-wrap">
+                <input type="text" name="api_secret" lay-verify="required" autocomplete="off" lay-affix="clear"
+                       class="layui-input input-width" placeholder="请输入API秘钥">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label label-width">Admin Token</label>
+            <div class="layui-input-inline layui-input-wrap">
+                <input type="text" name="admin_token" lay-verify="required" autocomplete="off" lay-affix="clear"
+                       class="layui-input input-width" placeholder="请输入Admin Token">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">Store Token</label>
+            <div class="layui-input-inline layui-input-wrap">
+                <input type="text" name="store_token" lay-verify="required" autocomplete="off" lay-affix="clear"
+                       class="layui-input input-width" placeholder="请输入Store Token">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">版本号</label>
+            <div class="layui-input-block input-width">
+                <select name="version">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="status" lay-skin="switch" lay-filter="switchTest" title="ON|OFF">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-card">
+                <div class="layui-card-header" style="text-align: center;">支付信息</div>
+                <div class="layui-card-body">
+
+                    <ul><li v-for="item in payments">{{item.account}}</li></ul>
+
+
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="80">
+                            <col width="80">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>账号</th>
+<!--                            <th>商户号</th>-->
+<!--                            <th>API Key</th>-->
+<!--                            <th>API 秘钥</th>-->
+<!--                            <th>状态</th>-->
+<!--                            <th>申请状态</th>-->
+<!--                            <th>模式</th>-->
+<!--                            <th>沙箱API Key</th>-->
+<!--                            <th>沙箱API 秘钥</th>-->
+<!--                            <th>支付方式</th>-->
+<!--                            <th>shopifyKey</th>-->
+<!--                            <th>操作</th>-->
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr v-for="item in payments">
+                            <td>{{item}}</td>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit lay-filter="demo1">立即创建</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
+<script>
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            payments :[
+                {
+                    "account": 'test',
+                    "merchant_no": '',
+                    "client_id": '',
+                    "secrect": '',
+                    "status": '',
+                    "apply_status": '',
+                    "mode": '',
+                    "client_id_sandbox": '',
+                    "secrect_sandbox": '',
+                    "pay_method": 1,
+                    "shopify_key": '',
+                }
+            ],
+
+            msg: 'test'
+        },
+    });
+
+
+
+
+
+    layui.use(['form'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+        // 自定义验证规则
+        form.verify({
+            pass: function (value) {
+                if (!/(.+){6,12}$/.test(value)) {
+                    return '密码必须 6 到 12 位';
+                }
+            }
+        });
+
+        // 提交事件
+        form.on('submit(demo1)', function (data) {
+            var field = data.field; // 获取表单字段值
+            // 显示填写结果，仅作演示用
+            layer.alert(JSON.stringify(field), {
+                title: '当前填写的字段值'
+            });
+            // 此处可执行 Ajax 等操作
+            // …
+            return false; // 阻止默认 form 跳转
+        });
+
+    });
+</script>
+
+{include file="admin/footer" /}
