@@ -1,7 +1,7 @@
 <?php
 declare (strict_types = 1);
 
-namespace app\controller;
+namespace app\controller\api;
 
 use app\BaseController;
 use app\constant\CommonConstant;
@@ -11,9 +11,7 @@ use app\model\Orders;
 use app\model\Shops;
 use app\model\ShopsPayment;
 use app\service\payment\PaymentBase;
-use app\service\shopify\action\rest\ShippingZoneRest;
 use app\validate\CardValidate;
-use app\validate\DraftOrderValidate;
 use app\validate\OrderValidate;
 use app\validate\PlaceOrderValidate;
 use app\validate\PrePayValidate;

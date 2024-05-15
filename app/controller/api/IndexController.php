@@ -1,9 +1,8 @@
 <?php
 
-namespace app\controller;
+namespace app\controller\api;
 
 use app\BaseController;
-use app\exception\BusinessException;
 
 
 class IndexController extends BaseController

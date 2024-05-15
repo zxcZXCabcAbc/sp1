@@ -27,8 +27,6 @@ class ShippingLines extends BaseModel
 
     public function getTitleAttr($title)
     {
-        if(!isJson($title)) return $title;
-        $obj = json_decode($title,true);
-        return $obj['title'];
+        return get_json_key($title);
     }
 }

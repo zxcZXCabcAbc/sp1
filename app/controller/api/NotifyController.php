@@ -1,14 +1,13 @@
 <?php
 declare (strict_types = 1);
 
-namespace app\controller;
+namespace app\controller\api;
 
 use app\BaseController;
 use app\model\Notify;
 use app\model\Orders;
 use app\model\ShopsPayment;
 use app\queue\CapturePaymentQueue;
-use Carbon\Carbon;
 use think\facade\Queue;
 use think\Request;
 

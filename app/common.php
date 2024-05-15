@@ -46,3 +46,11 @@ function isJson($string) {
     return (json_last_error() == JSON_ERROR_NONE);
 }
 
+if(!function_exists('get_json_key')){
+    function get_json_key($str,$key='title')
+    {
+        if(!isJson($str)) return $str;
+        $json = json_decode($str,true);
+        return \think\helper\Arr::get($json,$key,'');
+    }
+}
