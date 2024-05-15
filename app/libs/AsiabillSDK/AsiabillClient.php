@@ -43,6 +43,7 @@ class AsiabillClient
     public function send()
     {
         try {
+            $this->asiabill->startLogger(true,runtime_path('asiabill'));
             return $this->asiabill->request($this->getRequestType(),$this->getBody());
         }catch (\Exception $e){
             dd($e);

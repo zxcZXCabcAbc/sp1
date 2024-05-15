@@ -1,8 +1,7 @@
 
 {include file="admin/header" title="新增店铺" /}
-<script src="__JS__/vue.min.js"></script>
-<div id="app">
 
+<div id="app">
     <form class="layui-form" action="">
         <div class="layui-form-item">
             <label class="layui-form-label">店铺域名</label>
@@ -124,33 +123,6 @@
 
 <!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
 <script>
-
-    var app = new Vue({
-        el: '#app',
-        data: {
-            payments :[
-                {
-                    "account": 'test',
-                    "merchant_no": '',
-                    "client_id": '',
-                    "secrect": '',
-                    "status": '',
-                    "apply_status": '',
-                    "mode": '',
-                    "client_id_sandbox": '',
-                    "secrect_sandbox": '',
-                    "pay_method": 1,
-                    "shopify_key": '',
-                }
-            ],
-
-            msg: 'test'
-        },
-    });
-
-
-
-
 
     layui.use(['form'], function () {
         var form = layui.form;
