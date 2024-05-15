@@ -25,7 +25,7 @@ class NotifyController extends BaseController
             $data = $request->param('data');
             $tradeNo = $data['tradeNo'] ?? '';
             $order = Orders::query()->where('transaction_id',$tradeNo)->findOrEmpty();
-            if($order){
+            if(!$order->isEmpty()){
                 Notify::saveParams($order->id,$params,Notify::TYPE_NOTIFY,ShopsPayment::PAY_METHOD_ASIABILL);//存数据库
                 Queue::push(CapturePaymentQueue::class,['order_id'=>$order->id,'request'=>$params],'checkout');
             }

@@ -19,7 +19,6 @@ class CapturePaymentQueue
             $job->delete();
             return false;
         }
-        dump('***************正在执行订单ID: ' . $data['order_id'] . ' *********支付');
         // 执行任务
         $isJobDone = $this->run($data);
         if ($isJobDone) {
@@ -37,6 +36,7 @@ class CapturePaymentQueue
     public function run($data)
     {
         try {
+            dump('***************正在执行订单ID: ' . $data['order_id'] . ' *********支付');
             $order_id = $data['order_id'];
             $this->request = $data['request'] ?? [];
             $this->order = Orders::findOrEmpty($order_id);
