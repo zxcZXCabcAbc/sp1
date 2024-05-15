@@ -39,11 +39,13 @@ class OrderLogic
      */
     public function createDraftOrder(Request $request)
     {
-        $draftData = $this->formatDraft($request);
-        $draft = $this->rest->create_draft_order($draftData);
-        //存订单
-        $order_id = $this->saveOrder($draft,$request);
-        return compact('draft','order_id');
+       
+            $draftData = $this->formatDraft($request);
+            $draft = $this->rest->create_draft_order($draftData);
+            //存订单
+            $order_id = $this->saveOrder($draft, $request);
+            return compact('draft', 'order_id');
+
     }
 
     /**
@@ -193,9 +195,9 @@ class OrderLogic
                 'sku'=>$item['sku'],
             ];
         }
-        $shipping_address = $request->param('shipping_address');
-        $shipping_line = $request->param('shipping_line');
-        $email = $request->param('email');
+        $shipping_address = $request->param('shipping_address',[]);
+        $shipping_line = $request->param('shipping_line',[]);
+        $email = $request->param('email','');
         $billing_address = $request->param('billing_address',[]);
         return compact('line_items','shipping_address','shipping_line','email','billing_address');
 

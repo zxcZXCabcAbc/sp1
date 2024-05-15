@@ -12,14 +12,14 @@ class DraftOrderRest extends RestBase
      */
     public function create_draft_order(array $data) :array
     {
-            $this->rest->line_items = $data['line_items'];
-            $this->rest->shipping_address = $data['shipping_address'];
-            $this->rest->email = $data['email'];
-            $this->rest->shipping_line = $data['shipping_line'];
+        if (isset($data['line_items']) && !empty($data['line_items'])) $this->rest->line_items = $data['line_items'];
+        if (isset($data['shipping_address']) && !empty($data['shipping_address'])) $this->rest->shipping_address = $data['shipping_address'];;
+        if (isset($data['email']) && !empty($data['email']))   $this->rest->email = $data['email'];
+        if (isset($data['shipping_line']) && !empty($data['shipping_line'])) $this->rest->shipping_line = $data['shipping_line'];
+        if (isset($data['billing_address']) && !empty($data['billing_address'])) {
+            $this->rest->billing_address = $data['billing_address'];
             $this->rest->use_customer_default_address = true;
-            if (isset($data['billing_address']) && !empty($data['billing_address'])) {
-                $this->rest->billing_address = $data['billing_address'];
-            }
+        }
 
 //        $this->rest->customer = [
 //            "id" => 207119551

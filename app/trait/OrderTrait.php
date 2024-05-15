@@ -113,9 +113,9 @@ trait OrderTrait
      */
     protected function saveShippingLines(Orders $orders,$shippingLines)
     {
-        //dump($shippingLines);
-        $shippingLines['title'] = json_encode(['title'=>$shippingLines['title']]);
+
         if(empty($shippingLines)) return false;
+        $shippingLines['title'] = json_encode(['title'=>$shippingLines['title']]);
         $shippingLinesData = (new ShippingLines())->fill($shippingLines)->getDatas();
         $shippingLinesData['custom'] = $shippingLinesData['custom'] ? 1 : 0;
         $orders->shippings()->delete();
