@@ -41,6 +41,7 @@ class CapturePaymentQueue
             $this->request = $data['request'] ?? [];
             $this->order = Orders::findOrEmpty($order_id);
             if ($this->order->isEmpty()) return true;
+            if(is_null($this->order)) return true;//订单是NULL 问题
             if ($this->order->order_status == Orders::ORDER_STATUS_COMPLETED) return true;
             $payment = $this->order->payment;
             switch ($payment->pay_method) {

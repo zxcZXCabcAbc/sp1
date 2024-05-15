@@ -34,7 +34,9 @@ return [
             // 端口
             'hostport'        => env('DB_PORT', '3306'),
             // 数据库连接参数
-            'params'          => [],
+            'params'          => [
+                'persistent'=>true
+            ],
             // 数据库编码默认采用utf8
             'charset'         => env('DB_CHARSET', 'utf8mb4'),
             // 数据库表前缀
