@@ -19,6 +19,7 @@ use think\Request;
  * @property integer $status
  * @property HasMany $payments
  * @property integer $pay_step
+ * @property string $website
  */
 class Shops extends BaseModel
 {
@@ -28,7 +29,7 @@ class Shops extends BaseModel
         'host','name','api_key',
         'api_secret','admin_token','store_token',
         'version','created_at','updated_at','status',
-        'pay_step'
+        'pay_step','website'
     ];
 
     public function payments()

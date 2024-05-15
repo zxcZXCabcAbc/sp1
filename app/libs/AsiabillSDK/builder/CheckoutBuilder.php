@@ -20,7 +20,7 @@ class CheckoutBuilder extends BuilderBase
             'platform'=>'php_SDK',
             'remark'=>'remark',
             'returnUrl'=>$this->order->return_url,
-            'webSite'=>$this->order->shop->host,
+            'webSite'=>$this->order->shop->website ?: $this->order->shop->host,
             'shipping'=>$this->getShipping(),
             'goodsDetails'=>$this->getGoodsDetails(),
             'orderNo'=>$this->order->order_no,//订单号
