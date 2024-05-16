@@ -59,6 +59,7 @@
                 </select>
             </div>
         </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-block">
@@ -70,40 +71,94 @@
             <div class="layui-card">
                 <div class="layui-card-header" style="text-align: center;">支付信息</div>
                 <div class="layui-card-body">
+<!--                    支付方式1-->
+                    <div class="layui-fluid">
+                        <div class="layui-row" style="justify-content:flex-start;display: flex;width:100%">
+                            <div class="layui-col-md10">
+                              <div class="layui-row">
+                                  <div class="layui-col-md4">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">支付方式</label>
+                                          <div class="layui-input-block">
+                                              <select name="pay_methods">
 
-                    <ul><li v-for="item in payments">{{item.account}}</li></ul>
+                                              </select>
+                                          </div>
+                                      </div>
+                                  </div>
 
+                                  <div class="layui-col-md4 ">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">模式</label>
+                                          <div class="layui-input-block">
+                                              <input type="checkbox" name="mode" lay-skin="switch" lay-filter="switchTest" title="TEST|LIVE">
+                                          </div>
+                                      </div>
+                                  </div>
 
-                    <table class="layui-table">
-                        <colgroup>
-                            <col width="80">
-                            <col width="80">
-                            <col>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th>账号</th>
-<!--                            <th>商户号</th>-->
-<!--                            <th>API Key</th>-->
-<!--                            <th>API 秘钥</th>-->
-<!--                            <th>状态</th>-->
-<!--                            <th>申请状态</th>-->
-<!--                            <th>模式</th>-->
-<!--                            <th>沙箱API Key</th>-->
-<!--                            <th>沙箱API 秘钥</th>-->
-<!--                            <th>支付方式</th>-->
-<!--                            <th>shopifyKey</th>-->
-<!--                            <th>操作</th>-->
-                        </tr>
-                        </thead>
+                                  <div class="layui-col-md2 ">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">状态</label>
+                                          <div class="layui-input-block">
+                                              <input type="checkbox" name="status" lay-skin="switch" lay-filter="switchTest" title="OFF|ON">
+                                          </div>
+                                      </div>
+                                  </div>
 
-                        <tbody>
-                        <tr v-for="item in payments">
-                            <td>{{item}}</td>
-                        </tr>
-                        </tbody>
+                                  <div class="layui-col-md2">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">申请状态</label>
+                                          <div class="layui-input-block">
+                                              <input type="checkbox" name="apply_status" lay-skin="switch" lay-filter="switchTest" title="OFF|ON">
+                                          </div>
+                                      </div>
+                                  </div>
 
-                    </table>
+                              </div>
+                              <div class="layui-row">
+                                  <div class="layui-col-md4">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">商户号</label>
+                                          <div class="layui-input-block">
+                                              <input type="text" name="store_token" lay-verify="required" autocomplete="off" lay-affix="clear"
+                                                     class="layui-input" placeholder="请输入Store Token">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="layui-col-md4">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">Client ID</label>
+                                          <div class="layui-input-block">
+                                              <input type="text" name="store_token" lay-verify="required" autocomplete="off" lay-affix="clear"
+                                                     class="layui-input " placeholder="请输入Store Token">
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="layui-col-md4">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">Secret</label>
+                                          <div class="layui-input-block">
+                                              <input type="text" name="store_token" lay-verify="required" autocomplete="off" lay-affix="clear"
+                                                     class="layui-input " placeholder="请输入Store Token">
+                                          </div>
+                                      </div>
+                                  </div>
+
+                              </div>
+
+                            </div>
+
+                            <div class="layui-col-md2" style="justify-content: center;display: flex;flex-direction: column;">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-danger layui-btn-sm" style="align-items: center;">删除</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

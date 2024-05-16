@@ -21,8 +21,8 @@ class PaypalService extends PaymentBase implements PaymentInterface
         //dd($builder->toArray());
         $response = $client->purchase($builder);
         $result = $response['result'] ?? [];
-        if(empty($result)) throw new \Exception('create order error');
         $this->saveSendRequest(['request'=>$builder->toArray(), 'result'=>$result,]);
+        if(empty($result)) throw new \Exception('create order error');
         $transaction_id = $result['id'] ?? 0;
         if(empty($transaction_id)) throw new \Exception($response->getMessage());
 
