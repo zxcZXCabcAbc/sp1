@@ -34,7 +34,8 @@
         "topthink/think-queue": "^3.0",
         "uberphp/checkout-php-sdk": "^1.0",
         "stripe/stripe-php": "^13.16",
-        "topthink/think-view": "^2.0"
+        "topthink/think-view": "^2.0",
+        "topthink/think-captcha": "^3.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.0",

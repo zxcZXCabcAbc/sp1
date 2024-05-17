@@ -40,6 +40,8 @@ use think\facade\Event;
 use Omnipay\Omnipay;
 use think\facade\Log;
 use think\facade\Redis;
+use think\facade\Session;
+use think\helper\Arr;
 use think\Request;
 
 class LfxTest extends Command
@@ -58,6 +60,10 @@ class LfxTest extends Command
     {
         try {
 
+            $arr = ['test'=>'name'];
+
+           Session::set('name','lfx');
+           dd(Session::get('name'));
 
             $payment = ShopsPayment::query()->find(5);
             dump($payment->mode);

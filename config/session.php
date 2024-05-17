@@ -16,4 +16,7 @@ return [
     'expire'         => 1440,
     // 前缀
     'prefix'         => '',
+    'auto_start'     => true,
+    'use_cookies'    => true,
+    'use_trans_sid'  => false,
 ];

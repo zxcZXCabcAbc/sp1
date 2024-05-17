@@ -53,4 +53,8 @@ Route::group('/admin',function (){
     Route::delete('/shop/del/:id','app\controller\admin\ShopController@delete')->model(\app\model\Shops::class);
     Route::post('/shop/edit/:id','app\controller\admin\ShopController@edit')->model(\app\model\Shops::class);
     Route::get('/shop/json','app\controller\admin\ShopController@getList');
-});
+    Route::get('/login','app\controller\admin\AdminController@login');
+    Route::get('/home','app\controller\admin\AdminController@index');
+    Route::post('/login/check','app\controller\admin\AdminController@checkLogin');
+    Route::get('/logout','app\controller\admin\AdminController@logout');
+})->middleware(\app\middleware\CheckUserLogin::class);

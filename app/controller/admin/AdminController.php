@@ -4,6 +4,9 @@ declare (strict_types = 1);
 namespace app\controller\admin;
 
 use app\BaseController;
+use think\captcha\facade\Captcha;
+use think\facade\Cache;
+use think\facade\Session;
 use think\Request;
 
 class AdminController extends BaseController
@@ -11,35 +14,34 @@ class AdminController extends BaseController
 
     public function index()
     {
+        return view('admin/index',['title'=>'Shopify Admin']);
+    }
+
+
+    public function login(Request $request)
+    {
+        return view('admin/login');
+    }
+
+
+    public function checkLogin(Request $request)
+    {
+        $this->validate($request->post(),['username'=>'require','password'=>'require']);
+        $password = 'ddhd@2024';
+        $username = 'admin';
+        if($request->param('username') != $username || $request->param('password') != $password){
+            throw new \Exception('账号或者密码错误!');
+        }
+        Cache::set('uid',1);
+        return redirect("/admin/home");
 
     }
 
 
-    public function create(Request $request)
+    public function logout()
     {
-
-    }
-
-    /**
-     * 保存新建的资源
-     *
-     * @param  \think\Request  $request
-     * @return \think\Response
-     */
-    public function save(Request $request)
-    {
-        //
-    }
-
-    /**
-     * 显示指定的资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function read($id)
-    {
-        //
+        Cache::delete('uid');
+        return redirect("/admin/login");
     }
 
     /**

@@ -4,6 +4,7 @@ declare (strict_types = 1);
 namespace app\controller\admin;
 
 use app\BaseController;
+use app\constant\CommonConstant;
 use app\constant\ModelConstant;
 use app\model\Shops;
 use app\model\ShopsPayment;
@@ -21,7 +22,7 @@ class ShopController extends BaseController
     ];
     public function index()
     {
-       return view('admin/shop_list');
+       return view('admin/shop_list',[ 'title'=>'店铺列表']);
 
     }
 
@@ -61,7 +62,7 @@ class ShopController extends BaseController
                 unset($params['payments']);
                 $rows = Shops::query()->where('host', $params['host'])->select();
                 if (!$rows->isEmpty()) throw new \Exception('店铺已存在');
-                $params['status'] = $params['status'] == ModelConstant::STATUS_ON_NAME ? ModelConstant::STATUS_ON : ModelConstant::STATUS_OFF;
+                $params['status'] = Arr::get($params,'status',ModelConstant::STATUS_OFF_NAME) == ModelConstant::STATUS_ON_NAME ? ModelConstant::STATUS_ON : ModelConstant::STATUS_OFF;
                 $params['created_at'] = Carbon::now()->toDateTimeString();
                 $shopId = Shops::query()->insertGetId($params);
                 $payments = $this->formatPayments($payments,$shopId);
@@ -84,16 +85,13 @@ class ShopController extends BaseController
             $payment['apply_status'] = Arr::get($payment,'apply_status',ModelConstant::STATUS_OFF_NAME) == ModelConstant::STATUS_ON_NAME ? ModelConstant::STATUS_ON : ModelConstant::STATUS_OFF;
             $payment['mode'] = Arr::get($payment,'mode',ModelConstant::STATUS_OFF_NAME) == ModelConstant::STATUS_ON_NAME ? ModelConstant::LIVE_MODE : ModelConstant::TEST_MODE;
             $payment['created_at'] = Carbon::now()->toDateTimeString();
-            $mode = Arr::get($payment,'mode',ModelConstant::STATUS_OFF_NAME);
-            dd($mode);
-            if(Arr::get($payment,'mode',ModelConstant::STATUS_OFF_NAME) == ModelConstant::STATUS_OFF_NAME){
+            if( $payment['mode'] == ModelConstant::TEST_MODE){
                 $payment['client_id_sandbox'] = $payment['client_id'];
                 $payment['secrect_sandbox'] = $payment['secrect'];
                 $payment['client_id'] = $payment['secrect'] = '';
             }
             $arr[] = $payment;
         }
-        dd($arr);
         return $arr;
     }
 
@@ -126,7 +124,7 @@ class ShopController extends BaseController
         }
         $shopData['payments'] = $payments;
         $shopData['versions'] = $this->versions;
-        dump($shopData);
+        //dump($shopData);
         return view('admin/shop_edit',$shopData);
     }
 

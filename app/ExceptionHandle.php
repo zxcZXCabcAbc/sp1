@@ -3,6 +3,7 @@ namespace app;
 
 use app\constant\CommonConstant;
 use app\exception\BusinessException;
+use app\exception\UnLoginException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\Handle;
@@ -59,6 +60,8 @@ class ExceptionHandle extends Handle
             case $e instanceof BusinessException:
                 tplog($request->url(),$request->all());
                 return json(['code'=>CommonConstant::API_REQUEST_ERROR,'msg'=>$e->getMessage(),'data'=>[]]);
+            case $e instanceof UnLoginException:
+                return redirect("/admin/login");
             default:
                 return json(['code'=>$e->getCode() ?: 500,'msg'=>$e->getMessage(),'data'=>[]]);
         }
