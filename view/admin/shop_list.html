@@ -48,16 +48,16 @@
 </script>
 
 <script>
-    layui.use(function(){
+    layui.use(['jquery','table'],function(){
         var table = layui.table;
         var form = layui.form;
+        var $ = layui.$
         // 创建表格实例
         table.render({
             elem: '#shop-list-search',
             url: "{:url('/admin/shop/json')}", // 此处为静态模拟数据，实际使用时需换成真实接口
             toolbar: '#toolbarDemo',
             cols: [[
-                {type: 'radio', title: '😊', fixed: true}, // 单选框
                 {field:'id', title: 'ID', width:80, sort: true, fixed: true},
                 {field:'name', title: '店铺名', width:120},
                 {field:'host', title: '域名', width:260},
@@ -87,19 +87,36 @@
             var data = obj.data; // 获得当前行数据
             // console.log(obj)
             if(obj.event === 'edit'){
-                layer.open({
-                    title: '编辑 - id:'+ data.id,
-                    type: 1,
-                    area: ['80%','80%'],
-                    content: '<div style="padding: 16px;">自定义表单元素</div>'
+                let shop_edit_index = layer.open({
+                    title: '编辑'+ data.name,
+                    type: 2,
+                    area: ['60%','80%'],
+                    content: "/admin/shop/update/" + data.id,
+                    end:()=>{
+                        location.reload()
+                    }
                 });
+                sessionStorage.setItem('shop_edit_index',shop_edit_index);
+
             } else if(obj.event === 'del'){
-                layer.open({
-                    title: '删除 - id:'+ data.id,
-                    type: 1,
-                    area: ['80%','80%'],
-                    content: '<div style="padding: 16px;">自定义表单元素</div>'
-                });
+                layer.confirm("确认删除吗?",{icon: 3,title: '警告'},function (index){
+                let url = `/admin/shop/del/${data.id}`
+                  $.ajax({
+                      url: url,
+                      type: 'delete',
+                      dataType: 'json',
+                      success:function (data){
+                        if(data.code == 200){
+                            success('删除成功',function (){
+                                location.reload();
+                            })
+                        }else{
+                           error(data.msg)
+                        }
+                      }
+                  })
+
+                })
             }
         });
 
@@ -108,12 +125,16 @@
             var id = obj.config.id;
             switch(obj.event){
                 case 'add':
-                    layer.open({
+                    var layer_index = layer.open({
                         title: '新增店铺',
                         type: 2,
                         area: ['60%','80%'],
-                        content:"{:url('/admin/shop/add')}"
+                        content:"{:url('/admin/shop/add')}",
+                        end: function (){
+                            location.reload()
+                        }
                     });
+                    sessionStorage.setItem("shop_list_index",layer_index)
                     break;
             };
         });

@@ -1,0 +1,551 @@
+{include file="admin/header" title="编辑店铺" /}
+
+<div id="app">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">店铺域名</label>
+            <div class="layui-input-block">
+                <input type="text"
+                       name="host"
+                       lay-verify="required"
+                       placeholder="请输入店铺域名"
+                       autocomplete="off"
+                       class="layui-input input-width"
+                       value="{$host}"
+                >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">推广域名</label>
+            <div class="layui-input-block">
+                <input type="text"
+                       name="website"
+                       lay-verify="required"
+                       placeholder="请输入推广域名"
+                       autocomplete="off"
+                       class="layui-input input-width"
+                       value="{$website}"
+                >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">店铺名称</label>
+            <div class="layui-input-inline layui-input-wrap">
+                <input type="text"
+                       name="name"
+                       lay-verify="required"
+                       autocomplete="off"
+                       lay-affix="clear"
+                       class="layui-input input-width"
+                       placeholder="请输入店铺名称"
+                       value="{$name}"
+                >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">API Key</label>
+            <div class="layui-input-inline layui-input-wrap">
+                <input type="text"
+                       name="api_key"
+                       lay-verify="required"
+                       autocomplete="off"
+                       lay-affix="clear"
+                       class="layui-input input-width"
+                       placeholder="请输入API Key"
+                       value="{$api_key}"
+                >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">API秘钥</label>
+            <div class="layui-input-inline layui-input-wrap">
+                <input type="text"
+                       name="api_secret"
+                       lay-verify="required"
+                       autocomplete="off"
+                       lay-affix="clear"
+                       class="layui-input input-width"
+                       placeholder="请输入API秘钥"
+                       value="{$api_secret}"
+                >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label label-width">Admin Token</label>
+            <div class="layui-input-inline layui-input-wrap">
+                <input type="text"
+                       name="admin_token"
+                       lay-verify="required"
+                       autocomplete="off"
+                       lay-affix="clear"
+                       class="layui-input input-width"
+                       placeholder="请输入Admin Token"
+                       value="{$admin_token}"
+                >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">Store Token</label>
+            <div class="layui-input-inline layui-input-wrap">
+                <input type="text"
+                       name="store_token"
+                       lay-verify="required"
+                       autocomplete="off"
+                       lay-affix="clear"
+                       class="layui-input input-width"
+                       placeholder="请输入Store Token"
+                       value="{$store_token}"
+                >
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">版本号</label>
+            <div class="layui-input-block input-width">
+                <select name="version">
+                    {foreach $versions as $vo}
+                    <option value="{$vo}" {if $version eq $vo} selected {
+                    /if}>{$vo}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="checkbox"
+                       name="status"
+                       lay-skin="switch"
+                       lay-filter="switchTest"
+                       title="ON|OFF"
+                       {if $status eq 'on'} checked {/if}
+                >
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-card">
+                <div class="layui-card-header" style="text-align: center;">支付信息</div>
+                <div class="layui-card-body" id="payment-body">
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn layui-btn-sm" id="add-payment" type="button"><i
+                                    class="layui-icon layui-icon-addition">新增</i></button>
+                        </div>
+                    </div>
+
+                    {if count($payments) gt 0}
+                    {foreach $payments as $index => $payment}
+                    <div class="layui-fluid">
+                        <div class="layui-row" style="justify-content:flex-start;display: flex;width:100%">
+                            <div class="layui-col-md10">
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">支付方式</label>
+                                            <div class="layui-input-block">
+                                                <select name="payments[{$index}][pay_method]">
+                                                    <option value="1" {if $payment['pay_method'] eq 1} selected {/if}>Paypal</option>
+                                                    <option value="2" {if $payment['pay_method'] eq 2} selected {/if}>Asiabill</option>
+                                                    <option value="3" {if $payment['pay_method'] eq 3} selected {/if}>Payoneer</option>
+                                                    <option value="4" {if $payment['pay_method'] eq 4} selected {/if}>Airwallex</option>
+                                                    <option value="5" {if $payment['pay_method'] eq 5} selected {/if}>Stripe</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-col-md4 ">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">模式</label>
+                                            <div class="layui-input-block">
+                                                <input type="checkbox"
+                                                       name="payments[{$index}][mode]"
+                                                       lay-skin="switch"
+                                                       title="LIVE|TEST"
+                                                       {if $payment['mode'] eq 'on'} checked {/if}
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-col-md2 ">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">状态</label>
+                                            <div class="layui-input-block">
+                                                <input type="checkbox"
+                                                       name="payments[{$index}][status]"
+                                                       lay-skin="switch"
+                                                       title="ON|OFF"
+                                                       {if $payment['status'] eq 'on'} checked {/if}
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-col-md2">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">申请状态</label>
+                                            <div class="layui-input-block">
+                                                <input type="checkbox"
+                                                       name="payments[{$index}][apply_status]"
+                                                       lay-skin="switch"
+                                                       title="ON|OFF"
+                                                       {if $payment['apply_status'] eq 'on'} checked {/if}
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">商户号</label>
+                                            <div class="layui-input-block">
+                                                <input type="text"
+                                                       name="payments[{$index}][merchant_no]"
+                                                       autocomplete="off"
+                                                       lay-affix="clear"
+                                                       class="layui-input"
+                                                       placeholder="请输入商户号"
+                                                       value="{$payment['merchant_no']}"
+                                                        >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Client ID</label>
+                                            <div class="layui-input-block">
+                                                <input type="text"
+                                                       name="payments[{$index}][client_id]"
+                                                       lay-verify="required"
+                                                       autocomplete="off"
+                                                       lay-affix="clear"
+                                                       class="layui-input "
+                                                       placeholder="请输入Client ID"
+                                                       value="{$payment['client_id']}"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Secret</label>
+                                            <div class="layui-input-block">
+                                                <input type="text"
+                                                       name="payments[{$index}][secrect]"
+                                                       lay-verify="required"
+                                                       autocomplete="off"
+                                                       lay-affix="clear"
+                                                       class="layui-input "
+                                                       placeholder="请输入Secret"
+                                                       value="{$payment['secrect']}"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="layui-col-md2"
+                                 style="justify-content: center;display: flex;flex-direction: column;">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button class="layui-btn layui-btn-danger layui-btn-sm del-payment-btn"
+                                                style="align-items: center;" type="button" onclick="delPayment(this)">删除
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/foreach}
+                    {else}
+                    <!--                    支付方式1-->
+                    <div class="layui-fluid">
+                        <div class="layui-row" style="justify-content:flex-start;display: flex;width:100%">
+                            <div class="layui-col-md10">
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">支付方式</label>
+                                            <div class="layui-input-block">
+                                                <select name="payments[0][pay_method]">
+                                                    <option value="1">Paypal</option>
+                                                    <option value="2">Asiabill</option>
+                                                    <option value="3">Payoneer</option>
+                                                    <option value="4">Airwallex</option>
+                                                    <option value="5">Stripe</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-col-md4 ">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">模式</label>
+                                            <div class="layui-input-block">
+                                                <input type="checkbox" name="payments[0][mode]" lay-skin="switch"
+                                                       title="LIVE|TEST">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-col-md2 ">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">状态</label>
+                                            <div class="layui-input-block">
+                                                <input type="checkbox" name="payments[0][status]" lay-skin="switch"
+                                                       title="ON|OFF">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-col-md2">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">申请状态</label>
+                                            <div class="layui-input-block">
+                                                <input type="checkbox" name="payments[0][apply_status]"
+                                                       lay-skin="switch" title="ON|OFF">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">商户号</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="payments[0][merchant_no]"
+                                                       autocomplete="off"
+                                                       lay-affix="clear"
+                                                       class="layui-input"
+                                                       placeholder="请输入商户号">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Client ID</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="payments[0][client_id]" lay-verify="required"
+                                                       autocomplete="off" lay-affix="clear"
+                                                       class="layui-input " placeholder="请输入Client ID">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Secret</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="payments[0][secrect]" lay-verify="required"
+                                                       autocomplete="off" lay-affix="clear"
+                                                       class="layui-input " placeholder="请输入Secret">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="layui-col-md2"
+                                 style="justify-content: center;display: flex;flex-direction: column;">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button class="layui-btn layui-btn-danger layui-btn-sm del-payment-btn"
+                                                style="align-items: center;" type="button" onclick="delPayment(this)">删除
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit lay-filter="demo1">立即更新</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!-- 请勿在项目正式环境中引用该 layui.js 地址 -->
+<script type="text/javascript">
+
+
+    layui.use(['form'], function () {
+        var form = layui.form
+        // 自定义验证规则
+        form.verify({
+            pass: function (value) {
+                if (!/(.+){6,12}$/.test(value)) {
+                    return '密码必须 6 到 12 位';
+                }
+            }
+        });
+
+        // 提交事件
+        form.on('submit(demo1)', function (data) {
+            var field = data.field; // 获取表单字段值
+            let url = "/admin/shop/edit/" + "{$id}"
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                data: field,
+                success: function (data) {
+                    if (data.code == 200) {
+                        layer.msg(
+                            '修改店铺成功',
+                            {icon: 1,}, function () {
+                                let parentIndex = sessionStorage.getItem('shop_edit_index')
+                                parent.layer.close(parentIndex)
+                            });
+                    } else {
+                       error(data.msg)
+                    }
+                },
+                error: function (xhr, status, error) {
+
+                }
+            })
+
+
+            return false; // 阻止默认 form 跳转
+        });
+
+        $('#add-payment').click(function () {
+            let len = $('.layui-fluid').length
+            var paymentHtml = `
+            <div class="layui-fluid">
+                        <div class="layui-row" style="justify-content:flex-start;display: flex;width:100%">
+                            <div class="layui-col-md10">
+                              <div class="layui-row">
+                                  <div class="layui-col-md4">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">支付方式</label>
+                                          <div class="layui-input-block">
+                                              <select name="payments[${len}][pay_method]">
+                                                <option value="1">Paypal</option>
+                                                <option value="2">Asiabill</option>
+                                                <option value="3">Payoneer</option>
+                                                <option value="4">Airwallex</option>
+                                                <option value="5">Stripe</option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="layui-col-md4 ">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">模式</label>
+                                          <div class="layui-input-block">
+                                              <input type="checkbox" name="payments[${len}][mode]" lay-skin="switch"  title="LIVE|TEST">
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="layui-col-md2 ">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">状态</label>
+                                          <div class="layui-input-block">
+                                              <input type="checkbox" name="payments[${len}][status]" lay-skin="switch"  title="ON|OFF">
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="layui-col-md2">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">申请状态</label>
+                                          <div class="layui-input-block">
+                                              <input type="checkbox" name="payments[${len}][apply_status]" lay-skin="switch"  title="ON|OFF">
+                                          </div>
+                                      </div>
+                                  </div>
+
+                              </div>
+                              <div class="layui-row">
+                                  <div class="layui-col-md4">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">商户号</label>
+                                          <div class="layui-input-block">
+                                              <input type="text" name="payments[${len}][merchant_no]" lay-verify="required" autocomplete="off" lay-affix="clear"
+                                                     class="layui-input" placeholder="请输入Store Token">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="layui-col-md4">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">Client ID</label>
+                                          <div class="layui-input-block">
+                                              <input type="text" name="payments[${len}][client_id]" lay-verify="required" autocomplete="off" lay-affix="clear"
+                                                     class="layui-input " placeholder="请输入Store Token">
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="layui-col-md4">
+                                      <div class="layui-form-item">
+                                          <label class="layui-form-label">Secret</label>
+                                          <div class="layui-input-block">
+                                              <input type="text" name="payments[${len}][secrect]" lay-verify="required" autocomplete="off" lay-affix="clear"
+                                                     class="layui-input " placeholder="请输入Store Token">
+                                          </div>
+                                      </div>
+                                  </div>
+
+                              </div>
+
+                            </div>
+
+                            <div class="layui-col-md2" style="justify-content: center;display: flex;flex-direction: column;">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-danger layui-btn-sm del-payment-btn" style="align-items: center;" type="button" onclick="delPayment(this)">删除</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+           `;
+
+            $('#payment-body').append(paymentHtml);
+            form.render()
+        });
+    });
+
+
+    function delPayment(t) {
+        $(t).parent().parent().parent().parent().parent().remove();
+    }
+
+
+</script>
+
+{include file="admin/footer" /}

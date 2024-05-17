@@ -4,12 +4,21 @@ declare (strict_types = 1);
 namespace app\controller\admin;
 
 use app\BaseController;
+use app\constant\ModelConstant;
 use app\model\Shops;
+use app\model\ShopsPayment;
+use Carbon\Carbon;
+use think\helper\Arr;
 use think\Request;
 
 class ShopController extends BaseController
 {
-
+    protected $versions = [
+        '2023-04',
+        '2023-07',
+        '2023-10',
+        '2024-01',
+    ];
     public function index()
     {
        return view('admin/shop_list');
@@ -41,73 +50,90 @@ class ShopController extends BaseController
         if($request->method() == 'GET'){
             $vars = [
                 'title'=>'添加店铺',
-                'versions'=>[
-                    '2023-04',
-                    '2023-07',
-                    '2023-10',
-                    '2024-01',
-                ],
+                'versions'=>$this->versions,
             ];
             return view('admin/add_shop',$vars);
-            //return view('admin/layout');
         }else{
+            $shopId = 0;
+            try {
+                $params = $request->post();
+                $payments = $params['payments'];
+                unset($params['payments']);
+                $rows = Shops::query()->where('host', $params['host'])->select();
+                if (!$rows->isEmpty()) throw new \Exception('店铺已存在');
+                $params['status'] = $params['status'] == ModelConstant::STATUS_ON_NAME ? ModelConstant::STATUS_ON : ModelConstant::STATUS_OFF;
+                $params['created_at'] = Carbon::now()->toDateTimeString();
+                $shopId = Shops::query()->insertGetId($params);
+                $payments = $this->formatPayments($payments,$shopId);
+                ShopsPayment::query()->insertAll($payments);
+                return $this->success(['shopId' => $shopId]);
+            }catch (\Exception $e){
+                Shops::query()->where('id',$shopId)->delete();
+                throw new \Exception($e->getMessage());
+            }
 
         }
     }
 
-    /**
-     * 保存新建的资源
-     *
-     * @param  \think\Request  $request
-     * @return \think\Response
-     */
-    public function save(Request $request)
+    public function formatPayments($payments,$shopId)
     {
-        //
+        $arr = [];
+        foreach ($payments as $index => $payment) {
+            $payment['shop_id'] = $shopId;
+            $payment['status'] = Arr::get($payment,'status',ModelConstant::STATUS_OFF_NAME) == ModelConstant::STATUS_ON_NAME ? ModelConstant::STATUS_ON : ModelConstant::STATUS_OFF;
+            $payment['apply_status'] = Arr::get($payment,'apply_status',ModelConstant::STATUS_OFF_NAME) == ModelConstant::STATUS_ON_NAME ? ModelConstant::STATUS_ON : ModelConstant::STATUS_OFF;
+            $payment['mode'] = Arr::get($payment,'mode',ModelConstant::STATUS_OFF_NAME) == ModelConstant::STATUS_ON_NAME ? ModelConstant::LIVE_MODE : ModelConstant::TEST_MODE;
+            $payment['created_at'] = Carbon::now()->toDateTimeString();
+            $mode = Arr::get($payment,'mode',ModelConstant::STATUS_OFF_NAME);
+            dd($mode);
+            if(Arr::get($payment,'mode',ModelConstant::STATUS_OFF_NAME) == ModelConstant::STATUS_OFF_NAME){
+                $payment['client_id_sandbox'] = $payment['client_id'];
+                $payment['secrect_sandbox'] = $payment['secrect'];
+                $payment['client_id'] = $payment['secrect'] = '';
+            }
+            $arr[] = $payment;
+        }
+        dd($arr);
+        return $arr;
     }
 
-    /**
-     * 显示指定的资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function read($id)
+
+    public function edit(Request $request,Shops $shop)
     {
-        //
+        $params = $request->post();
+        $payments = $params['payments'];
+        unset($params['payments']);
+        $rows = Shops::query()->where('host', $params['host'])->where('id','<>',$shop->id)->select();
+        if (!$rows->isEmpty()) throw new \Exception('店铺已存在');
+        $status = $params['status'] ?? ModelConstant::STATUS_OFF_NAME;
+        $params['status'] = $status == ModelConstant::STATUS_ON_NAME ? ModelConstant::STATUS_ON : ModelConstant::STATUS_OFF;
+        $params['updated_at'] = Carbon::now()->toDateTimeString();
+        Shops::query()->where('id',$shop->id)->update($params);
+        $shop->payments()->delete();
+        $payments = $this->formatPayments($payments,$shop->id);
+        ShopsPayment::query()->insertAll($payments);
+        return $this->success();
     }
 
-    /**
-     * 显示编辑资源表单页.
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function edit($id)
+
+    public function update(Request $request, Shops $shop)
     {
-        //
+        $shopData = $shop->toArray();
+        $payments = $shop->payments()->select()->toArray();
+        foreach ($payments as &$payment){
+            $payment['client_id'] = $payment['mode'] == ModelConstant::STATUS_OFF_NAME ? $payment['client_id_sandbox'] : $payment['client_id'];
+            $payment['secrect'] = $payment['mode'] == ModelConstant::STATUS_OFF_NAME ? $payment['secrect_sandbox'] : $payment['secrect'];
+        }
+        $shopData['payments'] = $payments;
+        $shopData['versions'] = $this->versions;
+        dump($shopData);
+        return view('admin/shop_edit',$shopData);
     }
 
-    /**
-     * 保存更新的资源
-     *
-     * @param  \think\Request  $request
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function update(Request $request, $id)
+    public function delete(Request $request,Shops $shop)
     {
-        //
-    }
-
-    /**
-     * 删除指定资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function delete($id)
-    {
-        //
+        $shop->payments()->delete();
+        $shop->delete();
+        return $this->success($shop->id);
     }
 }

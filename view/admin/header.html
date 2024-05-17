@@ -9,5 +9,32 @@
     <link href="__LAYUI__/css/layui.css" rel="stylesheet">
     <link href="__CSS__/base.css" rel="stylesheet">
     <script src="__LAYUI__/layui.js"></script>
+    <script type="text/javascript">
+
+        var $, layer;
+        layui.use([ 'layer', 'jquery', ], function () {
+            layer = layui.layer;
+            $ = layui.$;
+        });
+        function success(msg,fn=null){
+            if(typeof fn === 'function') return layer.msg(msg, {icon: 1,},fn);
+            return layer.msg(msg, {icon: 1,})
+        }
+
+        function error(msg){
+            return layer.msg(msg, {
+                icon: 2,
+                skin: 'layer-ext-moon',
+            });
+        }
+
+
+    </script>
+
+
+
+    </script>
+
+
 </head>
 <body>

@@ -49,7 +49,8 @@ Route::group('/api',function (){
 Route::group('/admin',function (){
     Route::rule('/shop/add','app\controller\admin\ShopController@create','GET|POST');
     Route::get('/shop/list','app\controller\admin\ShopController@index');
-    Route::post('/shop/update/:id','app\controller\admin\ShopController@update')->model(\app\model\Shops::class);
+    Route::any('/shop/update/:id','app\controller\admin\ShopController@update')->model(\app\model\Shops::class);
     Route::delete('/shop/del/:id','app\controller\admin\ShopController@delete')->model(\app\model\Shops::class);
+    Route::post('/shop/edit/:id','app\controller\admin\ShopController@edit')->model(\app\model\Shops::class);
     Route::get('/shop/json','app\controller\admin\ShopController@getList');
 });

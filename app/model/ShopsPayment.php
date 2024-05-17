@@ -94,4 +94,35 @@ class ShopsPayment extends BaseModel
     {
         return $this->pay_method > ShopsPayment::PAY_METHOD_PAYPAL ? CommonConstant::LOG_CREDIT_CARD : CommonConstant::LOG_PAYPAL;
     }
+
+    public function setStatusAttr($status)
+    {
+        return $status == ModelConstant::STATUS_ON_NAME ? ModelConstant::STATUS_ON : ModelConstant::STATUS_OFF;
+    }
+
+    public function getStatusAttr($status)
+    {
+        return $status == ModelConstant::STATUS_ON ? ModelConstant::STATUS_ON_NAME : ModelConstant::STATUS_OFF_NAME;
+    }
+
+
+    public function setApplyStatusAttr($status)
+    {
+        return $status == ModelConstant::STATUS_ON_NAME ? ModelConstant::STATUS_ON : ModelConstant::STATUS_OFF;
+    }
+
+    public function getApplyStatusAttr($status)
+    {
+        return $status == ModelConstant::STATUS_ON ? ModelConstant::STATUS_ON_NAME : ModelConstant::STATUS_OFF_NAME;
+    }
+
+    public function setModeAttr($status)
+    {
+        return $status == ModelConstant::STATUS_ON_NAME ? ModelConstant::LIVE_MODE : ModelConstant::TEST_MODE;
+    }
+
+    public function getModeAttr($status)
+    {
+        return $status == ModelConstant::STATUS_ON ? ModelConstant::STATUS_OFF_NAME : ModelConstant::STATUS_ON_NAME;
+    }
 }

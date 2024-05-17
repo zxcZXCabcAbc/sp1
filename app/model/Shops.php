@@ -48,4 +48,14 @@ class Shops extends BaseModel
 
         return $shop->payments()->status(ModelConstant::STATUS_ON)->field(['id as payment_id','pay_method','account'])->order('pay_method','DESC')->select();
     }
+
+    public function setStatusAttr($status)
+    {
+        return $status == ModelConstant::STATUS_ON_NAME ? ModelConstant::STATUS_ON : ModelConstant::STATUS_OFF;
+    }
+
+    public function getStatusAttr($status)
+    {
+        return $status == ModelConstant::STATUS_ON ? ModelConstant::STATUS_ON_NAME : ModelConstant::STATUS_OFF_NAME;
+    }
 }

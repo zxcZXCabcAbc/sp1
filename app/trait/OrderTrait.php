@@ -45,6 +45,8 @@ trait OrderTrait
             $order['total_shipping_price'] = $shippingLines['price'] ?? '0.00';
             $order['browser_ip'] = $request->ip();
             $order['app_id'] = $request->header('X-Opc-Client-Id','');
+            $orderNo = $customer['last_order_name'] ?: $order['name'];
+            $order['order_no'] = $this->formatOrderNo($order['shop_id'],$orderNo);
             if(is_null($orders)) {
                 //存token
                 $checkout = $request->param('checkout',[]);
@@ -52,8 +54,6 @@ trait OrderTrait
                 $token = $checkout['cart']['token'] ?? '';
                 if($token) $order['token'] = $token;
                 if($checkout_id) $order['checkout_id'] = $checkout_id;
-                $orderNo = $customer['last_order_name'] ?: $order['name'];
-                $order['order_no'] = $this->formatOrderNo($order['shop_id'],$orderNo);
                 $orderId = $orderModel->setIsConvert(true)->fill($order)->saveData();
                 $orders = Orders::query()->find($orderId);
             }else{
