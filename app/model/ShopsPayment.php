@@ -64,8 +64,8 @@ class ShopsPayment extends BaseModel
     {
         return [
             'merchant_no' => $this->merchant_no,
-            'app_key' => $this->mode == self::MODE_SANDBOX ? $this->client_id_sandbox : $this->client_id,
-            'app_secret' => $this->mode == self::MODE_SANDBOX ? $this->secrect_sandbox : $this->secrect,
+            'app_key' => $this->mode == ModelConstant::STATUS_OFF_NAME ? $this->client_id_sandbox : $this->client_id,
+            'app_secret' => $this->mode == ModelConstant::STATUS_OFF_NAME ? $this->secrect_sandbox : $this->secrect,
             'shopify_key' => $this->shopify_key,
             'shop_id'=>$this->shop_id
         ];

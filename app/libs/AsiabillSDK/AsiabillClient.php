@@ -2,6 +2,7 @@
 
 namespace app\libs\AsiabillSDK;
 
+use app\constant\ModelConstant;
 use app\model\ShopsPayment;
 use Asiabill\Classes\AsiabillIntegration;
 
@@ -35,7 +36,7 @@ class AsiabillClient
     public function __construct(ShopsPayment $payment)
     {
         $cnf = $payment->config;
-        $mode = $payment->mode == ShopsPayment::MODE_SANDBOX ? 'test' : 'live';
+        $mode = $payment->mode == ModelConstant::STATUS_OFF_NAME ? 'test' : 'live';
         $this->asiabill = new AsiabillIntegration($mode,$cnf['app_key'],$cnf['app_secret']);
     }
 

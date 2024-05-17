@@ -58,19 +58,10 @@ class LfxTest extends Command
     {
         try {
 
-            $draftRest = new DraftOrderRest(5);
-            $order_id = 905895051397;
-            $params = [
-                'note'=>''
-            ];
 
-            $result = $draftRest->update_draft_order($order_id,$params);
-
-            dd($result);
-
-
-            $order = Orders::query()->find(85);
             $payment = ShopsPayment::query()->find(5);
+            dump($payment->mode);
+            dd($payment->config);
             $account = [
                 "holderName"=> "Jhone",
                 "number"=> "4242424242424242",

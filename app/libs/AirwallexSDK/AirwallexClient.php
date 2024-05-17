@@ -3,6 +3,7 @@
 namespace app\libs\AirwallexSDK;
 
 use app\constant\CommonConstant;
+use app\constant\ModelConstant;
 use app\helpers\RedisHelper;
 use app\libs\HttpSDK\HttpService;
 use app\model\ShopsPayment;
@@ -24,7 +25,7 @@ class AirwallexClient extends HttpService
     protected $cnf;
     public function __construct(ShopsPayment $payment)
     {
-        self::$apiUrl = $payment->mode == ShopsPayment::MODE_LIVE ? self::BASE_URL : self::SANDBOX_URL;
+        self::$apiUrl = $payment->mode == ModelConstant::STATUS_ON_NAME ? self::BASE_URL : self::SANDBOX_URL;
         $paymentCnf = $payment->config;
         self::$appKey = $paymentCnf['app_key'];
         self::$appSecrect = $paymentCnf['app_secret'];

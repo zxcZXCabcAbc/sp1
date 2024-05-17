@@ -2,6 +2,7 @@
 
 namespace app\libs\PaypalSDK;
 
+use app\constant\ModelConstant;
 use app\exception\BusinessException;
 use app\model\ShopsPayment;
 use Omnipay\PayPal\RestGateway;
@@ -16,7 +17,7 @@ class PaypalClient
     public function __construct(public ShopsPayment $payment)
     {
         $config = $this->payment->config;
-        $environmentClass = $this->payment->mode == ShopsPayment::MODE_SANDBOX ? SandboxEnvironment::class : ProductionEnvironment::class;
+        $environmentClass = $this->payment->mode == ModelConstant::STATUS_OFF_NAME ? SandboxEnvironment::class : ProductionEnvironment::class;
         $clientClass = new \ReflectionClass($environmentClass);
         $client = $clientClass->newInstance($config['app_key'],$config['app_secret']);
         $this->gateway = new PayPalHttpClient($client);

@@ -3,6 +3,7 @@
 namespace app\libs\PayoneerSDK;
 
 use app\constant\CommonConstant;
+use app\constant\ModelConstant;
 use app\libs\HttpSDK\HttpService;
 use app\model\ShopsPayment;
 
@@ -39,7 +40,7 @@ class PayoneerClient extends HttpService
 
     public function __construct(ShopsPayment $payment)
     {
-        $mode = $payment->mode == ShopsPayment::MODE_SANDBOX ? CommonConstant::MODE_SANDBOX_WORD : CommonConstant::MODE_LIVE_WORD;
+        $mode = $payment->mode == ModelConstant::STATUS_OFF_NAME ? CommonConstant::MODE_SANDBOX_WORD : CommonConstant::MODE_LIVE_WORD;
         self::$base_url = "https://api.{$mode}.oscato.com";
         $paymentCnf = $payment->config;
         $this->authorization = $paymentCnf['app_secret'];
