@@ -27,9 +27,9 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
 
-                <li class="layui-nav-item"><a href="/admin/home">首页</a></li>
+                <li class="layui-nav-item {if $Request.url eq '/admin/home.html'} layui-nav-itemed {/if} " ><a href="/admin/home">首页</a></li>
 
-                <li class="layui-nav-item layui-nav-itemed">
+                <li class="layui-nav-item {if $Request.url eq '/admin/shop/list.html'} layui-nav-itemed {/if}">
                     <a class="" href="javascript:;">店铺管理</a>
                     <dl class="layui-nav-child">
                         <dd><a href="{:url('/admin/shop/list')}">店铺列表</a></dd>
