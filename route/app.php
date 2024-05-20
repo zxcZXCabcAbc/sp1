@@ -10,7 +10,9 @@
 // +----------------------------------------------------------------------
 use think\facade\Route;
 
-Route::any('/','app\controller\api\indexController@index');
+Route::any('/test','app\controller\api\indexController@index');
+Route::any('/session/set/:name','app\controller\api\indexController@setSession');
+Route::any('/session/get/:name','app\controller\api\indexController@getSession');
 
 Route::any('/api/notify',"app\controller\api\\notifyController@index");//异步通知地址
 Route::any('/api/checkout/:id',"app\controller\api\\notifyController@checkout")->model(\app\model\Orders::class);//异步通知地址
@@ -47,14 +49,17 @@ Route::group('/api',function (){
 
 //后台管理
 Route::group('/admin',function (){
-    Route::rule('/shop/add','app\controller\admin\ShopController@create','GET|POST');
-    Route::get('/shop/list','app\controller\admin\ShopController@index');
-    Route::any('/shop/update/:id','app\controller\admin\ShopController@update')->model(\app\model\Shops::class);
-    Route::delete('/shop/del/:id','app\controller\admin\ShopController@delete')->model(\app\model\Shops::class);
-    Route::post('/shop/edit/:id','app\controller\admin\ShopController@edit')->model(\app\model\Shops::class);
-    Route::get('/shop/json','app\controller\admin\ShopController@getList');
-    Route::get('/login','app\controller\admin\AdminController@login');
-    Route::get('/home','app\controller\admin\AdminController@index');
-    Route::post('/login/check','app\controller\admin\AdminController@checkLogin');
-    Route::get('/logout','app\controller\admin\AdminController@logout');
+    Route::rule('/shop/add','app\controller\admin\ShopController@create','GET|POST');//添加店铺
+    Route::get('/shop/list','app\controller\admin\ShopController@index');//店铺列表
+    Route::any('/shop/update/:id','app\controller\admin\ShopController@update')->model(\app\model\Shops::class);//更新店铺
+    Route::delete('/shop/del/:id','app\controller\admin\ShopController@delete')->model(\app\model\Shops::class);//删除店铺
+    Route::post('/shop/edit/:id','app\controller\admin\ShopController@edit')->model(\app\model\Shops::class);//编辑店铺
+    Route::get('/shop/json','app\controller\admin\ShopController@getList');//店铺数据
+    Route::get('/login','app\controller\admin\AdminController@login');//登录
+    Route::get('/home','app\controller\admin\AdminController@index');//主页
+    Route::post('/login/check','app\controller\admin\AdminController@checkLogin');//检查登录
+    Route::get('/logout','app\controller\admin\AdminController@logout');//退出
+    Route::get('/order/list','app\controller\admin\OrderController@index');//订单列表
+    Route::get('/order/data','app\controller\admin\OrderController@getList');//订单数据
+    Route::get('/order/:id','app\controller\admin\OrderController@show')->model(\app\model\Orders::class);//订单数据
 })->middleware(\app\middleware\CheckUserLogin::class);

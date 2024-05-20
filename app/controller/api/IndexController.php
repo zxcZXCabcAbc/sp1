@@ -3,17 +3,38 @@
 namespace app\controller\api;
 
 use app\BaseController;
+use think\facade\Session;
+use think\Request;
 
 
 class IndexController extends BaseController
 {
     public function index()
     {
-        dump('success11');
+
+        // 启动 Session
+        Session::init();
+
+        if (!Session::has('visits')) {
+            Session::set('visits', 0);
+        }
+
+        Session::set('visits', Session::get('visits') + 1);
+
+        return 'Visits: ' . Session::get('visits');
     }
 
-    public function hello($name = 'ThinkPHP8')
+    public function setSession($name = 'test')
     {
-        return 'hello,' . $name;
+        Session::set($name,'ldy');
+        dump(11);
+    }
+
+
+    public function getSession(Request$request,$name)
+    {
+       $r = \session($name);
+       dd($r);
+        //dump(Session::get($name));
     }
 }

@@ -19,4 +19,5 @@ return [
     'auto_start'     => true,
     'use_cookies'    => true,
     'use_trans_sid'  => false,
+    'path'=>runtime_path('session')
 ];

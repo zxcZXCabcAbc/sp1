@@ -46,3 +46,32 @@
 .empty{
     height:30px;
 }
+
+.t-center{
+    text-align: center;
+}
+.t-left{
+    text-align: left;
+}
+.w60 {
+    width: 60px;
+}
+.w80{
+    width: 80px;
+}
+
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+    width: 100%;
+}
+.float-left {
+    float: left;
+    margin: 5px;
+}
+
+.float-right {
+    float: right;
+    margin: 5px;
+}

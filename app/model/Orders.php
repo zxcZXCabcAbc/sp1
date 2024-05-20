@@ -71,6 +71,13 @@ class Orders extends BaseModel
     const ORDER_STATUS_WAIT = 0;//待支付
     const ORDER_STATUS_COMPLETED = 1;//已完成
     const ORDER_STATUS_FAIL = 2;//失败
+
+    public static $orderStatus = [
+        self::ORDER_STATUS_WAIT => '待支付',
+        self::ORDER_STATUS_COMPLETED => '支付成功',
+        self::ORDER_STATUS_FAIL => '支付失败',
+    ];
+
     public function addresses()
     {
         return $this->hasMany(Address::class,'order_id');

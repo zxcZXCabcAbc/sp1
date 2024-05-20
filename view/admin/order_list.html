@@ -1,0 +1,249 @@
+{extend name="admin/layout" /}
+
+{block name="content"}
+
+<div class="layui-card layui-card-panel">
+    <div class="layui-card-header" style="height: auto;">
+        <form class="layui-form">
+<!--            搜索1-->
+            <div class="layui-row">
+                <div class="layui-col-md2">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label w60">邮箱</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="contact_email" class="layui-input" autocomplete="off" placeholder="邮箱">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md2">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">草稿单号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" class="layui-input" autocomplete="off" placeholder="草稿单号">
+                            </div>
+                        </div>
+                    </div>
+                <div class="layui-col-md3">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">店铺</label>
+                            <div class="layui-input-block">
+                                <select name="shop_id" lay-search="">
+                                    <option value="">请选择店铺</option>
+                                    {foreach $shopList as $shop}
+                                    <option value="{$shop['id']}">{$shop['name']}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                </div>
+                <div class="layui-col-md3">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">支付方式</label>
+                        <div class="layui-input-block">
+                            <select name="payment_id" lay-search="">
+                                <option value="">请选择支付方式</option>
+                                {foreach $paymentList as $payment}
+                                <option value="{$payment['id']}">{$payment['account']}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md2">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label">订单状态</label>
+                       <div class="layui-input-block">
+                           <select name="order_status" lay-search="">
+                               <option value="">请选择订单状态</option>
+                               {volist name="orderStatus" id="vo" key="key"}
+                               <option value="{$key}">{$vo}</option>
+                               {/volist}
+                           </select>
+                       </div>
+                   </div>
+                </div>
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md2">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">订单编号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="last_order_name" class="layui-input" autocomplete="off" placeholder="订单编号">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">创建时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input" name="created_at" id="order-created" placeholder="开始 到 结束" style="width: 200px;">
+                            </div>
+                    </div>
+                </div>
+                <div class="layui-col-md2">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="order-table-search">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="layui-card-body">
+        <table class="layui-hide" id="order-list"></table>
+    </div>
+</div>
+
+{/block}
+
+{block name="js"}
+
+
+<script type="text/html" id="order-operation">
+    <div class="layui-clear-space">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
+    </div>
+</script>
+
+
+
+
+
+<script>
+    layui.use(['table','laydate','form'],function(){
+        var table = layui.table;
+        var form = layui.form;
+        var laydate = layui.laydate
+        //渲染日期
+        // 创建表格实例
+        table.render({
+            elem: '#order-list',
+            url: "/admin/order/data", // 此处为静态模拟数据，实际使用时需换成真实接口
+            toolbar: '#toolbarDemo',
+            cols: [[
+                {field:'id', title: 'ID', width:80, sort: true, fixed: true},
+                {field:'order_id', title: '订单ID', width:80,},
+                {field:'name', title: '草稿编号', width:80},
+                {field:'contact_email', title: '邮箱', width:220},
+                {field:'currency', title: '币种', width:80},
+                {field:'total_price', title: '总金额', width:80},
+                {field:'total_line_items_price', title: '商品小计', width:80},
+                {field:'total_shipping_price', title: '物流费', width:80},
+                {field:'shop_name', title: '店铺名', width:240},
+                {field:'transaction_id', title: '交易号', width:80},
+                {field:'pay_method', title: '支付方式', width:80},
+                {field:'order_no', title: '商户号', width:80},
+                {field:'error_msg', title: '报错信息', width:80},
+                {field:'order_status', title: '状态', width:120,templet: function (d){
+                    if(d.order_status == 2){
+                        return '<button class="layui-btn layui-btn-danger layui-btn-sm">支付失败</button>';
+                        //return '<span class="layui-badge layui-badge-rim layui-bg-orange">支付失败</span>';
+                    }else if(d.order_status == 1){
+                        return '<button class="layui-btn layui-btn-normal layui-btn-sm">支付成功</button>';
+                        //return '<span class="layui-badge layui-bg-green layui-badge-rim">支付成功</span>';
+                    }else{
+                        return '<button class="layui-btn layui-btn-primary layui-btn-sm">待支付</button>';
+                        //return '<span class="layui-badge layui-bg-gray layui-badge-rim">待支付</span>';
+                    }
+                    }},
+                {field:'created_at', title: '创建时间',width:160},
+                {fixed: 'right', title:'操作', width: 60, minWidth: 125, toolbar: '#order-operation'}
+            ]],
+            page: true,
+            height: 500
+        });
+
+
+        // 搜索提交
+        form.on('submit(order-table-search)', function(data){
+            var field = data.field; // 获得表单字段
+            // 执行搜索重载
+            table.reload('order-list', {
+                page: {
+                    curr: 1 // 重新从第 1 页开始
+                },
+                where: field // 搜索的字段
+            });
+
+            return false; // 阻止默认 form 跳转
+        });
+
+        table.on('tool(shop-list-search)', function(obj){ // 双击 toolDouble
+            var data = obj.data; // 获得当前行数据
+            // console.log(obj)
+            if(obj.event === 'edit'){
+                let shop_edit_index = layer.open({
+                    title: '编辑'+ data.name,
+                    type: 2,
+                    area: ['60%','80%'],
+                    content: "/admin/shop/update/" + data.id,
+                    end:()=>{
+                        location.reload()
+                    }
+                });
+                sessionStorage.setItem('shop_edit_index',shop_edit_index);
+
+            }
+        });
+
+    //日期选择
+        laydate.render({
+            elem: "#order-created",
+            range: true,
+            format: 'yyyy/MM/dd',
+            shortcuts: [
+                {
+                    text: "上周",
+                    value: function(){
+                        var date = new Date();
+                        var year = date.getFullYear();
+                        var month = date.getMonth();
+                        var dayOfWeek = date.getDay();
+                        var dayOfMonth = date.getDate();
+                        var monday = dayOfMonth - dayOfWeek - 6;
+                        var sunday = dayOfMonth - dayOfWeek;
+
+                        return [
+                            new Date(year, month, monday),
+                            new Date(year, month, sunday)
+                        ];
+                    }
+                },
+                {
+                    text: "上月",
+                    value: function(){
+                        var date = new Date();
+                        var year = date.getFullYear();
+                        var month = date.getMonth();
+                        return [
+                            new Date(year, month - 1, 1),
+                            new Date(year, month, 0)
+                        ];
+                    }
+                },
+                {
+                    text: "本月",
+                    value: function(){
+                        var date = new Date();
+                        var year = date.getFullYear();
+                        var month = date.getMonth();
+                        return [
+                            new Date(year, month, 1),
+                            new Date(year, month + 1, 0)
+                        ];
+                    }
+                },
+            ],
+        });
+
+
+    });
+</script>
+
+{/block}
+
+

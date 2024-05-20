@@ -88,7 +88,7 @@ class ShopController extends BaseController
             if( $payment['mode'] == ModelConstant::TEST_MODE){
                 $payment['client_id_sandbox'] = $payment['client_id'];
                 $payment['secrect_sandbox'] = $payment['secrect'];
-                $payment['client_id'] = $payment['secrect'] = '';
+                unset($payment['client_id'],$payment['secrect']);
             }
             $arr[] = $payment;
         }

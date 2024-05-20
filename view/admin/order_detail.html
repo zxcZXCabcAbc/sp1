@@ -1,0 +1,67 @@
+{extend name="admin/layout"}
+
+
+{block name="nav"}
+<div class="clearfix">
+    <div class="float-left"><i class="layui-icon layui-icon-return" style="font-size: 20px; color: gray;"></i></div>
+    <div class="float-left" style="font-size: 20px;font-weight: 800;">{$name}</div>
+    <div class="float-left" style="font-size: 20px;">
+        <button class="layui-btn layui-btn-radius layui-btn-sm layui-bg-gray">已付款</button>
+    </div>
+    <div class="float-left" style="font-size: 20px;">
+        <button class="layui-btn layui-btn-radius layui-btn-sm layui-bg-orange">已发货</button>
+    </div>
+    <div class="float-right">
+        <div class="layui-btn-container">
+            <button class="layui-btn demo-dropdown-base layui-btn-radius layui-btn-sm layui-bg-gray">
+                <span>其他操作</span>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+        </div>
+    </div>
+    <div class="float-right">
+        <button class="layui-btn layui-btn-radius layui-btn-sm layui-bg-gray">退款</button>
+    </div>
+    <div class="float-right">
+        <button class="layui-btn layui-btn-radius layui-btn-sm layui-bg-gray">编辑</button>
+    </div>
+
+
+</div>
+
+
+{/block}
+
+{block name="content"}
+
+{/block}
+
+{block name="js"}
+<script>
+    layui.use(function () {
+        var dropdown = layui.dropdown;
+        // 渲染
+        dropdown.render({
+            elem: '.demo-dropdown-base', // 绑定元素选择器，此处指向 class 可同时绑定多个元素
+            data: [{
+                title: 'menu item 1',
+                id: 100
+            }, {
+                title: 'menu item 2',
+                id: 101
+            }, {
+                title: 'menu item 3',
+                id: 102
+            }],
+            click: function (obj) {
+                this.elem.find('span').text(obj.title);
+            }
+        });
+    });
+
+</script>
+
+
+{/block}
+
+

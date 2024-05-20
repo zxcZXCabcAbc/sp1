@@ -27,19 +27,19 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
 
-                <li class="layui-nav-item {if $Request.url eq '/admin/home.html'} layui-nav-itemed {/if} " ><a href="/admin/home">首页</a></li>
+                <li class="layui-nav-item {if $Request.url eq '/admin/home'} layui-nav-itemed {/if} " ><a href="/admin/home">首页</a></li>
 
-                <li class="layui-nav-item {if $Request.url eq '/admin/shop/list.html'} layui-nav-itemed {/if}">
+                <li class="layui-nav-item {if $Request.url eq '/admin/shop/list'} layui-nav-itemed {/if}">
                     <a class="" href="javascript:;">店铺管理</a>
                     <dl class="layui-nav-child">
                         <dd><a href="{:url('/admin/shop/list')}">店铺列表</a></dd>
                     </dl>
                 </li>
 
-                <li class="layui-nav-item">
+                <li class="layui-nav-item {if $Request.url eq '/admin/order/list'} layui-nav-itemed {/if}">
                     <a class="" href="javascript:;">订单管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">订单列表</a></dd>
+                        <dd><a href="/admin/order/list">订单列表</a></dd>
                     </dl>
                 </li>
 
@@ -52,7 +52,7 @@
         <!-- 内容主体区域 -->
         <div style="padding: 15px;">
             <blockquote class="layui-elem-quote layui-text">
-                导航
+               {block name="nav"} {/block}
             </blockquote>
             {block name="content"} {/block}
         </div>

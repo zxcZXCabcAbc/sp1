@@ -26,7 +26,7 @@ class AdminController extends BaseController
 
     public function checkLogin(Request $request)
     {
-        $this->validate($request->post(),['username'=>'require','password'=>'require']);
+        $this->validate($request->post(),['username|用户名'=>'require','password|密码'=>'require','captcha|验证码'=>'require|captcha']);
         $password = 'ddhd@2024';
         $username = 'admin';
         if($request->param('username') != $username || $request->param('password') != $password){
