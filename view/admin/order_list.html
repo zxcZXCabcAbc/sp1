@@ -55,9 +55,9 @@
                        <div class="layui-input-block">
                            <select name="order_status" lay-search="">
                                <option value="">请选择订单状态</option>
-                               {volist name="orderStatus" id="vo" key="key"}
+                               {foreach $orderStatus as $key => $vo}
                                <option value="{$key}">{$vo}</option>
-                               {/volist}
+                               {/foreach}
                            </select>
                        </div>
                    </div>
