@@ -98,6 +98,7 @@ class OrderController extends BaseController
         $data['title'] = "订单详情";
         $data['order_name'] = Str::contains($data['last_order_name'],'#') ? $data['last_order_name'] : $data['name'];
         $data['orderId'] = $data['order_id'] > 0 ? $data['order_id'] : pathinfo($data['admin_graphql_api_id'],PATHINFO_BASENAME);
+        $data['created_at'] = Carbon::parse($data['created_at'])->format('Y年m月d日 H:i');
         //dd($data);
         return view('admin/order_detail',$data);
     }
