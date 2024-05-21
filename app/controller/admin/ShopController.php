@@ -134,4 +134,20 @@ class ShopController extends BaseController
         $shop->delete();
         return $this->success($shop->id);
     }
+
+    public function editShopStatus(Request $request,Shops $shop)
+    {
+        $this->validate($request->all(),['status'=>'require|in:0,1']);
+        $shop->status = $request->param('status');
+        $shop->updated_at = Carbon::now()->toDateTimeString();
+        $shop->save();
+        return $this->success();
+
+    }
+
+    public function getShopPayment(Request $request,Shops $shop)
+    {
+        $payments = $shop->payments()->field(['id','account'])->select()->toArray();
+        return $this->success($payments);
+    }
 }

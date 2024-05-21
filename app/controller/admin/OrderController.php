@@ -84,6 +84,7 @@ class OrderController extends BaseController
             $pay_method = $paymentList[$item['payment_id']] ?? 0;
             $item['pay_method'] = ShopsPayment::$payMethodNames[$pay_method] ?? '-';
             $item['created_at'] = Carbon::parse($item['created_at'])->toDateTimeString();
+            $item['last_order_name'] = Str::contains($item['last_order_name'],'#') ? $item['last_order_name'] : '-';
         }
     }
 

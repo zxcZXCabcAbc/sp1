@@ -54,7 +54,9 @@ Route::group('/admin',function (){
     Route::any('/shop/update/:id','app\controller\admin\ShopController@update')->model(\app\model\Shops::class);//更新店铺
     Route::delete('/shop/del/:id','app\controller\admin\ShopController@delete')->model(\app\model\Shops::class);//删除店铺
     Route::post('/shop/edit/:id','app\controller\admin\ShopController@edit')->model(\app\model\Shops::class);//编辑店铺
+    Route::post('/shop/status/:id','app\controller\admin\ShopController@editShopStatus')->model(\app\model\Shops::class);//编辑店铺
     Route::get('/shop/json','app\controller\admin\ShopController@getList');//店铺数据
+    Route::get('/shop/payment/:id','app\controller\admin\ShopController@getShopPayment')->model(\app\model\Shops::class);//编辑店铺
     Route::get('/login','app\controller\admin\AdminController@login');//登录
     Route::get('/home','app\controller\admin\AdminController@index');//主页
     Route::post('/login/check','app\controller\admin\AdminController@checkLogin');//检查登录

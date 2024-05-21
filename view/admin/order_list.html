@@ -27,7 +27,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">店铺</label>
                             <div class="layui-input-block">
-                                <select name="shop_id" lay-search="">
+                                <select name="shop_id" lay-search="" lay-filter="demo-select-filter">
                                     <option value="">请选择店铺</option>
                                     {foreach $shopList as $shop}
                                     <option value="{$shop['id']}">{$shop['name']}</option>
@@ -40,7 +40,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label label-width">支付方式</label>
                         <div class="layui-input-block">
-                            <select name="payment_id" lay-search="">
+                            <select name="payment_id" lay-search=""  id="payment-method-select">
                                 <option value="">请选择支付方式</option>
                                 {foreach $paymentList as $payment}
                                 <option value="{$payment['id']}">{$payment['account']}</option>
@@ -128,6 +128,7 @@
                 {field:'id', title: 'ID', width:80, sort: true, fixed: true},
                 {field:'order_id', title: '订单ID', width:80,},
                 {field:'name', title: '草稿编号', width:80},
+                {field:'last_order_name', title: '订单编号', width:100},
                 {field:'contact_email', title: '邮箱', width:220},
                 {field:'currency', title: '币种', width:80},
                 {field:'total_price', title: '总金额', width:80},
@@ -232,7 +233,29 @@
             ],
         });
 
+        //选择框事件
+        form.on('select(demo-select-filter)',(data)=>{
+            var shopId = data.value
+            $.ajax({
+                url: `/admin/shop/payment/${shopId}`,
+                dataType:'json',
+                type:'get',
+                success:(data)=>{
+                    console.log(data)
+                    let payments = data.data
 
+                    let html = '<option value="">请选择支付方式</option>';
+                    payments.forEach((item,index)=>{
+                        console.log(1111,item)
+                        html += `<option value="${item.id}">${item.account}</option>`
+                    })
+                    $('#payment-method-select').empty()
+                    $('#payment-method-select').append(html)
+                    form.render('select')
+
+                },
+            })
+        })
     });
 </script>
 

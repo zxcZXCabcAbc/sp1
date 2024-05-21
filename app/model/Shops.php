@@ -23,7 +23,7 @@ use think\Request;
  */
 class Shops extends BaseModel
 {
-    public $autoWriteTimestamp = true;
+    public $autoWriteTimestamp = 'datetime';
     protected $dateFormat = 'U';
     protected $field = [
         'host','name','api_key',
@@ -31,7 +31,8 @@ class Shops extends BaseModel
         'version','created_at','updated_at','status',
         'pay_step','website'
     ];
-
+    protected $updateTime = 'updated_at';
+    protected $createTime = 'created_at';
     public function payments()
     {
         return $this->hasMany(ShopsPayment::class,'shop_id');

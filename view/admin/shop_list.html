@@ -47,6 +47,10 @@
     </div>
 </script>
 
+<script type="text/html" id="switchTpl">
+    <input type="checkbox" name="status" lay-skin="switch" lay-filter="statusSwitch" lay-text="ON|OFF" data-id="{{ d.id }}" {{ d.status == 'on' ? 'checked' : '' }}>
+</script>
+
 <script>
     layui.use(['jquery','table'],function(){
         var table = layui.table;
@@ -60,8 +64,9 @@
             cols: [[
                 {field:'id', title: 'ID', width:80, sort: true, fixed: true},
                 {field:'name', title: '店铺名', width:120},
-                {field:'host', title: '域名', width:260},
-                {field:'status', title: '状态', width:80},
+                {field:'host', title: '域名', width:300},
+                {field:'website', title: '推广域名', width:300},
+                {field:'status', title: '状态', width:120,templet:'#switchTpl' },
                 {field:'created_at', title: '创建时间',},
                 {fixed: 'right', title:'操作', width: 134, minWidth: 125, toolbar: '#shop-operation'}
             ]],
@@ -137,6 +142,27 @@
                     sessionStorage.setItem("shop_list_index",layer_index)
                     break;
             };
+        });
+
+        // 监听开关
+        form.on('switch(statusSwitch)', function(data){
+            var id = data.elem.getAttribute('data-id');
+            var checked = data.elem.checked;
+            $.ajax({
+                url: `/admin/shop/status/${id}`,
+                dataType: 'json',
+                type: 'post',
+                data:{status: checked ? 1 : 0},
+                success:(data)=>{
+                    if(data.code == 200){
+                        success("修改成功",function (){
+                            location.reload()
+                        })
+                    }else{
+                        error(data.msg)
+                    }
+                }
+            });
         });
 
     });
