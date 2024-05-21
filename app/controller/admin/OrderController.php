@@ -10,6 +10,7 @@ use app\model\Shops;
 use app\model\ShopsPayment;
 use Carbon\Carbon;
 use think\facade\View;
+use think\helper\Str;
 use think\Request;
 
 class OrderController extends BaseController
@@ -95,6 +96,9 @@ class OrderController extends BaseController
         $data['billingAddress'] = $order->billingAddress->toArray();
         $data['customer'] = $order->customer->toArray();
         $data['title'] = "订单详情";
+        $data['order_name'] = Str::contains($data['last_order_name'],'#') ? $data['last_order_name'] : $data['name'];
+        $data['orderId'] = $data['order_id'] > 0 ? $data['order_id'] : pathinfo($data['admin_graphql_api_id'],PATHINFO_BASENAME);
+        //dd($data);
         return view('admin/order_detail',$data);
     }
 }

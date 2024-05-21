@@ -1,43 +1,155 @@
 {extend name="admin/layout"}
-
-
 {block name="nav"}
-<div class="clearfix">
-    <div class="float-left"><i class="layui-icon layui-icon-return" style="font-size: 20px; color: gray;"></i></div>
-    <div class="float-left" style="font-size: 20px;font-weight: 800;">{$name}</div>
-    <div class="float-left" style="font-size: 20px;">
-        <button class="layui-btn layui-btn-radius layui-btn-sm layui-bg-gray">已付款</button>
-    </div>
-    <div class="float-left" style="font-size: 20px;">
-        <button class="layui-btn layui-btn-radius layui-btn-sm layui-bg-orange">已发货</button>
-    </div>
-    <div class="float-right">
-        <div class="layui-btn-container">
-            <button class="layui-btn demo-dropdown-base layui-btn-radius layui-btn-sm layui-bg-gray">
-                <span>其他操作</span>
-                <i class="layui-icon layui-icon-down layui-font-12"></i>
-            </button>
-        </div>
-    </div>
-    <div class="float-right">
-        <button class="layui-btn layui-btn-radius layui-btn-sm layui-bg-gray">退款</button>
-    </div>
-    <div class="float-right">
-        <button class="layui-btn layui-btn-radius layui-btn-sm layui-bg-gray">编辑</button>
-    </div>
-
-
-</div>
-
-
 {/block}
 
 {block name="content"}
-
+<div class="content">
+    <div class="content-box">
+        <div class="top-order">
+            <h1 style="font-size:1.25rem;font-weight: 700">{$order_name}</h1>
+            <div class="list-order">
+                <div style="background-color: rgba(0,0,0,.06)">{if $order_status eq 1} 已付款 {else} 未付款 {/if}</div>
+                <div style="background-color: rgba(255,235,120,1)">未发货</div>
+            </div>
+        </div>
+        <div class="order-date">2024年4月23日 0:48 来自 pay app</div>
+        <div class="header-content">
+            <div class="header-lf-content">
+                <div class="header-box-style">
+                    <div>
+                        <div class="header-msg">
+                            <div style="padding:0 20px;margin-bottom:15px;">
+                                <div style="margin-bottom:5px;">
+                                    配送方式
+                                </div>
+                                <div>
+                                    无需配送
+                                </div>
+                            </div>
+                            <div class="msg-goods">
+                                {volist name="goodsList" id="goods"}
+                                <div>
+                                    <img src="{$goods['image']}" style="width: 50px; height: 50px;">
+                                    <span style="font-weight: 550;width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{$goods['name']}</span>
+                                    <span style="align-self: center;width: 100px;" >{$currency}{$goods['price']} * {$goods['quantity']}</span>
+                                    <span style="align-self: center;">{$goods['price'] * $goods['quantity']}</span>
+                                </div>
+                                {/volist}
+                            </div>
+                        </div>
+                        <div class="header-msg">
+                            <div style="padding-bottom:15px;border-bottom:1px solid rgba(71, 71, 71, .1)">
+                                <div style="padding:0 15px;display: flex;justify-content: space-between;">
+                                    <div>
+                                        小计
+                                    </div>
+                                    <div>
+                                        {$goodsList | count}件商品
+                                    </div>
+                                    <div>
+                                        {$currency}{$subtotal_price}
+                                    </div>
+                                </div>
+                                <div style="padding: 0 15px;display: flex;justify-content:space-between;margin-top:10px;">
+                                    <div style="font-weight: 550;">总计</div>
+                                    <div>
+                                        {$currency}{$total_price}
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding:20px 15px;display: flex;justify-content: space-between;">
+                                <div>已付款</div>
+                                <div>
+                                    {$currency}{$total_price}
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex;justify-content: flex-end">
+                            <div class="header-btn">
+                                <span>为商品发货</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-rg-content">
+                <div class="header-box-style" style="font-size: .8125rem;">
+                    <div style="font-weight: 550;">
+                        备注
+                    </div>
+                    <div style="margin-top:10px;color:#484848">
+                        <div>{if $note} {$note} {else}没有来自客户的备注{/if}</div>
+                    </div>
+                </div>
+                <div class="header-box-style" style="font-size: .8125rem;margin-top:20px;">
+                    <div style="font-weight: 550;">
+                        渠道信息
+                    </div>
+                    <div style="margin:10px 0;color:#484848">
+                        <div>渠道</div>
+                    </div>
+                    <div style="line-height: 1.8;">
+                        <div>
+                            pay app
+                        </div>
+                        <div>
+                            订单 ID
+                        </div>
+                        <div>
+                            {$checkout_id}
+                        </div>
+                    </div>
+                </div>
+                <div class="header-box-style" style="font-size: .8125rem;margin-top:20px;">
+                    <div style="font-weight: 550;">
+                        客户
+                    </div>
+                    <div style="line-height: 1.8;margin-top:10px">
+                        <div style="color:rgba(0, 91, 211, 1);cursor: pointer;">{$customer['first_name']}{$customer['last_name']}</div>
+                        <div>1订单</div>
+                    </div>
+                    <div style="font-weight: 550;margin:10px 0;">
+                        联系信息
+                    </div>
+                    <div style="line-height: 1.8;">
+                        <div style="color:rgba(0, 91, 211, 1);cursor: pointer;">{$contact_email}</div>
+                    </div>
+                    <div style="font-weight: 550;margin:10px 0;">
+                        收获地址
+                    </div>
+                    <div style="line-height: 1.6;">
+                        <div>{$shippingAddress['first_name']} {$shippingAddress['last_name']}</div>
+                        <div>{$shippingAddress['address1']}</div>
+                        <div>{$shippingAddress['city']}</div>
+                        <div>{$shippingAddress['province']}</div>
+                        <div>{$shippingAddress['zip']} {$shippingAddress['country']}</div>
+                        <div>{$shippingAddress['phone']}</div>
+                    </div>
+                    <div style="font-weight: 550;margin:10px 0;">
+                        账单地址
+                    </div>
+                    <div style="line-height: 1.6;">
+                        {if $billingAddress}
+                        <div>{$billingAddress['first_name']} {$billingAddress['last_name']}</div>
+                        <div>{$billingAddress['address1']}</div>
+                        <div>{$billingAddress['city']}</div>
+                        <div>{$billingAddress['province']}</div>
+                        <div>{$billingAddress['zip']} {$billingAddress['country']}</div>
+                        <div>{$billingAddress['phone']}</div>
+                        {else}
+                        未提供账单地址
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {/block}
 
 {block name="js"}
 <script>
+
     layui.use(function () {
         var dropdown = layui.dropdown;
         // 渲染

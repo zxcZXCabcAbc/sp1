@@ -172,21 +172,13 @@
             return false; // 阻止默认 form 跳转
         });
 
-        table.on('tool(shop-list-search)', function(obj){ // 双击 toolDouble
+        table.on('tool(order-list)', function(obj){ // 双击 toolDouble
             var data = obj.data; // 获得当前行数据
             // console.log(obj)
             if(obj.event === 'edit'){
-                let shop_edit_index = layer.open({
-                    title: '编辑'+ data.name,
-                    type: 2,
-                    area: ['60%','80%'],
-                    content: "/admin/shop/update/" + data.id,
-                    end:()=>{
-                        location.reload()
-                    }
-                });
-                sessionStorage.setItem('shop_edit_index',shop_edit_index);
 
+                console.log(11111)
+                location.href = `/admin/order/${data.id}`
             }
         });
 
