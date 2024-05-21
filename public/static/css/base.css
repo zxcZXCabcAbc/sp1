@@ -2,7 +2,7 @@
     width:800px;
 }
 .label-width{
-    /*width: 120px !important;*/
+    *width: 90px !important;
     white-space: nowrap;
 }
 
