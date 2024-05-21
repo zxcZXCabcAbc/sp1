@@ -3,7 +3,7 @@
 <div id="app">
     <form class="layui-form">
         <div class="layui-form-item">
-            <label class="layui-form-label">店铺域名</label>
+            <label class="layui-form-label label-width">店铺域名</label>
             <div class="layui-input-block">
                 <input type="text"
                        name="host"
@@ -17,7 +17,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">推广域名</label>
+            <label class="layui-form-label label-width">推广域名</label>
             <div class="layui-input-block">
                 <input type="text"
                        name="website"
@@ -31,7 +31,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">店铺名称</label>
+            <label class="layui-form-label label-width">店铺名称</label>
             <div class="layui-input-inline layui-input-wrap">
                 <input type="text"
                        name="name"
@@ -46,7 +46,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">API Key</label>
+            <label class="layui-form-label label-width">API Key</label>
             <div class="layui-input-inline layui-input-wrap">
                 <input type="text"
                        name="api_key"
@@ -61,7 +61,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">API秘钥</label>
+            <label class="layui-form-label label-width">API秘钥</label>
             <div class="layui-input-inline layui-input-wrap">
                 <input type="text"
                        name="api_secret"
@@ -91,7 +91,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">Store Token</label>
+            <label class="layui-form-label label-width">Store Token</label>
             <div class="layui-input-inline layui-input-wrap">
                 <input type="text"
                        name="store_token"
@@ -151,7 +151,7 @@
                                 <div class="layui-row">
                                     <div class="layui-col-md4">
                                         <div class="layui-form-item">
-                                            <label class="layui-form-label">支付方式</label>
+                                            <label class="layui-form-label label-width">支付方式</label>
                                             <div class="layui-input-block">
                                                 <select name="payments[{$index}][pay_method]">
                                                     <option value="1" {if $payment['pay_method'] eq 1} selected {/if}>Paypal</option>
@@ -194,7 +194,7 @@
 
                                     <div class="layui-col-md2">
                                         <div class="layui-form-item">
-                                            <label class="layui-form-label">申请状态</label>
+                                            <label class="layui-form-label label-width">申请状态</label>
                                             <div class="layui-input-block">
                                                 <input type="checkbox"
                                                        name="payments[{$index}][apply_status]"
@@ -225,7 +225,7 @@
                                     </div>
                                     <div class="layui-col-md4">
                                         <div class="layui-form-item">
-                                            <label class="layui-form-label">Client ID</label>
+                                            <label class="layui-form-label label-width">Client ID</label>
                                             <div class="layui-input-block">
                                                 <input type="text"
                                                        name="payments[{$index}][client_id]"
@@ -283,7 +283,7 @@
                                 <div class="layui-row">
                                     <div class="layui-col-md4">
                                         <div class="layui-form-item">
-                                            <label class="layui-form-label">支付方式</label>
+                                            <label class="layui-form-label label-width">支付方式</label>
                                             <div class="layui-input-block">
                                                 <select name="payments[0][pay_method]">
                                                     <option value="1">Paypal</option>
@@ -318,7 +318,7 @@
 
                                     <div class="layui-col-md2">
                                         <div class="layui-form-item">
-                                            <label class="layui-form-label">申请状态</label>
+                                            <label class="layui-form-label label-width">申请状态</label>
                                             <div class="layui-input-block">
                                                 <input type="checkbox" name="payments[0][apply_status]"
                                                        lay-skin="switch" title="ON|OFF">
@@ -342,7 +342,7 @@
                                     </div>
                                     <div class="layui-col-md4">
                                         <div class="layui-form-item">
-                                            <label class="layui-form-label">Client ID</label>
+                                            <label class="layui-form-label label-width">Client ID</label>
                                             <div class="layui-input-block">
                                                 <input type="text" name="payments[0][client_id]" lay-verify="required"
                                                        autocomplete="off" lay-affix="clear"
@@ -353,7 +353,7 @@
 
                                     <div class="layui-col-md4">
                                         <div class="layui-form-item">
-                                            <label class="layui-form-label">Secret</label>
+                                            <label class="layui-form-label label-width">Secret</label>
                                             <div class="layui-input-block">
                                                 <input type="text" name="payments[0][secrect]" lay-verify="required"
                                                        autocomplete="off" lay-affix="clear"

@@ -2,8 +2,9 @@
     width:800px;
 }
 .label-width{
-    *width: 90px !important;
+    width: 95px !important;
     white-space: nowrap;
+    font-size: 14px !important;
 }
 
 .w800{
