@@ -7,6 +7,7 @@ use app\model\Orders;
 class CheckoutBuilder extends BuilderBase
 {
     private $rate = 0.15;
+    const CUSTOMER_CLIENT_IP = '52.36.193.167';
     public function toArray()
     {
         $requestData = [
@@ -14,7 +15,7 @@ class CheckoutBuilder extends BuilderBase
             //'customerId'=>$this->getCustomerId(),
             'customerPaymentMethodId'=>$this->getCustomerPaymentMethodId(),
             'isMobile'=>'0',
-            'customerIp'=>$this->order->browser_ip,
+            'customerIp'=>self::CUSTOMER_CLIENT_IP,
             'orderAmount'=> $this->getTotalMoney(),
             'orderCurrency'=>$this->order->currency,
             'platform'=>'php_SDK',
