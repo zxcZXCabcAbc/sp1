@@ -68,6 +68,18 @@ class CheckoutController extends BaseController
         }
         $api = new Payment();
         $data = $api->createCheckOut($lines);
+        $errors = $data['errors'] ?? [];
+        if($errors){
+            $message = [];
+            foreach ($errors as $err){
+                if($err['message']) {
+                    $message[] = $err['message'];
+                }else{
+                    $message[] = $err['extensions']['code'];
+                }
+            }
+            throw new \Exception(implode(',',$message));
+        }
         $checkoutId = $data['data']['checkoutCreate']['checkout']['id'] ?? '';
         $error = $data['data']['checkoutCreate']['checkoutUserErrors'];
         if($error) {
