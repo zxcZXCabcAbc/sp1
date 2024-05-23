@@ -42,6 +42,7 @@ use think\model\relation\HasOne;
  * @property string $app_id
  * @property string $order_status_url
  * @property string $order_no
+ * @property string $shipping_protection
  *
  */
 class Orders extends BaseModel
@@ -60,7 +61,7 @@ class Orders extends BaseModel
         'tags','token','total_discounts',
         'total_line_items_price','total_outstanding','total_price',
         'total_shipping_price','total_tax','total_tip_received',
-        'total_weight','updated_at','user_id','tax_lines','status','order_type',
+        'shipping_protection','updated_at','user_id','tax_lines','status','order_type',
         'shop_id','payment_id','transaction_id','error_msg','order_status','order_no'
     ];
 

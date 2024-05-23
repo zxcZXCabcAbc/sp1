@@ -39,12 +39,11 @@ class OrderLogic
      */
     public function createDraftOrder(Request $request)
     {
-       
-            $draftData = $this->formatDraft($request);
-            $draft = $this->rest->create_draft_order($draftData);
-            //存订单
-            $order_id = $this->saveOrder($draft, $request);
-            return compact('draft', 'order_id');
+        $draftData = $this->formatDraft($request);
+        $draft = $this->rest->create_draft_order($draftData);
+        //存订单
+        $order_id = $this->saveOrder($draft, $request);
+        return compact('draft', 'order_id');
 
     }
 
@@ -184,7 +183,9 @@ class OrderLogic
         $cart = $checkout['cart'] ?? [];
         if(empty($cart)) throw new \Exception('cart is empty');
         $items = $cart['items'];
+
         foreach ($items as $item){
+            if(in_array($item['title'],CommonConstant::SHIPPING_PROTECTION_FEE)) continue;
             $line_items[] = [
                'variant_id'=>$item['variant_id'],
                 'product_id'=>$item['product_id'],

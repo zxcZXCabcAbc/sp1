@@ -2,6 +2,7 @@
 
 namespace app\trait;
 
+use app\constant\CommonConstant;
 use app\model\Address;
 use app\model\Customer;
 use app\model\LineItems;
@@ -26,8 +27,10 @@ trait OrderTrait
             $order['order_type'] = Orders::ORDER_DRAFT;
             $order['shop_id'] = request()->middleware('x_shop_id');
             if(array_key_exists('email',$order)) $order['contact_email'] = $order['email'];
-            $lineItems = $order['line_items'];
-            $this->formatLineItems($lineItems,$request);
+            $checkout = $request->param('checkout',[]);
+            //$lineItems = $order['line_items'];
+            $lineItems = $checkout['cart']['items'] ?? [];
+            list($goodsList,$shipping_protection) = $this->formatLineItems($lineItems,$request);
             $customer = $order['customer'] ?? [];
             $addresses = [];
             $billingAddress = $shippingAddress = $request->param('shipping_address') ?: [];
@@ -42,6 +45,7 @@ trait OrderTrait
             }
             $shippingLines = $request->param('shipping_line',[]);
             $orderModel = new Orders();
+            $order['shipping_protection'] = $shipping_protection;
             $order['total_shipping_price'] = $shippingLines['price'] ?? '0.00';
             $order['browser_ip'] = $request->ip();
             $order['app_id'] = $request->header('X-Opc-Client-Id','');
@@ -49,7 +53,6 @@ trait OrderTrait
             $order['order_no'] = $this->formatOrderNo($order['shop_id'],$orderNo);
             if(is_null($orders)) {
                 //存token
-                $checkout = $request->param('checkout',[]);
                 $checkout_id = $request->param('checkout_id','');
                 $token = $checkout['cart']['token'] ?? '';
                 if($token) $order['token'] = $token;
@@ -61,7 +64,7 @@ trait OrderTrait
                 $orders->save($orderData);
                 $orderId = $orders->id;
             }
-            $this->saveLineItems($orders, $lineItems);//保存商品
+            $this->saveLineItems($orders, $goodsList);//保存商品
             $this->saveAddress($orders, $addresses);//保存地址
             $this->saveShippingLines($orders, $shippingLines);//保存物流
             $this->saveCustomer($orders, $customer);//保存顾客
@@ -136,17 +139,28 @@ trait OrderTrait
         return $orders->customer()->save($customerData);
     }
 
-    protected function formatLineItems(array &$lineItems,Request $request)
+    protected function formatLineItems(array $lineItems,Request $request)
     {
         $checkout = $request->param('checkout');
         $items = $checkout['cart']['items'];
-        $images = array_column($items,'image','variant_id');
-        foreach ($lineItems as &$item){
-            $item['image'] = $images[$item['variant_id']] ?? '';
-            $item['variant_title'] = json_encode(['title'=>$item['variant_title']]);
-            $item['name'] = json_encode(['title'=>$item['name']]);
+        //$images = array_column($items,'image','variant_id');
+        $shipping_protection = 0;
+        $goodsList = [];
+        foreach ($lineItems as $index => $item){
+            $title = $item['title'];
+            $item['price'] = bcdiv($item['price'],100,2);
+            $item['variant_title'] = json_encode(['title'=>$item['variant_title'] ?: $item['title']]);
+            $item['name'] = json_encode(['title'=>$item['product_title']]);
             $item['title'] = json_encode(['title'=>$item['title']]);
+            if(in_array($title,CommonConstant::SHIPPING_PROTECTION_FEE)) {
+                $shipping_protection = $item['price'];
+            }else{
+                $goodsList[] = $item;
+            }
+
         }
+
+        return [$goodsList,$shipping_protection];
 
     }
 

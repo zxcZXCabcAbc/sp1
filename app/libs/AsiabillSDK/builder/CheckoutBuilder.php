@@ -59,7 +59,7 @@ class CheckoutBuilder extends BuilderBase
             ];
         }
 
-        if($this->order->shippingLine){
+        if($this->order->shippingLine && $this->order->shippingLine->price > 0){
             $products[] = [
                 'goodsCount' => 1,
                 'goodsPrice' => $this->order->shippingLine->price,
@@ -78,7 +78,9 @@ class CheckoutBuilder extends BuilderBase
 
     protected function getTotalMoney()
     {
-        //return $this->order->total_price;
+        if($this->order->shipping_protection > 0){
+            return bcadd($this->order->total_price,$this->order->shipping_protection,2);
+        }
         return bcmul($this->order->total_price,1 + $this->rate,2);
     }
 
