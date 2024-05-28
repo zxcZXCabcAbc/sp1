@@ -64,11 +64,70 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="display: flex;justify-content: flex-end">
+                        <div style="display: flex;justify-content: flex-end;padding-bottom: 10px;">
                             <div class="header-btn">
                                 <span>为商品发货</span>
                             </div>
                         </div>
+<!--                        时间线-->
+                        <div class="header-msg">
+                            <div style="padding:0 20px;margin-bottom:15px;">
+                                <div class="layui-tab layui-tab-brief">
+                                    <ul class="layui-tab-title">
+                                        <li class="layui-this">用户日志</li>
+                                        <li>支付日志</li>
+                                    </ul>
+                                    <div class="layui-tab-content" style="overflow-y: scroll;height:390px;">
+                                        <div class="layui-tab-item layui-show">
+                                            {if count($userLogs) gt 0}
+                                            <div class="layui-timeline">
+                                                {volist name="userLogs" id="log"}
+                                                <div class="layui-timeline-item">
+                                                    <i class="layui-icon layui-timeline-axis"></i>
+                                                    <div class="layui-timeline-content layui-text">
+                                                        <h3 class="layui-timeline-title">{$log['created_at']|date='m月d日 H:i'}</h3>
+                                                        <p>
+                                                            {$log['logs']}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                {/volist}
+                                                {else}
+                                                <p>暂无日志</p>
+
+                                                {/if}
+
+                                            </div>
+                                        </div>
+                                        <div class="layui-tab-item">
+                                            {if count($requestLogs) gt 0}
+                                            {volist name="requestLogs" id="vo"}
+                                            <div class="layui-timeline">
+                                                <div class="layui-timeline-item">
+                                                    <i class="layui-icon layui-timeline-axis"></i>
+                                                    <div class="layui-timeline-content layui-text">
+                                                        <h3 class="layui-timeline-title">{$vo['created_at']|date='m月d日 H:i'}</h3>
+                                                        <p>
+                                                            <pre>
+                                                                <?php echo json_encode($vo['params'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);?>
+                                                            </pre>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/volist}
+
+                                            {else}
+                                                <p>暂无日志</p>
+                                            {/if}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>

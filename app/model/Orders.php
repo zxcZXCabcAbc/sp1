@@ -173,4 +173,10 @@ class Orders extends BaseModel
         return $this->shippings()->find();
     }
 
+
+    public function logs(): HasMany
+    {
+        return $this->hasMany(OrderLogs::class,'checkout_id');
+    }
+
 }

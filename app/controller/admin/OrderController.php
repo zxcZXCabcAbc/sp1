@@ -5,6 +5,8 @@ namespace app\controller\admin;
 use app\BaseController;
 use app\constant\CommonConstant;
 use app\constant\ModelConstant;
+use app\model\Notify;
+use app\model\OrderLogs;
 use app\model\Orders;
 use app\model\Shops;
 use app\model\ShopsPayment;
@@ -100,6 +102,13 @@ class OrderController extends BaseController
         $data['order_name'] = Str::contains($data['last_order_name'],'#') ? $data['last_order_name'] : $data['name'];
         $data['orderId'] = $data['order_id'] > 0 ? $data['order_id'] : pathinfo($data['admin_graphql_api_id'],PATHINFO_BASENAME);
         $data['created_at'] = Carbon::parse($data['created_at'])->format('Y年m月d日 H:i');
+        $data['userLogs'] = OrderLogs::query()->where('checkout_id',$order->checkout_id)->field(['logs','created_at'])->select()->toArray();
+        $requestLogs = Notify::query()->where('order_id',$order->id)->field(['params','created_at','pay_method'])->select()->toArray();
+        foreach ($requestLogs as &$item){
+            $item['pay_method'] = ShopsPayment::$payMethodNames[$item['pay_method']] ?? '-';
+        }
+        $data['requestLogs'] = $requestLogs;
+        //dump(json_encode($data,JSON_UNESCAPED_SLASHES));
         //dd($data);
         return view('admin/order_detail',$data);
     }
