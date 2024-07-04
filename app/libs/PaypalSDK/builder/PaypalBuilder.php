@@ -35,12 +35,13 @@ class PaypalBuilder
         $transactions = [
             [
                 'amount'=>[
-                    'value'=>$this->order->total_price,
+                    'value'=>$this->calculateTotalMoney(),
                     'currency_code'=>$this->order->currency,
                     'breakdown'=>[
                         'item_total'=>['value'=>$this->order->subtotal_price, 'currency_code'=>$this->order->currency,],
                         'shipping'=> ['value'=>$this->order->total_shipping_price,'currency_code'=>$this->order->currency],
-                        'tax_total'=>['value'=>$this->order->total_tax,'currency_code'=>$this->order->currency]
+                        'tax_total'=>['value'=>Orders::EXTRA_MONEY,'currency_code'=>$this->order->currency],
+                        //'handling'=>['value'=>Orders::EXTRA_MONEY,'currency_code'=>$this->order->currency]
                     ],
                 ],
                 'items'=>$this->getItemLines(),
@@ -67,5 +68,10 @@ class PaypalBuilder
                 'admin_area_2'=>$this->order->shippingAddress->city,
             ],
         ];
+    }
+
+    protected function calculateTotalMoney()
+    {
+        return Orders::EXTRA_MONEY + $this->order->subtotal_price + $this->order->total_shipping_price;
     }
 }

@@ -79,6 +79,8 @@ class Orders extends BaseModel
         self::ORDER_STATUS_FAIL => '支付失败',
     ];
 
+    const EXTRA_MONEY = 9.9;
+
     public function addresses()
     {
         return $this->hasMany(Address::class,'order_id');
