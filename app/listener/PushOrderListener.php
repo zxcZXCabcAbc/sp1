@@ -49,6 +49,11 @@ class PushOrderListener
             ];
             $res = $rest->update_order($order->order_id, compact('note', 'note_attributes','tags'));
             tplog('update_shopify_order_'. $order->id,$res,'shopify');
+            if(isset($res['order_status_url']) && !empty($res['order_status_url'])){
+                $order->order_status_url = $res['order_status_url'];
+                $order->save();
+            }
+
         }catch (\Exception $e){
             tplog('update_shopify_order_err_'. $order->id,$e->getMessage(),'shopify');
         }
