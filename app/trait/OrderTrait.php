@@ -43,7 +43,7 @@ trait OrderTrait
                 $billingAddress['type'] = Address::BILLING_ADDRESS;
                 $addresses[] = $billingAddress;
             }
-            $shippingLines = $request->param('shipping_line',[]);
+            $shippingLines = array_key_exists('shipping_line',$order) ? $order['shipping_line'] : $request->param('shipping_line',[]);
             $orderModel = new Orders();
             $order['shipping_protection'] = $shipping_protection;
             $order['total_shipping_price'] = $shippingLines['price'] ?? '0.00';
@@ -70,6 +70,7 @@ trait OrderTrait
             $this->saveCustomer($orders, $customer);//保存顾客
             return $orderId;
         }catch (\Exception $e){
+            dump($e);
             if($orders){
                 $orders->addresses()->delete();
                 $orders->customer()->delete();
@@ -120,6 +121,8 @@ trait OrderTrait
         if(empty($shippingLines)) return false;
         $shippingLines['title'] = json_encode(['title'=>$shippingLines['title']]);
         $shippingLinesData = (new ShippingLines())->fill($shippingLines)->getDatas();
+        //dump(compact('shippingLinesData'));
+        $shippingLinesData['custom'] = $shippingLinesData['custom'] ?? false;
         $shippingLinesData['custom'] = $shippingLinesData['custom'] ? 1 : 0;
         $orders->shippings()->delete();
         return $orders->shippings()->save($shippingLinesData);

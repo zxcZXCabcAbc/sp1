@@ -108,6 +108,7 @@
                                                     <div class="layui-timeline-content layui-text">
                                                         <h3 class="layui-timeline-title">{$vo['created_at']|date='m月d日 H:i'}</h3>
                                                         <p>
+                                                            <span>---------支付方式: {$vo['pay_method']}--------------</span>
                                                             <pre>
                                                                 <?php echo json_encode($vo['params'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);?>
                                                             </pre>

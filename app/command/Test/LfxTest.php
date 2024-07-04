@@ -59,12 +59,9 @@ class LfxTest extends Command
     protected function execute(Input $input, Output $output)
     {
         try {
-
-            $arr = ['test'=>'name'];
-
-           Session::set('name','lfx');
-           dd(Session::get('name'));
-
+           RedisHelper::Set('name','ldy');
+           $val = RedisHelper::Get('name');
+            dd($val);
             $payment = ShopsPayment::query()->find(5);
             dump($payment->mode);
             dd($payment->config);

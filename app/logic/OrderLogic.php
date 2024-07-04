@@ -62,6 +62,7 @@ class OrderLogic
         $draft_id = pathinfo($draft_id,PATHINFO_BASENAME);
         $draftData = $this->formatDraft($request);
         $draft = $this->rest->update_draft_order($draft_id,$draftData);
+//        dump($draft);
         $this->saveOrder($draft,$request,$order);
         return compact('draft');
     }
